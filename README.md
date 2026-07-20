@@ -109,10 +109,19 @@ flutter pub get
 supabase start
 supabase migration up --local
 
+# Optional: create a disposable local demo login
+scripts/create_local_demo_user.sh
+
 # Run the app against local Supabase (default URL: http://127.0.0.1:55321)
 flutter run -d chrome \
   --dart-define=SUPABASE_ANON_KEY=your-local-supabase-anon-key
 ```
+
+The demo helper creates or verifies a local-only account:
+`demo@fieldfleet.local` / `local-demo-pass`. It refuses non-local Supabase
+URLs and does not run automatically, so production and shared deployments do
+not inherit a default login. The first login bootstraps a demo workspace
+through the normal app path.
 
 This public checkout uses Supabase project id `fieldfleet_public` and local
 ports `55321`-`55329` so it can run next to another Supabase project on the

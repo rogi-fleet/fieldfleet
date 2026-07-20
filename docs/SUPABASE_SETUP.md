@@ -181,6 +181,63 @@ The API gateway root can return `404 Not Found` to a `curl -I` request and
 still be healthy; the important signal is that Kong responds on `55321`.
 Studio normally redirects to `/project/default`.
 
+### Optional local demo login
+
+Most people expect a self-hostable app to be explorable immediately, but a
+committed `admin/admin` account is unsafe because it tends to survive into real
+deployments. This repo uses an explicit local-only helper instead:
+
+```bash
+scripts/create_local_demo_user.sh
+```
+
+Default local credentials:
+
+```text
+Email: demo@fieldfleet.local
+Password: local-demo-pass
+```
+
+The helper reads the local anon and service-role keys from `supabase status -o
+env`, refuses non-local `SUPABASE_URL` values, and creates an email-confirmed
+Supabase Auth user through the local Auth admin API. The first app login then
+creates the public `users` row, workspace, and owner membership through the
+normal bootstrap code path.
+
+You can override the disposable credentials for one run:
+
+```bash
+DEMO_EMAIL=demo+$(date +%s)@fieldfleet.local \
+DEMO_PASSWORD='replace-with-a-local-password' \
+scripts/create_local_demo_user.sh
+```
+
+### Playwright smoke testing
+
+For headless browser checks, prefer the production web build over Flutter's
+debug `web-server` target:
+
+```bash
+flutter build web --no-pub \
+  --dart-define=SUPABASE_URL=http://127.0.0.1:55321 \
+  --dart-define=SUPABASE_ANON_KEY=your-local-supabase-anon-key
+
+python3 -m http.server 5001 --bind 127.0.0.1 --directory build/web
+```
+
+Flutter web renders most UI to canvas, so enable semantics before using
+accessibility locators:
+
+```js
+document.querySelector('flt-semantics-placeholder')?.click();
+```
+
+The login screen exposes Flutter-created text inputs only after they receive
+focus. In Playwright, click the field first, then target the generated input
+such as `input[aria-label="you@example.com"]` or `input[type="password"]`.
+The demo account should land on the authenticated dashboard and create one
+local user, workspace, and membership through the normal bootstrap flow.
+
 ### Fresh-install migration notes
 
 During public-checkout validation, a clean isolated replay exposed several

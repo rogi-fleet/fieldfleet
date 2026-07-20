@@ -1,8 +1,10 @@
 -- Seed file for local development
 -- This runs after migrations during `supabase db reset`
 
--- Note: In local dev, you'll create users via the Supabase Studio or Auth API
--- This seed just creates some sample data for testing
+-- Note: Auth users are not created automatically by this seed. For a
+-- disposable local login, run:
+--   scripts/create_local_demo_user.sh
+-- The helper is local-only and uses the normal first-login bootstrap path.
 
 -- Sample cost categories (created for any workspace)
 -- These will be created once a workspace exists
@@ -39,7 +41,9 @@ $$ LANGUAGE plpgsql;
 
 -- Instructions for local testing:
 -- 1. Start Supabase: supabase start
--- 2. Open Studio: http://localhost:54323
--- 3. Create a user via Authentication > Users > Add User
--- 4. Create workspace and user records manually or via your app
--- 5. Call: SELECT seed_workspace_data('your-workspace-uuid');
+-- 2. Apply migrations: supabase migration up --local
+-- 3. Optional demo login: scripts/create_local_demo_user.sh
+-- 4. Open Studio: http://127.0.0.1:55323
+-- 5. Create or log in as a user; the app bootstraps the workspace.
+-- 6. Optional extra sample data:
+--    SELECT seed_workspace_data('your-workspace-uuid');
