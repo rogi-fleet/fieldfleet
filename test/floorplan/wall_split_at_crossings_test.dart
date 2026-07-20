@@ -1,7 +1,4 @@
-import 'dart:ui' show Offset;
-
 import 'package:flutter_test/flutter_test.dart';
-import 'package:taskfleet_ops/models/floorplan/layer.dart';
 import 'package:taskfleet_ops/models/floorplan/line.dart';
 import 'package:taskfleet_ops/models/floorplan/vertex.dart';
 import 'package:taskfleet_ops/services/floorplan/class/wall_ops.dart';
@@ -104,8 +101,7 @@ void main() {
       expect(r.selectedLayer.lines.containsKey('v'), isTrue);
     });
 
-    test('new wall crossing two existing walls splits all three correctly',
-        () {
+    test('new wall crossing two existing walls splits all three correctly', () {
       // Two parallel verticals at x=30 and x=70 spanning y=-50..50.
       // Horizontal wall at y=0 from x=0 to x=100 crosses both.
       final ids = IdBroker();

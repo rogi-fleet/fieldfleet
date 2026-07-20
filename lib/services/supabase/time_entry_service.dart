@@ -32,9 +32,8 @@ class SupabaseTimeEntryService {
         .map((data) {
           var entries = data.map((row) => _toTimeEntry(row)).toList();
           if (workspaceId != null) {
-            entries = entries
-                .where((e) => e.workspaceId == workspaceId)
-                .toList();
+            entries =
+                entries.where((e) => e.workspaceId == workspaceId).toList();
           }
           return entries;
         });
@@ -358,24 +357,21 @@ class SupabaseTimeEntryService {
       );
 
       // Update entry with calculations and location
-      await _supabase
-          .from('time_entries')
-          .update({
-            'clock_out': clockOut.toUtc().toIso8601String(),
-            'break_duration': breakDuration,
-            'total_duration': totalDuration,
-            'regular_hours': regularHours,
-            'overtime_hours': overtimeHours,
-            'double_time_hours': hoursBreakdown.doubleTime,
-            'regular_cost': costs.regularCost,
-            'overtime_cost': costs.overtimeCost,
-            'double_time_cost': costs.doubleTimeCost,
-            'total_cost': costs.totalCost,
-            'updated_at': DateTime.now().toUtc().toIso8601String(),
-            'clock_out_latitude': clockOutLocation?.latitude,
-            'clock_out_longitude': clockOutLocation?.longitude,
-          })
-          .eq('id', entryId);
+      await _supabase.from('time_entries').update({
+        'clock_out': clockOut.toUtc().toIso8601String(),
+        'break_duration': breakDuration,
+        'total_duration': totalDuration,
+        'regular_hours': regularHours,
+        'overtime_hours': overtimeHours,
+        'double_time_hours': hoursBreakdown.doubleTime,
+        'regular_cost': costs.regularCost,
+        'overtime_cost': costs.overtimeCost,
+        'double_time_cost': costs.doubleTimeCost,
+        'total_cost': costs.totalCost,
+        'updated_at': DateTime.now().toUtc().toIso8601String(),
+        'clock_out_latitude': clockOutLocation?.latitude,
+        'clock_out_longitude': clockOutLocation?.longitude,
+      }).eq('id', entryId);
 
       // Fire-and-forget automations (e.g. "remind crew to file a daily log
       // after clock-out"); _processEvent logs its own failures.
@@ -436,14 +432,11 @@ class SupabaseTimeEntryService {
         throw Exception('Entry cannot be edited');
       }
 
-      await _supabase
-          .from('time_entries')
-          .update({
-            'status': TimeEntryStatus.submitted.toJson(),
-            'submitted_at': DateTime.now().toUtc().toIso8601String(),
-            'updated_at': DateTime.now().toUtc().toIso8601String(),
-          })
-          .eq('id', entryId);
+      await _supabase.from('time_entries').update({
+        'status': TimeEntryStatus.submitted.toJson(),
+        'submitted_at': DateTime.now().toUtc().toIso8601String(),
+        'updated_at': DateTime.now().toUtc().toIso8601String(),
+      }).eq('id', entryId);
 
       await _notifyApproversOfSubmittedTimeEntry(entry);
     } catch (e) {
@@ -480,10 +473,10 @@ class SupabaseTimeEntryService {
           .maybeSingle();
       final workerName =
           (workerRow?['display_name'] as String?)?.trim().isNotEmpty == true
-          ? (workerRow!['display_name'] as String).trim()
-          : ((workerRow?['email'] as String?)?.trim().isNotEmpty == true
-                ? (workerRow!['email'] as String).trim()
-                : 'A team member');
+              ? (workerRow!['display_name'] as String).trim()
+              : ((workerRow?['email'] as String?)?.trim().isNotEmpty == true
+                  ? (workerRow!['email'] as String).trim()
+                  : 'A team member');
 
       final projectRow = await _supabase
           .from('projects')
@@ -494,9 +487,8 @@ class SupabaseTimeEntryService {
 
       final totalHours =
           entry.regularHours + entry.overtimeHours + entry.doubleTimeHours;
-      final normalizedHours = totalHours > 0
-          ? totalHours
-          : entry.totalDuration / 60.0;
+      final normalizedHours =
+          totalHours > 0 ? totalHours : entry.totalDuration / 60.0;
       final dateLabel =
           '${entry.date.month}/${entry.date.day}/${entry.date.year}';
       final body = projectName.isNotEmpty
@@ -547,15 +539,12 @@ class SupabaseTimeEntryService {
         throw Exception('Can only approve submitted entries');
       }
 
-      await _supabase
-          .from('time_entries')
-          .update({
-            'status': TimeEntryStatus.approved.toJson(),
-            'approved_by': managerId,
-            'approved_at': DateTime.now().toUtc().toIso8601String(),
-            'updated_at': DateTime.now().toUtc().toIso8601String(),
-          })
-          .eq('id', entryId);
+      await _supabase.from('time_entries').update({
+        'status': TimeEntryStatus.approved.toJson(),
+        'approved_by': managerId,
+        'approved_at': DateTime.now().toUtc().toIso8601String(),
+        'updated_at': DateTime.now().toUtc().toIso8601String(),
+      }).eq('id', entryId);
 
       await _notifyWorkerOfTimeEntryDecision(
         entry: entry,
@@ -596,14 +585,11 @@ class SupabaseTimeEntryService {
         throw Exception('Can only reject submitted entries');
       }
 
-      await _supabase
-          .from('time_entries')
-          .update({
-            'status': TimeEntryStatus.rejected.toJson(),
-            'rejection_reason': reason,
-            'updated_at': DateTime.now().toUtc().toIso8601String(),
-          })
-          .eq('id', entryId);
+      await _supabase.from('time_entries').update({
+        'status': TimeEntryStatus.rejected.toJson(),
+        'rejection_reason': reason,
+        'updated_at': DateTime.now().toUtc().toIso8601String(),
+      }).eq('id', entryId);
 
       await _notifyWorkerOfTimeEntryDecision(
         entry: entry,
@@ -652,9 +638,8 @@ class SupabaseTimeEntryService {
 
       final totalHours =
           entry.regularHours + entry.overtimeHours + entry.doubleTimeHours;
-      final normalizedHours = totalHours > 0
-          ? totalHours
-          : entry.totalDuration / 60.0;
+      final normalizedHours =
+          totalHours > 0 ? totalHours : entry.totalDuration / 60.0;
       final dateLabel =
           '${entry.date.month}/${entry.date.day}/${entry.date.year}';
       final baseBody = projectName.isNotEmpty
@@ -710,9 +695,8 @@ class SupabaseTimeEntryService {
         .map((data) {
           var entries = data.map((row) => _toTimeEntry(row)).toList();
           if (workspaceId != null) {
-            entries = entries
-                .where((e) => e.workspaceId == workspaceId)
-                .toList();
+            entries =
+                entries.where((e) => e.workspaceId == workspaceId).toList();
           }
           return entries;
         });
@@ -731,9 +715,8 @@ class SupabaseTimeEntryService {
         .map((data) {
           var entries = data.map((row) => _toTimeEntry(row)).toList();
           if (workspaceId != null) {
-            entries = entries
-                .where((e) => e.workspaceId == workspaceId)
-                .toList();
+            entries =
+                entries.where((e) => e.workspaceId == workspaceId).toList();
           }
           return entries;
         });
@@ -862,14 +845,12 @@ class SupabaseTimeEntryService {
 
   /// Calculate total hours for a worker in a date range
   Future<
-    ({
-      double regularHours,
-      double overtimeHours,
-      double doubleTimeHours,
-      double totalCost,
-    })
-  >
-  calculateTotalHours(
+      ({
+        double regularHours,
+        double overtimeHours,
+        double doubleTimeHours,
+        double totalCost,
+      })> calculateTotalHours(
     String workerId,
     DateTime startDate,
     DateTime endDate, {
@@ -1040,7 +1021,7 @@ class SupabaseTimeEntryService {
         .map((data) {
           return data
               .map((row) => _toTimeEntry(row))
-              .where((e) => e.clockIn != null && e.clockOut == null)
+              .where((e) => e.clockOut == null)
               .toList();
         });
   }
@@ -1065,7 +1046,8 @@ class SupabaseTimeEntryService {
                   DateTime(startDate.year, startDate.month, startDate.day),
                 ) &&
                 !entry.date.isAfter(
-                  DateTime(endDate.year, endDate.month, endDate.day, 23, 59, 59),
+                  DateTime(
+                      endDate.year, endDate.month, endDate.day, 23, 59, 59),
                 );
           }).toList();
         });

@@ -26,10 +26,48 @@ CREATE INDEX IF NOT EXISTS idx_bills_created_by ON public.bills (created_by);
 CREATE INDEX IF NOT EXISTS idx_bills_project_id ON public.bills (project_id);
 CREATE INDEX IF NOT EXISTS idx_bills_purchase_order_id ON public.bills (purchase_order_id);
 CREATE INDEX IF NOT EXISTS idx_budget_templates_created_by ON public.budget_templates (created_by);
-CREATE INDEX IF NOT EXISTS idx_catalog_items_default_expense_account_id ON public.catalog_items (default_expense_account_id);
-CREATE INDEX IF NOT EXISTS idx_catalog_items_default_income_account_id ON public.catalog_items (default_income_account_id);
-CREATE INDEX IF NOT EXISTS idx_catalog_items_default_vendor_id ON public.catalog_items (default_vendor_id);
-CREATE INDEX IF NOT EXISTS idx_catalog_items_inventory_item_id ON public.catalog_items (inventory_item_id);
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'catalog_items'
+      AND column_name = 'default_expense_account_id'
+  ) THEN
+    CREATE INDEX IF NOT EXISTS idx_catalog_items_default_expense_account_id
+      ON public.catalog_items (default_expense_account_id);
+  END IF;
+
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'catalog_items'
+      AND column_name = 'default_income_account_id'
+  ) THEN
+    CREATE INDEX IF NOT EXISTS idx_catalog_items_default_income_account_id
+      ON public.catalog_items (default_income_account_id);
+  END IF;
+
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'catalog_items'
+      AND column_name = 'default_vendor_id'
+  ) THEN
+    CREATE INDEX IF NOT EXISTS idx_catalog_items_default_vendor_id
+      ON public.catalog_items (default_vendor_id);
+  END IF;
+
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'catalog_items'
+      AND column_name = 'inventory_item_id'
+  ) THEN
+    CREATE INDEX IF NOT EXISTS idx_catalog_items_inventory_item_id
+      ON public.catalog_items (inventory_item_id);
+  END IF;
+END $$;
 CREATE INDEX IF NOT EXISTS idx_change_orders_approved_by ON public.change_orders (approved_by);
 CREATE INDEX IF NOT EXISTS idx_change_orders_created_by ON public.change_orders (created_by);
 CREATE INDEX IF NOT EXISTS idx_client_portal_invites_sent_by ON public.client_portal_invites (sent_by);

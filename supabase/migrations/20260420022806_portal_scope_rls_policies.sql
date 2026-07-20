@@ -131,30 +131,24 @@ CREATE POLICY properties_select ON public.properties
     )
   );
 
-DROP POLICY IF EXISTS areas_select ON public.areas;
-CREATE POLICY areas_select ON public.areas
-  FOR SELECT USING (
-    public.has_workspace_module_permission(workspace_id, 'properties', 'read')
-    AND (
-      NOT public.is_external_portal_user(workspace_id)
-      OR EXISTS (
-        SELECT 1 FROM public.projects p
-        WHERE p.id = areas.project_id
-          AND p.client_id IN (SELECT public.current_portal_customer_ids(workspace_id))
+DO $$
+BEGIN
+  EXECUTE 'DROP POLICY IF EXISTS areas_select ON public.areas';
+  EXECUTE $policy$
+    CREATE POLICY areas_select ON public.areas
+      FOR SELECT USING (
+        public.has_workspace_module_permission(workspace_id, 'properties', 'read')
+        AND (
+          NOT public.is_external_portal_user(workspace_id)
+          OR EXISTS (
+            SELECT 1 FROM public.projects p
+            WHERE p.id = areas.project_id
+              AND p.client_id IN (SELECT public.current_portal_customer_ids(workspace_id))
+          )
+        )
       )
-    )
-  );
-
-  FOR SELECT USING (
-    public.has_workspace_module_permission(workspace_id, 'properties', 'read')
-    AND (
-      NOT public.is_external_portal_user(workspace_id)
-      OR EXISTS (
-        SELECT 1 FROM public.projects p
-          AND p.client_id IN (SELECT public.current_portal_customer_ids(workspace_id))
-      )
-    )
-  );
+  $policy$;
+END $$;
 
 DROP POLICY IF EXISTS property_contents_select ON public.property_contents;
 CREATE POLICY property_contents_select ON public.property_contents

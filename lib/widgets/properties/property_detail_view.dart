@@ -3,8 +3,6 @@ import '../../theme/theme.dart';
 import '../../models/project.dart';
 import '../../models/property.dart';
 import '../../services/service_locator.dart';
-import '../../utils/pdf_export_io.dart'
-    if (dart.library.html) '../../utils/pdf_export_web.dart' as pdf_export;
 
 import '../../models/property_status.dart';
 import 'property_status_badge.dart';
@@ -173,7 +171,8 @@ class _PropertyDetailViewState extends State<PropertyDetailView> {
 
   Widget _buildPropertyHeader(BuildContext context, Property property) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.md),
+      padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.xl, vertical: AppSpacing.md),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         border: Border(
@@ -323,7 +322,8 @@ class _PropertyDetailViewState extends State<PropertyDetailView> {
               const SizedBox(height: 2),
               Text(
                 'Progress',
-                style: TextStyle(fontSize: 10, color: ChromeColors.of(context).text),
+                style: TextStyle(
+                    fontSize: 10, color: ChromeColors.of(context).text),
               ),
             ],
           ),
@@ -368,7 +368,8 @@ class _PropertyDetailViewState extends State<PropertyDetailView> {
         Builder(
           builder: (context) => Text(
             label,
-            style: TextStyle(fontSize: 10, color: ChromeColors.of(context).text),
+            style:
+                TextStyle(fontSize: 10, color: ChromeColors.of(context).text),
           ),
         ),
       ],
@@ -377,13 +378,13 @@ class _PropertyDetailViewState extends State<PropertyDetailView> {
 
   Widget _buildAppBarStatsStrip(BuildContext context, Property property) {
     final labelStyle = Theme.of(context).textTheme.labelSmall?.copyWith(
-      color: ChromeColors.of(context).text,
-      fontWeight: FontWeight.w600,
-    );
+          color: ChromeColors.of(context).text,
+          fontWeight: FontWeight.w600,
+        );
     final valueStyle = Theme.of(context).textTheme.labelSmall?.copyWith(
-      color: Theme.of(context).colorScheme.onSurface,
-      fontWeight: FontWeight.w700,
-    );
+          color: Theme.of(context).colorScheme.onSurface,
+          fontWeight: FontWeight.w700,
+        );
 
     Widget stat(String label, String value) {
       return Container(
@@ -433,8 +434,8 @@ class _PropertyDetailViewState extends State<PropertyDetailView> {
         final sortedProperties = List<Property>.from(properties)
           ..sort(
             (a, b) => a.identifier.toLowerCase().compareTo(
-              b.identifier.toLowerCase(),
-            ),
+                  b.identifier.toLowerCase(),
+                ),
           );
 
         if (sortedProperties.length < 2) {
@@ -452,9 +453,9 @@ class _PropertyDetailViewState extends State<PropertyDetailView> {
             borderRadius: BorderRadius.circular(AppRadius.r12),
             icon: const Icon(Icons.keyboard_arrow_down),
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
             onChanged: (value) {
               if (value == null || value == property.id) return;
               _handlePropertySelection(context, value);
@@ -537,4 +538,3 @@ class _PropertyDetailViewState extends State<PropertyDetailView> {
     );
   }
 }
-

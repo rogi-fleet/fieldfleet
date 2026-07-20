@@ -72,18 +72,17 @@ class _FieldFormTemplateListScreenState
                       return ListView.builder(
                         padding: const EdgeInsets.all(AppSpacing.base),
                         itemCount: filtered.length,
-                        itemBuilder: (context, index) =>
-                            _TemplateCard(
-                              template: filtered[index],
-                              onEdit: () => context.push(
-                                  '/field-forms/${filtered[index].id}/edit'),
-                              onFill: () => context.push(
-                                  '/field-forms/${filtered[index].id}/fill'),
-                              onDuplicate: () =>
-                                  _duplicate(context, filtered[index]),
-                              onDelete: () =>
-                                  _confirmDelete(context, filtered[index]),
-                            ),
+                        itemBuilder: (context, index) => _TemplateCard(
+                          template: filtered[index],
+                          onEdit: () => context
+                              .push('/field-forms/${filtered[index].id}/edit'),
+                          onFill: () => context
+                              .push('/field-forms/${filtered[index].id}/fill'),
+                          onDuplicate: () =>
+                              _duplicate(context, filtered[index]),
+                          onDelete: () =>
+                              _confirmDelete(context, filtered[index]),
+                        ),
                       );
                     },
                   ),
@@ -200,7 +199,8 @@ class _FieldFormTemplateListScreenState
     );
   }
 
-  Future<void> _duplicate(BuildContext context, FieldFormTemplate template) async {
+  Future<void> _duplicate(
+      BuildContext context, FieldFormTemplate template) async {
     final auth = context.read<AuthProvider>();
     final userId = auth.appUser?.id;
     if (userId == null) return;
@@ -226,8 +226,7 @@ class _FieldFormTemplateListScreenState
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Delete Template'),
-        content: Text(
-            'Delete "${template.name}"? This cannot be undone.'),
+        content: Text('Delete "${template.name}"? This cannot be undone.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -275,12 +274,11 @@ class _TemplateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: AppSpacing.base, vertical: AppSpacing.sm),
+        contentPadding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.base, vertical: AppSpacing.sm),
         leading: CircleAvatar(
           backgroundColor: AppColors.primary.withOpacity(0.1),
           child: Icon(_categoryIcon(template.category),
@@ -298,8 +296,8 @@ class _TemplateCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   '${template.fieldCount} field${template.fieldCount == 1 ? '' : 's'}',
-                  style: TextStyle(
-                      fontSize: 12, color: AppColors.textSecondary),
+                  style:
+                      TextStyle(fontSize: 12, color: AppColors.textSecondary),
                 ),
                 if (template.requiresAnySignature) ...[
                   const SizedBox(width: 8),
@@ -319,8 +317,7 @@ class _TemplateCard extends StatelessWidget {
                 template.description!,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontSize: 12, color: AppColors.textSecondary),
+                style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
               ),
             ],
           ],
@@ -377,7 +374,8 @@ class _CategoryChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 2),
+      padding:
+          const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 2),
       decoration: BoxDecoration(
         color: _color(category).withOpacity(0.1),
         borderRadius: BorderRadius.circular(AppRadius.r12),
@@ -386,9 +384,7 @@ class _CategoryChip extends StatelessWidget {
       child: Text(
         category.displayName,
         style: TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
-            color: _color(category)),
+            fontSize: 11, fontWeight: FontWeight.w600, color: _color(category)),
       ),
     );
   }

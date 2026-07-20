@@ -15,38 +15,54 @@
 -- Applied to the live DB via supabase MCP apply_migration.
 -- =============================================================================
 
-ALTER FUNCTION public.calculate_distance_meters(lat1 numeric, lon1 numeric, lat2 numeric, lon2 numeric) SET search_path = public, pg_temp;
-ALTER FUNCTION public.fn_messages_thread_rollup() SET search_path = public, pg_temp;
-ALTER FUNCTION public.get_or_create_uncategorized_labor_item(p_project_id uuid, p_workspace_id uuid) SET search_path = public, pg_temp;
-ALTER FUNCTION public.get_user_workspace_ids() SET search_path = public, pg_temp;
-ALTER FUNCTION public.get_workspace_from_storage_path(path text) SET search_path = public, pg_temp;
-ALTER FUNCTION public.get_workspace_storage_usage(p_workspace_id uuid) SET search_path = public, pg_temp;
-ALTER FUNCTION public.inventory_apply_stock_movement() SET search_path = public, pg_temp;
-ALTER FUNCTION public.is_within_project_geofence(worker_lat numeric, worker_lon numeric, project_id uuid) SET search_path = public, pg_temp;
-ALTER FUNCTION public.is_workspace_member(workspace_uuid uuid) SET search_path = public, pg_temp;
-ALTER FUNCTION public.normalize_task_status_progress() SET search_path = public, pg_temp;
-ALTER FUNCTION public.permission_level_rank(level text) SET search_path = public, pg_temp;
-ALTER FUNCTION public.project_daily_logs_ws_check() SET search_path = public, pg_temp;
-ALTER FUNCTION public.project_inspection_items_ws_check() SET search_path = public, pg_temp;
-ALTER FUNCTION public.project_inspection_recalc() SET search_path = public, pg_temp;
-ALTER FUNCTION public.project_inspections_ws_check() SET search_path = public, pg_temp;
-ALTER FUNCTION public.project_modules_assert_ws() SET search_path = public, pg_temp;
-ALTER FUNCTION public.project_punch_list_items_ws_check() SET search_path = public, pg_temp;
-ALTER FUNCTION public.project_punch_list_recalc() SET search_path = public, pg_temp;
-ALTER FUNCTION public.project_punch_lists_ws_check() SET search_path = public, pg_temp;
-ALTER FUNCTION public.project_warranties_ws_check() SET search_path = public, pg_temp;
-ALTER FUNCTION public.project_warranty_claim_recalc() SET search_path = public, pg_temp;
-ALTER FUNCTION public.project_warranty_claims_ws_check() SET search_path = public, pg_temp;
-ALTER FUNCTION public.rename_customer_type(p_workspace_id uuid, p_type_id uuid, p_old_name text, p_new_name text) SET search_path = public, pg_temp;
-ALTER FUNCTION public.rename_vendor_category(p_workspace_id uuid, p_category_id uuid, p_old_name text, p_new_name text) SET search_path = public, pg_temp;
-ALTER FUNCTION public.rename_vendor_type(p_workspace_id uuid, p_type_id uuid, p_old_name text, p_new_name text) SET search_path = public, pg_temp;
-ALTER FUNCTION public.search_messages(p_workspace_id text, p_user_id text, p_query text, p_sender_id text, p_date_from timestamp with time zone, p_date_to timestamp with time zone, p_has_attachment boolean, p_limit integer) SET search_path = public, pg_temp;
-ALTER FUNCTION public.seed_customer_types_for_workspace(p_workspace_id uuid) SET search_path = public, pg_temp;
-ALTER FUNCTION public.seed_default_workspace_role_templates(p_workspace_id uuid, p_created_by uuid) SET search_path = public, pg_temp;
-ALTER FUNCTION public.seed_vendor_categories_for_workspace(p_workspace_id uuid) SET search_path = public, pg_temp;
-ALTER FUNCTION public.seed_vendor_types_for_workspace(p_workspace_id uuid) SET search_path = public, pg_temp;
-ALTER FUNCTION public.set_daily_ai_summaries_updated_at() SET search_path = public, pg_temp;
-ALTER FUNCTION public.sync_tasks_property_area_legacy() SET search_path = public, pg_temp;
-ALTER FUNCTION public.touch_bid_packages_updated_at() SET search_path = public, pg_temp;
-ALTER FUNCTION public.update_time_entry_distance() SET search_path = public, pg_temp;
-ALTER FUNCTION public.update_updated_at_column() SET search_path = public, pg_temp;
+DO $$
+DECLARE
+  function_signature text;
+  target_function regprocedure;
+BEGIN
+  FOREACH function_signature IN ARRAY ARRAY[
+    'public.calculate_distance_meters(numeric,numeric,numeric,numeric)',
+    'public.fn_messages_thread_rollup()',
+    'public.get_or_create_uncategorized_labor_item(uuid,uuid)',
+    'public.get_user_workspace_ids()',
+    'public.get_workspace_from_storage_path(text)',
+    'public.get_workspace_storage_usage(uuid)',
+    'public.inventory_apply_stock_movement()',
+    'public.is_within_project_geofence(numeric,numeric,uuid)',
+    'public.is_workspace_member(uuid)',
+    'public.normalize_task_status_progress()',
+    'public.permission_level_rank(text)',
+    'public.project_daily_logs_ws_check()',
+    'public.project_inspection_items_ws_check()',
+    'public.project_inspection_recalc()',
+    'public.project_inspections_ws_check()',
+    'public.project_modules_assert_ws()',
+    'public.project_punch_list_items_ws_check()',
+    'public.project_punch_list_recalc()',
+    'public.project_punch_lists_ws_check()',
+    'public.project_warranties_ws_check()',
+    'public.project_warranty_claim_recalc()',
+    'public.project_warranty_claims_ws_check()',
+    'public.rename_customer_type(uuid,uuid,text,text)',
+    'public.rename_vendor_category(uuid,uuid,text,text)',
+    'public.rename_vendor_type(uuid,uuid,text,text)',
+    'public.search_messages(text,text,text,text,timestamp with time zone,timestamp with time zone,boolean,integer)',
+    'public.seed_customer_types_for_workspace(uuid)',
+    'public.seed_default_workspace_role_templates(uuid,uuid)',
+    'public.seed_vendor_categories_for_workspace(uuid)',
+    'public.seed_vendor_types_for_workspace(uuid)',
+    'public.set_daily_ai_summaries_updated_at()',
+    'public.sync_tasks_property_area_legacy()',
+    'public.touch_bid_packages_updated_at()',
+    'public.update_time_entry_distance()',
+    'public.update_updated_at_column()'
+  ] LOOP
+    target_function := to_regprocedure(function_signature);
+    IF target_function IS NOT NULL THEN
+      EXECUTE format(
+        'ALTER FUNCTION %s SET search_path = public, pg_temp',
+        target_function
+      );
+    END IF;
+  END LOOP;
+END $$;

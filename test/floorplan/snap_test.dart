@@ -1,7 +1,6 @@
 import 'dart:ui' show Offset;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:taskfleet_ops/models/floorplan/layer.dart';
 import 'package:taskfleet_ops/models/floorplan/line.dart';
 import 'package:taskfleet_ops/models/floorplan/vertex.dart';
 import 'package:taskfleet_ops/services/floorplan/scene_io.dart';

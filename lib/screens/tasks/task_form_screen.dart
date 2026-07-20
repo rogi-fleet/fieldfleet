@@ -234,9 +234,8 @@ class _TaskFormContentState extends State<TaskFormContent>
 
   Future<void> _loadWorkspaceUsers(String workspaceId) async {
     try {
-      final members = await _workspaceMemberService
-          .getWorkspaceMembers(workspaceId)
-          .first;
+      final members =
+          await _workspaceMemberService.getWorkspaceMembers(workspaceId).first;
       final List<AppUser> users = [];
       for (final member in members) {
         final user = await _userService.getUserById(member.userId);
@@ -585,7 +584,8 @@ class _TaskFormContentState extends State<TaskFormContent>
           dueDate: _selectedDueDate,
           startDate: _selectedStartDate,
           endDate: _selectedEndDate,
-          clearEndDate: _selectedEndDate == null && _existingTask?.endDate != null,
+          clearEndDate:
+              _selectedEndDate == null && _existingTask?.endDate != null,
           estimatedDuration: duration,
           assignedToIds: _selectedAssignedUserIds,
           requiredAssetIds: _selectedAssetIds,
@@ -692,7 +692,10 @@ class _TaskFormContentState extends State<TaskFormContent>
     return InputDecoration(
       hintText: isRequired || !showOptionalSuffix ? label : '$label (optional)',
       helperText: helperText,
-      helperStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45), fontSize: 12),
+      helperStyle: TextStyle(
+          color:
+              Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45),
+          fontSize: 12),
       filled: true,
       fillColor: theme.colorScheme.surfaceContainerHighest.withOpacity(0.5),
       prefixIcon: Container(
@@ -720,7 +723,8 @@ class _TaskFormContentState extends State<TaskFormContent>
         borderRadius: BorderRadius.circular(AppRadius.r12),
         borderSide: BorderSide(color: theme.colorScheme.error, width: 2),
       ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.base, vertical: AppSpacing.base),
+      contentPadding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.base, vertical: AppSpacing.base),
     );
   }
 
@@ -743,7 +747,8 @@ class _TaskFormContentState extends State<TaskFormContent>
           onTap: onTap,
           borderRadius: BorderRadius.circular(AppRadius.r12),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.base, vertical: AppSpacing.base),
+            padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.base, vertical: AppSpacing.base),
             decoration: BoxDecoration(
               color: hasDate
                   ? primaryColor.withOpacity(0.08)
@@ -763,13 +768,22 @@ class _TaskFormContentState extends State<TaskFormContent>
                   decoration: BoxDecoration(
                     color: hasDate
                         ? primaryColor.withOpacity(0.15)
-                        : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45).withOpacity(0.1),
+                        : Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withValues(alpha: 0.45)
+                            .withOpacity(0.1),
                     borderRadius: BorderRadius.circular(AppRadius.sm),
                   ),
                   child: Icon(
                     icon,
                     size: 20,
-                    color: hasDate ? primaryColor : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
+                    color: hasDate
+                        ? primaryColor
+                        : Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withValues(alpha: 0.65),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -781,7 +795,10 @@ class _TaskFormContentState extends State<TaskFormContent>
                         label,
                         style: TextStyle(
                           fontSize: 12,
-                          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.65),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -790,12 +807,14 @@ class _TaskFormContentState extends State<TaskFormContent>
                         hasDate ? _formatDate(selectedDate) : 'Not set',
                         style: TextStyle(
                           fontSize: 15,
-                          fontWeight: hasDate
-                              ? FontWeight.w600
-                              : FontWeight.w400,
+                          fontWeight:
+                              hasDate ? FontWeight.w600 : FontWeight.w400,
                           color: hasDate
                               ? theme.colorScheme.onSurface
-                              : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45),
+                              : Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withValues(alpha: 0.45),
                         ),
                       ),
                     ],
@@ -807,7 +826,10 @@ class _TaskFormContentState extends State<TaskFormContent>
                     icon: Icon(
                       Icons.close_rounded,
                       size: 20,
-                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.45),
                     ),
                     tooltip: 'Clear date',
                     padding: EdgeInsets.zero,
@@ -819,7 +841,10 @@ class _TaskFormContentState extends State<TaskFormContent>
                 else
                   Icon(
                     Icons.chevron_right_rounded,
-                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.45),
                   ),
               ],
             ),
@@ -832,8 +857,7 @@ class _TaskFormContentState extends State<TaskFormContent>
   // ─── AI inline actions ───────────────────────────────────────────────────
 
   Widget _buildAiActionBar() {
-    final anyLoading =
-        _isImprovingDescription ||
+    final anyLoading = _isImprovingDescription ||
         _isGeneratingChecklist ||
         _isEstimatingDuration;
     return Padding(
@@ -1018,7 +1042,8 @@ class _TaskFormContentState extends State<TaskFormContent>
         borderRadius: BorderRadius.circular(6),
         onTap: _isAutoAssigning ? null : _autoAssign,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
           decoration: BoxDecoration(
             color: theme.colorScheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(6),
@@ -1058,10 +1083,9 @@ class _TaskFormContentState extends State<TaskFormContent>
   }
 
   Future<void> _autoAssign() async {
-    final workspaceId =
-        Provider.of<AuthProvider>(context, listen: false)
-            .appUser
-            ?.currentWorkspaceId;
+    final workspaceId = Provider.of<AuthProvider>(context, listen: false)
+        .appUser
+        ?.currentWorkspaceId;
     if (workspaceId == null) return;
 
     // Build a temporary Task object with current form state for scoring
@@ -1089,11 +1113,12 @@ class _TaskFormContentState extends State<TaskFormContent>
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('No matching team member found')),
         );
-      } else if (_selectedAssignedUserIds.contains(proposal.proposedAssigneeId)) {
+      } else if (_selectedAssignedUserIds
+          .contains(proposal.proposedAssigneeId)) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-                '${proposal.proposedAssigneeName} is already assigned'),
+            content:
+                Text('${proposal.proposedAssigneeName} is already assigned'),
           ),
         );
       } else {
@@ -1209,8 +1234,7 @@ class _TaskFormContentState extends State<TaskFormContent>
                             vertical: AppSpacing.xs,
                           ),
                           decoration: BoxDecoration(
-                            color:
-                                _existingTask!.completedChecklistCount ==
+                            color: _existingTask!.completedChecklistCount ==
                                     _existingTask!.totalChecklistCount
                                 ? AppColors.success.withOpacity(0.1)
                                 : theme.colorScheme.primary.withOpacity(0.1),
@@ -1221,8 +1245,7 @@ class _TaskFormContentState extends State<TaskFormContent>
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color:
-                                  _existingTask!.completedChecklistCount ==
+                              color: _existingTask!.completedChecklistCount ==
                                       _existingTask!.totalChecklistCount
                                   ? AppColors.success
                                   : theme.colorScheme.primary,
@@ -1512,7 +1535,10 @@ class _TaskFormContentState extends State<TaskFormContent>
                               Text(
                                 'Progress is editable after task creation.',
                                 style: theme.textTheme.bodySmall?.copyWith(
-                                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.65),
                                 ),
                               ),
                           ],
@@ -1545,7 +1571,8 @@ class _TaskFormContentState extends State<TaskFormContent>
                     if (_selectedAssignedUserIds.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.only(right: 8),
-                        child: Text('${_selectedAssignedUserIds.length} selected'),
+                        child:
+                            Text('${_selectedAssignedUserIds.length} selected'),
                       ),
                     _buildAutoAssignButton(),
                   ],
@@ -1600,7 +1627,11 @@ class _TaskFormContentState extends State<TaskFormContent>
                     value: null,
                     decoration: InputDecoration(
                       hintText: 'Add team member...',
-                      hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45)),
+                      hintStyle: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.45)),
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: AppSpacing.base,
@@ -1617,25 +1648,24 @@ class _TaskFormContentState extends State<TaskFormContent>
                     ),
                     items: _workspaceUsers
                         .where(
-                          (user) => !_selectedAssignedUserIds.contains(user.id),
-                        )
+                      (user) => !_selectedAssignedUserIds.contains(user.id),
+                    )
                         .map((user) {
-                          return DropdownMenuItem<String>(
-                            value: user.id,
-                            child: Row(
-                              children: [
-                                UserAvatar(
-                                  user: user,
-                                  size: AvatarSize.small,
-                                  onTap: null,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(user.displayName ?? user.email),
-                              ],
+                      return DropdownMenuItem<String>(
+                        value: user.id,
+                        child: Row(
+                          children: [
+                            UserAvatar(
+                              user: user,
+                              size: AvatarSize.small,
+                              onTap: null,
                             ),
-                          );
-                        })
-                        .toList(),
+                            const SizedBox(width: 8),
+                            Text(user.displayName ?? user.email),
+                          ],
+                        ),
+                      );
+                    }).toList(),
                     onChanged: (value) {
                       if (value != null) {
                         setState(() {
@@ -1704,11 +1734,15 @@ class _TaskFormContentState extends State<TaskFormContent>
                         child: Center(child: CircularProgressIndicator()),
                       )
                     : DropdownButtonFormField<String?>(
-                      borderRadius: AppRadius.cardRadius,
+                        borderRadius: AppRadius.cardRadius,
                         value: _selectedParentId,
                         decoration: InputDecoration(
                           hintText: 'None (root level task)',
-                          hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45)),
+                          hintStyle: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withValues(alpha: 0.45)),
                           border: InputBorder.none,
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: AppSpacing.base,
@@ -1759,7 +1793,12 @@ class _TaskFormContentState extends State<TaskFormContent>
               ),
               Text(
                 'Select tasks that must be completed before this task can start.',
-                style: TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65)),
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.65)),
               ),
               const SizedBox(height: 12),
               if (_isLoadingTasks)
@@ -1813,7 +1852,11 @@ class _TaskFormContentState extends State<TaskFormContent>
                     value: null,
                     decoration: InputDecoration(
                       hintText: 'Add predecessor task...',
-                      hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45)),
+                      hintStyle: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.45)),
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: AppSpacing.base,
@@ -1946,8 +1989,7 @@ class _TaskFormContentState extends State<TaskFormContent>
                   onTap: () async {
                     final picked = await showDatePicker(
                       context: context,
-                      initialDate:
-                          _recurrenceEndDate ??
+                      initialDate: _recurrenceEndDate ??
                           DateTime.now().add(const Duration(days: 90)),
                       firstDate: DateTime.now(),
                       lastDate: DateTime.now().add(
@@ -1971,9 +2013,8 @@ class _TaskFormContentState extends State<TaskFormContent>
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
                     setState(() {
-                      _recurrenceMaxOccurrences = value.isNotEmpty
-                          ? int.tryParse(value)
-                          : null;
+                      _recurrenceMaxOccurrences =
+                          value.isNotEmpty ? int.tryParse(value) : null;
                     });
                   },
                 ),
@@ -2074,7 +2115,8 @@ class _TaskFormContentState extends State<TaskFormContent>
         onTap: onTap,
         borderRadius: borderRadius,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 10),
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -2085,7 +2127,12 @@ class _TaskFormContentState extends State<TaskFormContent>
                   Icon(
                     icon,
                     size: 11,
-                    color: hasDate ? primary : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45),
+                    color: hasDate
+                        ? primary
+                        : Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withValues(alpha: 0.45),
                   ),
                   const SizedBox(width: 3),
                   Text(
@@ -2094,7 +2141,12 @@ class _TaskFormContentState extends State<TaskFormContent>
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.4,
-                      color: hasDate ? primary : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
+                      color: hasDate
+                          ? primary
+                          : Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.65),
                     ),
                   ),
                   const Spacer(),
@@ -2104,7 +2156,10 @@ class _TaskFormContentState extends State<TaskFormContent>
                       child: Icon(
                         Icons.close_rounded,
                         size: 13,
-                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withValues(alpha: 0.45),
                       ),
                     ),
                 ],
@@ -2117,7 +2172,10 @@ class _TaskFormContentState extends State<TaskFormContent>
                   fontWeight: hasDate ? FontWeight.w600 : FontWeight.w400,
                   color: hasDate
                       ? theme.colorScheme.onSurface
-                      : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45),
+                      : Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.45),
                 ),
               ),
             ],
@@ -2133,7 +2191,8 @@ class _TaskFormContentState extends State<TaskFormContent>
     final hasValue = _durationController.text.isNotEmpty;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 10),
+      padding:
+          const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -2145,7 +2204,12 @@ class _TaskFormContentState extends State<TaskFormContent>
               Icon(
                 Icons.timelapse_rounded,
                 size: 11,
-                color: hasValue ? primary : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45),
+                color: hasValue
+                    ? primary
+                    : Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.45),
               ),
               const SizedBox(width: 3),
               Text(
@@ -2154,7 +2218,12 @@ class _TaskFormContentState extends State<TaskFormContent>
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.4,
-                  color: hasValue ? primary : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
+                  color: hasValue
+                      ? primary
+                      : Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.65),
                 ),
               ),
             ],
@@ -2180,7 +2249,10 @@ class _TaskFormContentState extends State<TaskFormContent>
                   decoration: InputDecoration(
                     hintText: '—',
                     hintStyle: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.45),
                       fontSize: 13,
                     ),
                     border: InputBorder.none,
@@ -2194,7 +2266,10 @@ class _TaskFormContentState extends State<TaskFormContent>
                   ' h',
                   style: TextStyle(
                     fontSize: 12,
-                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.65),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -2207,7 +2282,10 @@ class _TaskFormContentState extends State<TaskFormContent>
                 '8h = 1d',
                 style: TextStyle(
                   fontSize: 9,
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.45),
                 ),
               ),
             ),
@@ -2276,7 +2354,12 @@ class _TaskFormContentState extends State<TaskFormContent>
               ),
               Text(
                 'Link this task to a property or area (for restoration workflows).',
-                style: TextStyle(fontSize: 13, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65)),
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.65)),
               ),
               const SizedBox(height: 12),
               Builder(
@@ -2325,7 +2408,10 @@ class _TaskFormContentState extends State<TaskFormContent>
                 Icon(
                   Icons.inventory_2_outlined,
                   size: 18,
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.65),
                 ),
                 const SizedBox(width: 6),
                 Text(
@@ -2362,7 +2448,10 @@ class _TaskFormContentState extends State<TaskFormContent>
                               ? Icons.add_circle_outline
                               : Icons.edit_outlined,
                           size: 18,
-                          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.65),
                         ),
                         const SizedBox(width: 8),
                         Expanded(
@@ -2371,14 +2460,20 @@ class _TaskFormContentState extends State<TaskFormContent>
                                 ? 'Select required equipment...'
                                 : 'Manage selected equipment...',
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withValues(alpha: 0.65),
                               fontSize: 14,
                             ),
                           ),
                         ),
                         Icon(
                           Icons.keyboard_arrow_down_rounded,
-                          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.45),
                         ),
                       ],
                     ),
@@ -2406,10 +2501,15 @@ class _TaskFormContentState extends State<TaskFormContent>
                     .toList();
                 if (selectedAssets.isEmpty) {
                   return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: AppSpacing.xs),
                     child: Text(
                       'No equipment selected',
-                      style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45)),
+                      style: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.45)),
                     ),
                   );
                 }
@@ -2477,7 +2577,10 @@ class _TaskFormContentState extends State<TaskFormContent>
           child: Text(
             'Save the task first to upload and manage files.',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.65),
             ),
             textAlign: TextAlign.center,
           ),
@@ -2490,7 +2593,11 @@ class _TaskFormContentState extends State<TaskFormContent>
       children: [
         Row(
           children: [
-            Icon(Icons.attach_file, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45)),
+            Icon(Icons.attach_file,
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.45)),
             const SizedBox(width: 8),
             Text('Task Files', style: Theme.of(context).textTheme.titleMedium),
           ],
@@ -2537,7 +2644,10 @@ class _TaskFormContentState extends State<TaskFormContent>
           child: Text(
             'Save the task first to add notes and comments.',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.65),
             ),
             textAlign: TextAlign.center,
           ),
@@ -2682,9 +2792,10 @@ class _TaskFormContentState extends State<TaskFormContent>
     final customerId = project.clientId?.trim();
     final address = project.address.trim();
     final projectPlural = context.read<WorkspaceProvider>().projectTerminology;
-    final projectSingular = projectPlural.endsWith('s') && projectPlural.length > 1
-        ? projectPlural.substring(0, projectPlural.length - 1)
-        : projectPlural;
+    final projectSingular =
+        projectPlural.endsWith('s') && projectPlural.length > 1
+            ? projectPlural.substring(0, projectPlural.length - 1)
+            : projectPlural;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -2751,7 +2862,8 @@ class _TaskFormContentState extends State<TaskFormContent>
 
     final chip = Container(
       constraints: BoxConstraints(maxWidth: maxWidth),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: AppSpacing.sm),
+      padding:
+          const EdgeInsets.symmetric(horizontal: 10, vertical: AppSpacing.sm),
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(AppRadius.r12),
@@ -2906,7 +3018,6 @@ class _AiActionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return ActionChip(
       avatar: loading
           ? SizedBox(
@@ -2951,7 +3062,8 @@ class _GroupColorPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 6),
+      padding:
+          const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 6),
       decoration: BoxDecoration(
         color: Theme.of(context)
             .colorScheme

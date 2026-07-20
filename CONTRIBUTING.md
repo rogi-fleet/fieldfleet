@@ -18,7 +18,9 @@ reports, fixes, tests, docs, and features.
 
 Follow the [Quick Start](README.md#quick-start): install the Flutter SDK and
 Supabase CLI, run `flutter pub get`, `supabase start`, and
-`supabase migration up --local`, then `flutter run -d chrome`.
+`supabase migration up --local`, then `flutter run -d chrome`. This public
+checkout uses Supabase project id `fieldfleet_public` and local port `55321`;
+inspect existing Supabase containers before running reset or repair commands.
 
 ## Making Changes
 

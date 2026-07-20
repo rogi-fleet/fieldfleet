@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../models/task.dart';
 import '../../models/customer.dart';
-import '../../models/document_type.dart';
 import '../../utils/address_formatter.dart';
 import '../../utils/project_terminology.dart';
 
@@ -107,8 +106,7 @@ class SupabaseSearchService {
 
     final queryLower = query.toLowerCase().trim();
     final results = <SearchResult>[];
-    final typesToSearch =
-        types ??
+    final typesToSearch = types ??
         SearchResultType.values
             .where((t) => t != SearchResultType.aiSuggestion)
             .toList();
@@ -222,17 +220,16 @@ class SupabaseSearchService {
           SearchResult(
             id: row['id'] as String,
             title: name,
-            subtitle: subtitleCandidates.isEmpty ? null : subtitleCandidates.first,
+            subtitle:
+                subtitleCandidates.isEmpty ? null : subtitleCandidates.first,
             type: SearchResultType.project,
             metadata: {
               'status': status,
               'customerName': customerName.isEmpty ? null : customerName,
-              'primaryContactName': primaryContactName.isEmpty
-                  ? null
-                  : primaryContactName,
-              'purchaseOrderNumber': purchaseOrderNumber.isEmpty
-                  ? null
-                  : purchaseOrderNumber,
+              'primaryContactName':
+                  primaryContactName.isEmpty ? null : primaryContactName,
+              'purchaseOrderNumber':
+                  purchaseOrderNumber.isEmpty ? null : purchaseOrderNumber,
               'serialNumber': serialNumber.isEmpty ? null : serialNumber,
             },
           ),
@@ -290,8 +287,7 @@ class SupabaseSearchService {
           SearchResult(
             id: task.id,
             title: task.title,
-            subtitle:
-                task.description ??
+            subtitle: task.description ??
                 (task.isComplete ? 'Completed' : 'In Progress'),
             type: SearchResultType.task,
             parentId: task.projectId,
@@ -402,9 +398,8 @@ class SupabaseSearchService {
         final contacts =
             (row['vendor_contacts'] as List<dynamic>? ?? const <dynamic>[])
                 .cast<Map<String, dynamic>>();
-        final activeContacts = contacts
-            .where((c) => c['is_active'] as bool? ?? true)
-            .toList();
+        final activeContacts =
+            contacts.where((c) => c['is_active'] as bool? ?? true).toList();
         final primaryContact = activeContacts.firstWhere(
           (c) => c['is_primary'] as bool? ?? false,
           orElse: () => activeContacts.isNotEmpty
@@ -497,9 +492,7 @@ class SupabaseSearchService {
         return SearchResult(
           id: row['id'] as String,
           title: name,
-          subtitle: stage.isNotEmpty
-              ? stage
-              : (source.isEmpty ? null : source),
+          subtitle: stage.isNotEmpty ? stage : (source.isEmpty ? null : source),
           type: SearchResultType.opportunity,
           metadata: {'stage': row['stage']},
         );
@@ -557,7 +550,13 @@ class SupabaseSearchService {
     return _searchSimple(
       table: 'catalog_items',
       select: 'id, name, description, sku, category, barcode, updated_at',
-      searchColumns: const ['name', 'description', 'sku', 'category', 'barcode'],
+      searchColumns: const [
+        'name',
+        'description',
+        'sku',
+        'category',
+        'barcode'
+      ],
       query: query,
       workspaceId: workspaceId,
       limit: limit,
@@ -614,9 +613,8 @@ class SupabaseSearchService {
           SearchResult(
             id: (user['id'] ?? row['user_id']) as String,
             title: title,
-            subtitle: jobTitle.isNotEmpty
-                ? jobTitle
-                : (email.isEmpty ? null : email),
+            subtitle:
+                jobTitle.isNotEmpty ? jobTitle : (email.isEmpty ? null : email),
             type: SearchResultType.teamMember,
             metadata: {'email': user['email']},
           ),
@@ -839,7 +837,8 @@ class SupabaseSearchService {
   }
 
   /// Get AI-powered suggestions based on query
-  List<SearchResult> getAiSuggestions(String query, SearchIntent intent, {String projectTerminology = 'Projects'}) {
+  List<SearchResult> getAiSuggestions(String query, SearchIntent intent,
+      {String projectTerminology = 'Projects'}) {
     final suggestions = <SearchResult>[];
     final queryLower = query.toLowerCase();
     final singular = singularProjectTerminology(projectTerminology);
@@ -908,7 +907,8 @@ class SupabaseSearchService {
         SearchResult(
           id: 'ai_overdue',
           title: 'Show overdue items',
-          subtitle: 'View all overdue tasks and ${projectTerminology.toLowerCase()}',
+          subtitle:
+              'View all overdue tasks and ${projectTerminology.toLowerCase()}',
           type: SearchResultType.aiSuggestion,
           metadata: {'action': 'show_overdue'},
         ),
@@ -949,9 +949,8 @@ class SupabaseSearchService {
     final contacts =
         (row['customer_contacts'] as List<dynamic>? ?? const <dynamic>[])
             .cast<Map<String, dynamic>>();
-    final activeContacts = contacts
-        .where((c) => c['is_active'] as bool? ?? true)
-        .toList();
+    final activeContacts =
+        contacts.where((c) => c['is_active'] as bool? ?? true).toList();
     final primaryContact = activeContacts.firstWhere(
       (c) => c['is_primary'] as bool? ?? false,
       orElse: () => activeContacts.isNotEmpty

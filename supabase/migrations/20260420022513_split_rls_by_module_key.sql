@@ -42,12 +42,6 @@ DROP POLICY IF EXISTS areas_delete ON public.areas;
 CREATE POLICY areas_delete ON public.areas
   FOR DELETE USING (public.has_workspace_module_permission(workspace_id, 'properties', 'write'));
 
-  FOR SELECT USING (public.has_workspace_module_permission(workspace_id, 'properties', 'read'));
-  FOR INSERT WITH CHECK (public.has_workspace_module_permission(workspace_id, 'properties', 'write'));
-  FOR UPDATE USING (public.has_workspace_module_permission(workspace_id, 'properties', 'write'))
-  WITH CHECK (public.has_workspace_module_permission(workspace_id, 'properties', 'write'));
-  FOR DELETE USING (public.has_workspace_module_permission(workspace_id, 'properties', 'write'));
-
 DROP POLICY IF EXISTS property_contents_select ON public.property_contents;
 CREATE POLICY property_contents_select ON public.property_contents
   FOR SELECT USING (public.has_workspace_module_permission(workspace_id, 'properties', 'read'));

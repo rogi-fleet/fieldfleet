@@ -12,7 +12,6 @@ import '../../../theme/theme.dart';
 import '../widgets/project_sub_tab.dart';
 import '../../../utils/project_terminology.dart';
 import '../../../utils/user_facing_error.dart';
-import '../../../widgets/common/zero_items_action_empty_state.dart';
 import '../../inventory/forms/equipment_rental_form.dart';
 import 'project_materials_tab.dart';
 
@@ -205,9 +204,7 @@ class _AssetsSubTabState extends State<_AssetsSubTab> {
                             if (a.assignedToProjectId != null ||
                                 a.assignedToUserId != null) return false;
                             if (searchQuery.isEmpty) return true;
-                            return a.name
-                                    .toLowerCase()
-                                    .contains(searchQuery) ||
+                            return a.name.toLowerCase().contains(searchQuery) ||
                                 (a.description
                                         ?.toLowerCase()
                                         .contains(searchQuery) ??
@@ -240,10 +237,10 @@ class _AssetsSubTabState extends State<_AssetsSubTab> {
                                 }),
                                 contentPadding: EdgeInsets.zero,
                                 title: Text(a.name),
-                                subtitle: Text(a.serialNumber?.isNotEmpty ==
-                                        true
-                                    ? a.serialNumber!
-                                    : 'No serial number'),
+                                subtitle: Text(
+                                    a.serialNumber?.isNotEmpty == true
+                                        ? a.serialNumber!
+                                        : 'No serial number'),
                                 secondary:
                                     const Icon(Icons.inventory_2_outlined),
                               );
@@ -271,8 +268,9 @@ class _AssetsSubTabState extends State<_AssetsSubTab> {
                             }
                             if (!ctx.mounted) return;
                             Navigator.of(dialogCtx).pop();
-                            final projTerm =
-                                ctx.read<WorkspaceProvider>().projectTerminology;
+                            final projTerm = ctx
+                                .read<WorkspaceProvider>()
+                                .projectTerminology;
                             ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
                               content: Text(selectedIds.length == 1
                                   ? 'Equipment assigned to ${singularProjectTerminology(projTerm).toLowerCase()}'
@@ -306,8 +304,8 @@ class _AssetsSubTabState extends State<_AssetsSubTab> {
     final projTerm = context.watch<WorkspaceProvider>().projectTerminology;
 
     return StreamBuilder<List<Asset>>(
-      stream: ServiceLocator.projectService.getProjectAssets(
-          widget.project.id, widget.project.workspaceId),
+      stream: ServiceLocator.projectService
+          .getProjectAssets(widget.project.id, widget.project.workspaceId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -345,8 +343,7 @@ class _AssetsSubTabState extends State<_AssetsSubTab> {
                     onPressed: workspaceId.isEmpty
                         ? null
                         : () => _showAssignDialog(context,
-                            workspaceId: workspaceId,
-                            assignedAssets: assets),
+                            workspaceId: workspaceId, assignedAssets: assets),
                     icon: const Icon(Icons.add),
                     label: const Text('Assign equipment'),
                   ),
@@ -440,8 +437,8 @@ class _AssetsSubTabState extends State<_AssetsSubTab> {
                                     size: 20, color: AppColors.errorDark),
                                 SizedBox(width: 8),
                                 Text('Unassign',
-                                    style: TextStyle(
-                                        color: AppColors.errorDark)),
+                                    style:
+                                        TextStyle(color: AppColors.errorDark)),
                               ]),
                               onTap: () async {
                                 final wsId = context
@@ -506,8 +503,7 @@ class _AssetsSubTabState extends State<_AssetsSubTab> {
                       child: Center(child: CircularProgressIndicator()),
                     );
                   }
-                  final rentals = [...snap.data!]
-                    ..sort((a, b) {
+                  final rentals = [...snap.data!]..sort((a, b) {
                       if (a.isOpen != b.isOpen) return a.isOpen ? -1 : 1;
                       return b.startDate.compareTo(a.startDate);
                     });
@@ -518,8 +514,7 @@ class _AssetsSubTabState extends State<_AssetsSubTab> {
                         child: Row(
                           children: [
                             Icon(Icons.precision_manufacturing_outlined,
-                                color:
-                                    Theme.of(context).colorScheme.outline),
+                                color: Theme.of(context).colorScheme.outline),
                             const SizedBox(width: 12),
                             const Expanded(
                                 child:
@@ -539,9 +534,8 @@ class _AssetsSubTabState extends State<_AssetsSubTab> {
                             r.isOpen
                                 ? Icons.precision_manufacturing
                                 : Icons.check_circle_outline,
-                            color: r.isOpen
-                                ? AppColors.info
-                                : AppColors.success,
+                            color:
+                                r.isOpen ? AppColors.info : AppColors.success,
                           ),
                           title: Text(
                             '${_d(r.startDate)} → ${r.endDate == null ? 'Open' : _d(r.endDate!)}',
@@ -563,8 +557,7 @@ class _AssetsSubTabState extends State<_AssetsSubTab> {
                               if (r.isOpen)
                                 TextButton.icon(
                                   onPressed: () => _closeRental(r),
-                                  icon: const Icon(Icons.exit_to_app,
-                                      size: 18),
+                                  icon: const Icon(Icons.exit_to_app, size: 18),
                                   label: const Text('Return'),
                                 ),
                             ],

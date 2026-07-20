@@ -142,8 +142,8 @@ class _ProjectSpecificationsTabState extends State<ProjectSpecificationsTab> {
                     Text(
                       '${sheet.itemCount} item${sheet.itemCount == 1 ? "" : "s"}'
                       ' • Created ${_dateFmt.format(sheet.createdAt)}',
-                      style: const TextStyle(
-                          fontSize: 12, color: Colors.black54),
+                      style:
+                          const TextStyle(fontSize: 12, color: Colors.black54),
                     ),
                   ],
                 ),
@@ -183,8 +183,7 @@ class _ProjectSpecificationsTabState extends State<ProjectSpecificationsTab> {
                       Icon(Icons.delete_outline,
                           size: 18, color: Colors.redAccent),
                       SizedBox(width: 10),
-                      Text('Delete',
-                          style: TextStyle(color: Colors.redAccent)),
+                      Text('Delete', style: TextStyle(color: Colors.redAccent)),
                     ]),
                   ),
                 ],
@@ -285,7 +284,7 @@ class _ProjectSpecificationsTabState extends State<ProjectSpecificationsTab> {
           scope: 'project',
           scopeReferenceId: widget.project.id,
         )
-        .first as List<Conversation>;
+        .first;
 
     if (!mounted) return;
     final picked = await showDialog<Conversation>(
@@ -328,8 +327,7 @@ class _ProjectSpecificationsTabState extends State<ProjectSpecificationsTab> {
   }
 
   void _toast(String msg) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(msg)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 
   // ---------------------------------------------------------------------------
@@ -362,8 +360,7 @@ class _ProjectSpecificationsTabState extends State<ProjectSpecificationsTab> {
       context: context,
       builder: (_) => _BudgetItemPickerDialog(
         allItems: items,
-        defaultTitle:
-            'Specifications — ${widget.project.name} — '
+        defaultTitle: 'Specifications — ${widget.project.name} — '
             '${DateFormat.yMMMd().format(DateTime.now())}',
       ),
     );
@@ -382,13 +379,12 @@ class _ProjectSpecificationsTabState extends State<ProjectSpecificationsTab> {
       final user = auth.appUser;
       if (user == null) throw Exception('Not signed in');
 
-      final safeName = result.title
-          .replaceAll(RegExp(r'[\\/\r\n]+'), ' ')
-          .trim();
+      final safeName =
+          result.title.replaceAll(RegExp(r'[\\/\r\n]+'), ' ').trim();
       final fileName = '$safeName.pdf';
 
-      final FileAttachment uploaded = await ServiceLocator.storageService
-          .uploadFileBytes(
+      final FileAttachment uploaded =
+          await ServiceLocator.storageService.uploadFileBytes(
         bytes: bytes,
         fileName: fileName,
         workspaceId: widget.project.workspaceId,
@@ -421,8 +417,8 @@ class _ProjectSpecificationsTabState extends State<ProjectSpecificationsTab> {
       ));
     } catch (e) {
       if (!mounted) return;
-      _toast(UserFacingError.uiMessage(e,
-          action: 'generate specifications PDF'));
+      _toast(
+          UserFacingError.uiMessage(e, action: 'generate specifications PDF'));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -642,6 +638,7 @@ class _BudgetItemPickerDialogState extends State<_BudgetItemPickerDialog> {
         walk(c);
       }
     }
+
     for (final r in byParent[null] ?? const <BudgetItem>[]) {
       walk(r);
     }
@@ -823,9 +820,8 @@ class _BudgetItemPickerDialogState extends State<_BudgetItemPickerDialog> {
     final qty = item.quantity == item.quantity.roundToDouble()
         ? item.quantity.toInt().toString()
         : item.quantity.toStringAsFixed(2);
-    final qtyLabel = item.unit != null && item.unit!.isNotEmpty
-        ? '$qty ${item.unit}'
-        : qty;
+    final qtyLabel =
+        item.unit != null && item.unit!.isNotEmpty ? '$qty ${item.unit}' : qty;
     return CheckboxListTile(
       value: isSelected,
       onChanged: (v) {
@@ -839,8 +835,8 @@ class _BudgetItemPickerDialogState extends State<_BudgetItemPickerDialog> {
       },
       dense: true,
       controlAffinity: ListTileControlAffinity.leading,
-      contentPadding: EdgeInsets.only(
-          left: 12 + item.hierarchyLevel * 14.0, right: 16),
+      contentPadding:
+          EdgeInsets.only(left: 12 + item.hierarchyLevel * 14.0, right: 16),
       title: Text(
         item.name,
         style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
@@ -856,9 +852,7 @@ class _BudgetItemPickerDialogState extends State<_BudgetItemPickerDialog> {
       secondary: Text(
         qtyLabel,
         style: const TextStyle(
-            fontSize: 12,
-            color: Colors.black54,
-            fontWeight: FontWeight.w600),
+            fontSize: 12, color: Colors.black54, fontWeight: FontWeight.w600),
       ),
     );
   }

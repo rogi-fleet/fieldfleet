@@ -4,6 +4,12 @@
 DO $$
 DECLARE
   tbl text;
+  tables_to_add text[] := ARRAY[
+    'properties',
+    'areas',
+    'property_contents',
+    'property_notes'
+  ];
 BEGIN
   FOREACH tbl IN ARRAY tables_to_add LOOP
     IF NOT EXISTS (

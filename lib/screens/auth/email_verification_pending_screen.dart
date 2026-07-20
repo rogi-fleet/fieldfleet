@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http;
 import '../../providers/auth_provider.dart';
 import '../../services/service_locator.dart';
 import '../../theme/theme.dart';
@@ -220,73 +218,6 @@ class _EmailVerificationPendingScreenState
         _resendCooldown = 30;
       });
       _startCooldownTimer();
-      return;
-
-      AppLogger.debug('Sending verification email via HTTP');
-
-      // Use direct HTTP call to avoid dart2js Int64 issues with Firebase callable
-      final user = (ServiceLocator.authService as dynamic).currentUser;
-      if (user == null) {
-        throw Exception('No authenticated user');
-      }
-
-      final idToken = await user.getIdToken();
-      final response = await http.post(
-        Uri.parse(
-          'https://us-central1-your-firebase-project-id.cloudfunctions.net/sendVerificationEmailHttp',
-        ),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $idToken',
-        },
-        body: jsonEncode({'data': {}}),
-      );
-
-      AppLogger.debug(
-        'Verification email response',
-        metadata: {'statusCode': response.statusCode},
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final result = data['result'] ?? data;
-
-        if (result['success'] == true) {
-          if (!mounted) return;
-          setState(() {
-            _emailSent = true;
-            _resendCooldown = 30;
-          });
-          _startCooldownTimer();
-        } else {
-          if (!mounted) return;
-          setState(() {
-            _error = result['message'] ?? 'Failed to send verification email';
-          });
-        }
-      } else {
-        AppLogger.warning(
-          'Verification email HTTP error',
-          metadata: {'statusCode': response.statusCode},
-        );
-        final error = jsonDecode(response.body);
-        final errorMessage =
-            error['error']?['message'] ?? 'Failed to send verification email';
-
-        if (errorMessage.contains('resource-exhausted') ||
-            errorMessage.contains('Too many')) {
-          if (!mounted) return;
-          setState(() {
-            _error =
-                'Too many emails sent. Please wait an hour before trying again.';
-          });
-        } else {
-          if (!mounted) return;
-          setState(() {
-            _error = errorMessage;
-          });
-        }
-      }
     } catch (e) {
       AppLogger.error('Failed to send verification email', error: e);
       if (!mounted) return;

@@ -14,9 +14,6 @@ import '../../theme/theme.dart';
 import 'package:intl/intl.dart';
 import '../file_upload_widget.dart';
 
-
-
-
 /// Summary tab showing property overview and quick stats.
 class PropertySummaryTab extends StatelessWidget {
   final Property property;
@@ -95,8 +92,7 @@ class PropertySummaryTab extends StatelessWidget {
             Row(
               children: PropertyStatus.values.map((status) {
                 final isActive = status == property.status;
-                final isPast =
-                    PropertyStatus.values.indexOf(status) <
+                final isPast = PropertyStatus.values.indexOf(status) <
                     PropertyStatus.values.indexOf(property.status);
 
                 return Expanded(
@@ -154,7 +150,9 @@ class PropertySummaryTab extends StatelessWidget {
                           fontSize: 11,
                           fontWeight:
                               isActive ? FontWeight.bold : FontWeight.normal,
-                          color: isActive ? status.color : ChromeColors.of(context).text,
+                          color: isActive
+                              ? status.color
+                              : ChromeColors.of(context).text,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -169,6 +167,7 @@ class PropertySummaryTab extends StatelessWidget {
     );
   }
 
+  // ignore: unused_element
   Widget _buildSummaryStatItem(String label, String value, Color color) {
     return Builder(
       builder: (context) => Column(
@@ -236,8 +235,7 @@ class PropertySummaryTab extends StatelessWidget {
                       padding: const EdgeInsets.all(AppSpacing.xl),
                       child: Column(
                         children: [
-                          Icon(Icons.inventory_2,
-                              size: 48, color: chrome.text),
+                          Icon(Icons.inventory_2, size: 48, color: chrome.text),
                           const SizedBox(height: 8),
                           Text(
                             'No contents items tracked',
@@ -272,7 +270,8 @@ class PropertySummaryTab extends StatelessWidget {
                             ),
                             Text(
                               'Items',
-                              style: TextStyle(color: ChromeColors.of(context).text),
+                              style: TextStyle(
+                                  color: ChromeColors.of(context).text),
                             ),
                           ],
                         ),
@@ -288,7 +287,8 @@ class PropertySummaryTab extends StatelessWidget {
                             ),
                             Text(
                               'Total Qty',
-                              style: TextStyle(color: ChromeColors.of(context).text),
+                              style: TextStyle(
+                                  color: ChromeColors.of(context).text),
                             ),
                           ],
                         ),
@@ -301,10 +301,13 @@ class PropertySummaryTab extends StatelessWidget {
                       runSpacing: 8,
                       alignment: WrapAlignment.center,
                       children: [
-                        _buildContentsBadge('Identified', identified, AppColors.textTertiary),
-                        _buildContentsBadge('Packed', packed, AppColors.messageAccent),
+                        _buildContentsBadge(
+                            'Identified', identified, AppColors.textTertiary),
+                        _buildContentsBadge(
+                            'Packed', packed, AppColors.messageAccent),
                         _buildContentsBadge('Stored', stored, Colors.indigo),
-                        _buildContentsBadge('Returned', returned, AppColors.success),
+                        _buildContentsBadge(
+                            'Returned', returned, AppColors.success),
                         _buildContentsBadge('Disposed', disposed, Colors.brown),
                       ],
                     ),
@@ -391,8 +394,7 @@ class PropertySummaryTab extends StatelessWidget {
                     const SizedBox(width: 4),
                     Text(
                       '${m.stuckCount} stuck',
-                      style:
-                          TextStyle(fontSize: 12, color: AppColors.warning),
+                      style: TextStyle(fontSize: 12, color: AppColors.warning),
                     ),
                   ],
                 ],
@@ -501,7 +503,8 @@ class UnitPlanCard extends StatelessWidget {
   final Property property;
   final Project project;
 
-  const UnitPlanCard({super.key, required this.property, required this.project});
+  const UnitPlanCard(
+      {super.key, required this.property, required this.project});
 
   String get _tag => 'property:${property.id}:floorplan';
 
@@ -552,8 +555,8 @@ class UnitPlanCard extends StatelessWidget {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Remove',
-                style: TextStyle(color: AppColors.error)),
+            child:
+                const Text('Remove', style: TextStyle(color: AppColors.error)),
           ),
         ],
       ),
@@ -708,13 +711,11 @@ class _PlanPreview extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 'Uploaded ${DateFormat('MMM d, y').format(file.uploadedAt)}',
-                style: TextStyle(
-                    fontSize: 12, color: chrome.text),
+                style: TextStyle(fontSize: 12, color: chrome.text),
               ),
               Text(
                 file.formattedSize,
-                style: TextStyle(
-                    fontSize: 12, color: chrome.sectionLabel),
+                style: TextStyle(fontSize: 12, color: chrome.sectionLabel),
               ),
             ],
           ),

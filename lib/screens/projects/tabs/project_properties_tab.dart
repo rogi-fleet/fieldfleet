@@ -204,9 +204,9 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
     _taskMetricsSub?.cancel();
     _taskMetricsSub = ServiceLocator.taskService
         .getPropertyTaskMetrics(
-          widget.project.id,
-          workspaceId: widget.project.workspaceId,
-        )
+      widget.project.id,
+      workspaceId: widget.project.workspaceId,
+    )
         .listen((metrics) {
       if (mounted) setState(() => _taskMetrics = metrics);
     });
@@ -281,8 +281,7 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
               // Apply filters
               final filteredProperties = _filterProperties(properties);
 
-              final canShowInlineEmptyList =
-                  _isInlineAddingProperty &&
+              final canShowInlineEmptyList = _isInlineAddingProperty &&
                   !_isElevationView &&
                   !_isCardView &&
                   _searchQuery.trim().isEmpty &&
@@ -334,9 +333,8 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
   }
 
   Widget _buildPropertyViewIcons() {
-    final currentView = _isElevationView
-        ? 'elevation'
-        : (_isCardView ? 'cards' : 'list');
+    final currentView =
+        _isElevationView ? 'elevation' : (_isCardView ? 'cards' : 'list');
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -388,9 +386,11 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
 
   Widget _buildSelectionBanner() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.base, vertical: AppSpacing.xs),
+      padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.base, vertical: AppSpacing.xs),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: AppSpacing.xs),
+        padding:
+            const EdgeInsets.symmetric(horizontal: 10, vertical: AppSpacing.xs),
         decoration: BoxDecoration(
           color: AppColors.info.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(AppRadius.sm),
@@ -417,7 +417,8 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
                 icon: const Icon(Icons.edit_outlined, size: 14),
                 label: const Text('Edit', style: TextStyle(fontSize: 12)),
                 style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
                   minimumSize: Size.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
@@ -428,9 +429,8 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
               width: 26,
               height: 26,
               child: IconButton(
-                onPressed: _isBulkUpdatingProperties
-                    ? null
-                    : _clearPropertySelection,
+                onPressed:
+                    _isBulkUpdatingProperties ? null : _clearPropertySelection,
                 icon: const Icon(Icons.close, size: 14),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
@@ -474,16 +474,16 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
               break;
             case 'identifier':
               cmp = a.identifier.toLowerCase().compareTo(
-                b.identifier.toLowerCase(),
-              );
+                    b.identifier.toLowerCase(),
+                  );
               break;
             case 'level':
               cmp = (a.floor ?? '').compareTo(b.floor ?? '');
               break;
             case 'occupancy':
               cmp = (a.occupant ?? '').toLowerCase().compareTo(
-                (b.occupant ?? '').toLowerCase(),
-              );
+                    (b.occupant ?? '').toLowerCase(),
+                  );
               break;
             case 'status':
               cmp = a.status.index.compareTo(b.status.index);
@@ -526,6 +526,7 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
     });
   }
 
+  // ignore: unused_element
   Widget _buildHeaderFact({
     required IconData icon,
     required Color iconColor,
@@ -560,9 +561,8 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
 
   Widget _buildEmptyState(BuildContext context, bool noProperties) {
     if (noProperties) {
-      final pluralTerminology = context
-          .watch<WorkspaceProvider>()
-          .projectTerminology;
+      final pluralTerminology =
+          context.watch<WorkspaceProvider>().projectTerminology;
       return ZeroItemsActionEmptyState(
         icon: Icons.home_work_outlined,
         title:
@@ -570,9 +570,8 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
         subtitle:
             'Add property to track multi-unit restoration ${pluralTerminology.toLowerCase()}',
         ctaLabel: 'Add Structure',
-        onTap: _isInlineSavingProperty
-            ? null
-            : () => _startAddProperty(context),
+        onTap:
+            _isInlineSavingProperty ? null : () => _startAddProperty(context),
       );
     }
     return Center(
@@ -613,8 +612,7 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
     final showInlineAddTriggerRow = !showInlineEditorRow;
     const tableHorizontalPadding =
         32.0; // header/body use 16px left + 16px right
-    final tableContentMinWidth =
-        _propertyTableColumns.fold<double>(
+    final tableContentMinWidth = _propertyTableColumns.fold<double>(
           0,
           (sum, column) =>
               sum + (_propertyColumnWidths[column.id] ?? column.defaultWidth),
@@ -622,8 +620,7 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
         selectionColumnWidth +
         tableHorizontalPadding;
 
-    final rowCount =
-        properties.length +
+    final rowCount = properties.length +
         (showInlineEditorRow ? 1 : 0) +
         (showInlineAddTriggerRow ? 1 : 0);
 
@@ -783,12 +780,11 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
     TextStyle? headerStyle, {
     required List<Property> visibleProperties,
   }) {
-    final isAllSelected =
-        visibleProperties.isNotEmpty &&
+    final isAllSelected = visibleProperties.isNotEmpty &&
         visibleProperties.every((p) => _selectedPropertyIds.contains(p.id));
     final isSomeSelected =
         visibleProperties.any((p) => _selectedPropertyIds.contains(p.id)) &&
-        !isAllSelected;
+            !isAllSelected;
 
     return TableHeaderRow(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.base),
@@ -940,9 +936,8 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
                   children: [
                     IconButton(
                       tooltip: isEditing ? 'Save changes' : 'Save',
-                      onPressed: _isInlineSavingProperty
-                          ? null
-                          : _saveInlineProperty,
+                      onPressed:
+                          _isInlineSavingProperty ? null : _saveInlineProperty,
                       icon: _isInlineSavingProperty
                           ? const SizedBox(
                               width: 16,
@@ -953,9 +948,8 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
                     ),
                     IconButton(
                       tooltip: 'Cancel',
-                      onPressed: _isInlineSavingProperty
-                          ? null
-                          : _cancelInlineEdit,
+                      onPressed:
+                          _isInlineSavingProperty ? null : _cancelInlineEdit,
                       icon: const Icon(Icons.close),
                     ),
                   ],
@@ -986,14 +980,14 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
       },
       fieldViewBuilder:
           (context, textController, focusNode, onFieldSubmitted) => TextField(
-            controller: textController,
-            focusNode: focusNode,
-            enabled: enabled,
-            autofocus: autofocus,
-            decoration: decoration,
-            onSubmitted: (_) => onFieldSubmitted(),
-            onTapOutside: (_) => _cancelInlineEditIfAllowed(),
-          ),
+        controller: textController,
+        focusNode: focusNode,
+        enabled: enabled,
+        autofocus: autofocus,
+        decoration: decoration,
+        onSubmitted: (_) => onFieldSubmitted(),
+        onTapOutside: (_) => _cancelInlineEditIfAllowed(),
+      ),
       onSelected: (selection) {
         controller
           ..text = selection
@@ -1467,9 +1461,8 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
     final nextIdentifier = identifier?.trim() ?? original.identifier;
     final nextName = name?.trim() ?? original.name;
     final nextFloor = floor != null ? floor.trim() : (original.floor ?? '');
-    final nextOccupant = occupant != null
-        ? occupant.trim()
-        : (original.occupant ?? '');
+    final nextOccupant =
+        occupant != null ? occupant.trim() : (original.occupant ?? '');
     final nextStatus = status ?? original.status;
 
     if (nextIdentifier.isEmpty || nextName.isEmpty) {
@@ -1480,8 +1473,7 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
       return;
     }
 
-    final changed =
-        nextIdentifier != original.identifier ||
+    final changed = nextIdentifier != original.identifier ||
         nextName != original.name ||
         nextFloor != (original.floor ?? '') ||
         nextOccupant != (original.occupant ?? '') ||
@@ -1551,7 +1543,9 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
           _buildPropertyCard(context, properties[index]),
       trailingBuilder: (context, cardWidth) => EntityCreateCard(
         title: 'Add Property',
-        subtitle: kIsWeb ? 'Click to add a new property' : 'Tap to add a new property',
+        subtitle: kIsWeb
+            ? 'Click to add a new property'
+            : 'Tap to add a new property',
         size: EntityCreateCardSize.compact,
         minHeight: _getCreateCardHeight(cardWidth),
         onTap: () => _startAddProperty(context),
@@ -1564,7 +1558,8 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
 
     return Card(
       clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.r12)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.r12)),
       child: InkWell(
         onTap: () => _openPropertyDetail(context, property),
         child: Column(
@@ -1968,9 +1963,8 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
     // Number is optional: derive whichever of name/identifier is blank from the
     // other so a name-only (or number-only) entry saves from the checkmark.
     final name = providedName.isEmpty ? providedIdentifier : providedName;
-    final identifier = providedIdentifier.isEmpty
-        ? providedName
-        : providedIdentifier;
+    final identifier =
+        providedIdentifier.isEmpty ? providedName : providedIdentifier;
     final floor = _inlineLevelController.text.trim();
     final occupant = _inlineOccupancyController.text.trim();
 
@@ -1998,8 +1992,8 @@ class _ProjectPropertiesTabState extends State<ProjectPropertiesTab> {
         if (editingId == null) {
           throw StateError('Missing property id for inline edit');
         }
-        final existingProperty = await ServiceLocator.propertyService
-            .getProperty(editingId);
+        final existingProperty =
+            await ServiceLocator.propertyService.getProperty(editingId);
         if (existingProperty == null) {
           throw StateError('Property no longer exists');
         }
@@ -2255,8 +2249,10 @@ class _PropertyFilterDialogState extends State<_PropertyFilterDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.r16)),
-      insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: 40),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.r16)),
+      insetPadding:
+          const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: 40),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 480, maxHeight: 440),
         child: Column(
@@ -2367,7 +2363,8 @@ class _PropertyFilterDialogState extends State<_PropertyFilterDialog> {
             ),
             const Divider(height: 1),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.base, vertical: AppSpacing.md),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.base, vertical: AppSpacing.md),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [

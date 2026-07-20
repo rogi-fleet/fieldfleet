@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import '../../../models/budget_item.dart';
 import '../../../models/pay_app_line.dart';
 import '../../../models/pay_application.dart';
-import '../../../models/project.dart';
 import '../../../providers/workspace_provider.dart';
 import '../../../services/pay_application_pdf_service.dart';
 import '../../../services/service_locator.dart';
@@ -49,7 +48,6 @@ class _PayApplicationEditorScreenState
   String? _error;
 
   PayApplication? _app;
-  Project? _project;
 
   // Editable per-row state. We keep a working list of lines and rebuild
   // PayApplication for totals on every change.
@@ -140,7 +138,6 @@ class _PayApplicationEditorScreenState
       _bindHeader(app);
       _bindLines(app.lines);
       setState(() {
-        _project = project;
         _app = app;
         _loading = false;
       });
@@ -287,8 +284,7 @@ class _PayApplicationEditorScreenState
       );
       // Navigate to canonical edit URL after first save.
       if (wasNew) {
-        context.go(
-            '/projects/${widget.projectId}/pay-applications/$id');
+        context.go('/projects/${widget.projectId}/pay-applications/$id');
       } else {
         setState(() {});
       }
@@ -309,8 +305,7 @@ class _PayApplicationEditorScreenState
       context.watch<WorkspaceProvider>().projectTerminology,
     );
     if (_loading) {
-      return const Scaffold(
-          body: Center(child: CircularProgressIndicator()));
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     if (_error != null) {
       return Scaffold(
@@ -357,8 +352,8 @@ class _PayApplicationEditorScreenState
           if (snap.status == PayApplicationStatus.draft ||
               snap.status == PayApplicationStatus.submitted)
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
               child: FilledButton.icon(
                 onPressed: _saving ? null : () => _save(submit: true),
                 icon: const Icon(Icons.send),
@@ -427,8 +422,7 @@ class _PayApplicationEditorScreenState
               }),
             ),
             const SizedBox(height: 16),
-            if (!_isNew &&
-                snap.status != PayApplicationStatus.draft)
+            if (!_isNew && snap.status != PayApplicationStatus.draft)
               _CertificationCard(
                 app: snap,
                 money: _money,
@@ -474,8 +468,7 @@ class _PayApplicationEditorScreenState
       final periodLabel = _periodTo != null
           ? DateFormat('yyyy-MM-dd').format(_periodTo!)
           : DateFormat('yyyy-MM-dd').format(DateTime.now());
-      final fileName =
-          'Pay-App-${app.applicationNumber}-$periodLabel.pdf';
+      final fileName = 'Pay-App-${app.applicationNumber}-$periodLabel.pdf';
       await ServiceLocator.storageService.uploadFileBytes(
         bytes: bytes,
         fileName: fileName,
@@ -712,7 +705,8 @@ class _G702HeaderCard extends StatelessWidget {
                 _field('Architect Project No.', architectProjectNoCtl,
                     width: 200),
                 _field('Contract For', contractForCtl, width: 260),
-                _dateField('Contract Date', contractDate, df, onPickContractDate),
+                _dateField(
+                    'Contract Date', contractDate, df, onPickContractDate),
                 _dateField('Date Issued', dateIssued, df, onPickDateIssued),
                 _dateField('Period From', periodFrom, df, onPickFrom),
                 _dateField('Period To', periodTo, df, onPickTo),
@@ -946,7 +940,8 @@ class _G703Grid extends StatelessWidget {
   Widget _header(ThemeData theme) {
     return Container(
       color: theme.colorScheme.surfaceContainerHighest,
-      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: AppSpacing.xs),
+      padding:
+          const EdgeInsets.symmetric(vertical: 6, horizontal: AppSpacing.xs),
       child: Row(
         children: _columns
             .map((c) => SizedBox(
@@ -968,7 +963,8 @@ class _G703Grid extends StatelessWidget {
     final d = drafts[i];
     final line = app.lines[i];
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: AppSpacing.xs),
+      padding:
+          const EdgeInsets.symmetric(vertical: 2, horizontal: AppSpacing.xs),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -1001,8 +997,7 @@ class _G703Grid extends StatelessWidget {
                   final ok = await confirmDestructive(
                     ctx,
                     title: 'Remove line?',
-                    message:
-                        'Remove $label from this pay application? Any '
+                    message: 'Remove $label from this pay application? Any '
                         'completed/stored values entered for it will be lost.',
                     confirmLabel: 'Remove',
                   );
@@ -1018,14 +1013,12 @@ class _G703Grid extends StatelessWidget {
   }
 
   Widget _totalsRow(ThemeData theme) {
-    final scheduled =
-        app.lines.fold<double>(0, (s, l) => s + l.scheduledValue);
+    final scheduled = app.lines.fold<double>(0, (s, l) => s + l.scheduledValue);
     final previous =
         app.lines.fold<double>(0, (s, l) => s + l.workCompletedPrevious);
     final thisPeriod =
         app.lines.fold<double>(0, (s, l) => s + l.workCompletedThisPeriod);
-    final stored =
-        app.lines.fold<double>(0, (s, l) => s + l.materialsStored);
+    final stored = app.lines.fold<double>(0, (s, l) => s + l.materialsStored);
     final total = app.totalCompletedAndStored;
     final balance = scheduled - total;
 
@@ -1039,7 +1032,8 @@ class _G703Grid extends StatelessWidget {
 
     return Container(
       color: theme.colorScheme.surfaceContainerHigh,
-      padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm, horizontal: AppSpacing.xs),
+      padding: const EdgeInsets.symmetric(
+          vertical: AppSpacing.sm, horizontal: AppSpacing.xs),
       child: Row(
         children: [
           cell('', _colItemNo),
@@ -1079,7 +1073,8 @@ class _G703Grid extends StatelessWidget {
         textAlign: center ? TextAlign.center : TextAlign.left,
         decoration: const InputDecoration(
           isDense: true,
-          contentPadding: EdgeInsets.symmetric(horizontal: 6, vertical: AppSpacing.sm),
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 6, vertical: AppSpacing.sm),
           border: OutlineInputBorder(),
         ),
         onChanged: (_) => onChanged(),
@@ -1097,7 +1092,8 @@ class _G703Grid extends StatelessWidget {
         inputFormatters: NumericInput.currency,
         decoration: const InputDecoration(
           isDense: true,
-          contentPadding: EdgeInsets.symmetric(horizontal: 6, vertical: AppSpacing.sm),
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 6, vertical: AppSpacing.sm),
           border: OutlineInputBorder(),
         ),
         onChanged: (_) => onChanged(),
@@ -1110,8 +1106,8 @@ class _G703Grid extends StatelessWidget {
       width: w,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 10),
-        child: Text(text,
-            textAlign: center ? TextAlign.center : TextAlign.right),
+        child:
+            Text(text, textAlign: center ? TextAlign.center : TextAlign.right),
       ),
     );
   }
@@ -1119,8 +1115,7 @@ class _G703Grid extends StatelessWidget {
   /// Editable retainage cell. When empty, displays the header-percentage
   /// derived amount as a hint (italic placeholder); typing a value sets a
   /// per-line override on the underlying PayAppLine.
-  Widget _cellRetainage(
-      TextEditingController c, PayAppLine line, double w) {
+  Widget _cellRetainage(TextEditingController c, PayAppLine line, double w) {
     final calculated = _lineRetainage(line);
     return SizedBox(
       width: w,
@@ -1131,12 +1126,11 @@ class _G703Grid extends StatelessWidget {
         inputFormatters: NumericInput.currency,
         decoration: InputDecoration(
           isDense: true,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 6, vertical: AppSpacing.sm),
+          contentPadding: const EdgeInsets.symmetric(
+              horizontal: 6, vertical: AppSpacing.sm),
           border: const OutlineInputBorder(),
           hintText: calculated,
-          hintStyle:
-              const TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
+          hintStyle: const TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
         ),
         onChanged: (_) => onChanged(),
       ),
@@ -1256,8 +1250,7 @@ class _CertificationCardState extends State<_CertificationCard> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(children: [
-              Icon(Icons.verified_outlined,
-                  color: theme.colorScheme.primary),
+              Icon(Icons.verified_outlined, color: theme.colorScheme.primary),
               const SizedBox(width: 8),
               Text("Architect's Certificate for Payment",
                   style: theme.textTheme.titleMedium),
@@ -1270,8 +1263,11 @@ class _CertificationCardState extends State<_CertificationCard> {
                 _kv('Amount Certified',
                     widget.money.format(app.certifiedAmount ?? 0)),
                 _kv('Certified By', app.certifiedBy ?? '—'),
-                _kv('Certified On',
-                    app.certifiedAt == null ? '—' : df.format(app.certifiedAt!)),
+                _kv(
+                    'Certified On',
+                    app.certifiedAt == null
+                        ? '—'
+                        : df.format(app.certifiedAt!)),
               ]),
               const SizedBox(height: 12),
               Row(children: [
@@ -1354,12 +1350,10 @@ class _CertificationCardState extends State<_CertificationCard> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(k,
-            style: TextStyle(
-                fontSize: 11, color: Theme.of(context).hintColor)),
+            style: TextStyle(fontSize: 11, color: Theme.of(context).hintColor)),
         const SizedBox(height: 2),
         Text(v,
-            style: const TextStyle(
-                fontSize: 14, fontWeight: FontWeight.w600)),
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
       ],
     );
   }

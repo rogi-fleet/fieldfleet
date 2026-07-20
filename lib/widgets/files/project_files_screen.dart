@@ -289,8 +289,7 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
         widget.initialVirtualFolder != null) {
       final target = _lastKnownFolders
           .where(
-            (f) =>
-                f.isVirtual && f.virtualType == widget.initialVirtualFolder,
+            (f) => f.isVirtual && f.virtualType == widget.initialVirtualFolder,
           )
           .firstOrNull;
       if (target != null) {
@@ -363,8 +362,6 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
         return ProjectWarrantiesTab(project: project);
       case VirtualFolderType.plans:
         return PlansListScreen(projectId: project.id);
-      case VirtualFolderType.specifications:
-        return ProjectSpecificationsTab(project: project);
       default:
         return const SizedBox.shrink();
     }
@@ -401,7 +398,6 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
         case VirtualFolderType.punchList:
         case VirtualFolderType.warranties:
         case VirtualFolderType.plans:
-        case VirtualFolderType.specifications:
           // Content is rendered directly; no file-attachment stream needed.
           _filesStream = Stream.value([]);
           return;
@@ -451,8 +447,6 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
         return Icons.verified_outlined;
       case VirtualFolderType.plans:
         return Icons.map_outlined;
-      case VirtualFolderType.specifications:
-        return Icons.menu_book_outlined;
       default:
         return Icons.folder_special;
     }
@@ -608,7 +602,8 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
       // covers the "Choose Files" button on mobile.
       useRootNavigator: true,
       builder: (dialogContext) => Dialog(
-        insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.xl),
+        insetPadding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xl, vertical: AppSpacing.xl),
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 680),
           child: content,
@@ -619,13 +614,23 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
 
   // Pick file then show tag dialog
   static const _allowedExtensions = {
-    'jpg', 'jpeg', 'png', 'gif', 'webp',
+    'jpg',
+    'jpeg',
+    'png',
+    'gif',
+    'webp',
     'pdf',
-    'doc', 'docx',
-    'xls', 'xlsx',
-    'ppt', 'pptx',
-    'mp4', 'mov', 'avi',
-    'mp3', 'wav',
+    'doc',
+    'docx',
+    'xls',
+    'xlsx',
+    'ppt',
+    'pptx',
+    'mp4',
+    'mov',
+    'avi',
+    'mp3',
+    'wav',
     'zip',
   };
 
@@ -642,8 +647,9 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
       // Web browsers don't always honour the extension filter — validate here.
       final rejected = result.files
           .where((f) {
-            final ext =
-                f.name.contains('.') ? f.name.split('.').last.toLowerCase() : '';
+            final ext = f.name.contains('.')
+                ? f.name.split('.').last.toLowerCase()
+                : '';
             return !_allowedExtensions.contains(ext);
           })
           .map((f) => f.name)
@@ -661,13 +667,11 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
         );
       }
 
-      final valid = result.files
-          .where((f) {
-            final ext =
-                f.name.contains('.') ? f.name.split('.').last.toLowerCase() : '';
-            return _allowedExtensions.contains(ext);
-          })
-          .toList();
+      final valid = result.files.where((f) {
+        final ext =
+            f.name.contains('.') ? f.name.split('.').last.toLowerCase() : '';
+        return _allowedExtensions.contains(ext);
+      }).toList();
 
       if (valid.isNotEmpty) {
         await _showTagDialogAndUpload(valid);
@@ -777,9 +781,7 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
                               ),
                               if (files.length > 1) ...[
                                 const SizedBox(height: 8),
-                                ...files
-                                    .take(3)
-                                    .map(
+                                ...files.take(3).map(
                                       (file) => Text(
                                         file.name,
                                         maxLines: 1,
@@ -902,9 +904,8 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
                 ? 'All ${files.length} uploads failed'
                 : 'Uploaded $successfulUploads of ${files.length} files',
           ),
-          backgroundColor: successfulUploads == 0
-              ? AppColors.error
-              : AppColors.warning,
+          backgroundColor:
+              successfulUploads == 0 ? AppColors.error : AppColors.warning,
         ),
       );
     }
@@ -930,9 +931,8 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
           fileName: platformFile.name,
           workspaceId: widget.workspaceId,
           projectId: widget.projectId,
-          folderId: _selectedFolder?.isVirtual == false
-              ? _selectedFolder?.id
-              : null,
+          folderId:
+              _selectedFolder?.isVirtual == false ? _selectedFolder?.id : null,
           tags: tags,
           uploadedBy: uploadedBy,
         );
@@ -948,9 +948,8 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
           fileName: platformFile.name,
           workspaceId: widget.workspaceId,
           projectId: widget.projectId,
-          folderId: _selectedFolder?.isVirtual == false
-              ? _selectedFolder?.id
-              : null,
+          folderId:
+              _selectedFolder?.isVirtual == false ? _selectedFolder?.id : null,
           tags: tags,
           uploadedBy: uploadedBy,
         );
@@ -1230,10 +1229,7 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
         // so we can use it directly without a fileUrl fallback.
         final thumbs = <String, List<String>>{
           for (final entry in _projectImagesByFolder.entries)
-            entry.key: entry.value
-                .take(3)
-                .map((f) => f.thumbnailUrl!)
-                .toList(),
+            entry.key: entry.value.take(3).map((f) => f.thumbnailUrl!).toList(),
         };
         final counts = <String, int>{
           for (final entry in _projectImagesByFolder.entries)
@@ -1332,8 +1328,7 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
           if (f.fileName.toLowerCase().contains(query)) return true;
           if ((f.title ?? '').toLowerCase().contains(query)) return true;
           if ((f.description ?? '').toLowerCase().contains(query)) return true;
-          if (f.effectiveTagNames
-              .any((t) => t.toLowerCase().contains(query))) {
+          if (f.effectiveTagNames.any((t) => t.toLowerCase().contains(query))) {
             return true;
           }
           return false;
@@ -1423,8 +1418,9 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
                     onTap: _showUploadDialog,
                   ),
               ],
-              filterCount:
-                  sortedTags.isNotEmpty ? (_selectedTagFilter != null ? 1 : 0) : null,
+              filterCount: sortedTags.isNotEmpty
+                  ? (_selectedTagFilter != null ? 1 : 0)
+                  : null,
               onFilterTap: sortedTags.isNotEmpty
                   ? () => _showTagFilterSheet(sortedTags)
                   : null,
@@ -1471,7 +1467,8 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
   }
 
   void _showTagFilterSheet(List<String> tags) {
-    final isCompact = MediaQuery.of(context).size.width < AppBreakpoints.compact;
+    final isCompact =
+        MediaQuery.of(context).size.width < AppBreakpoints.compact;
 
     final content = StatefulBuilder(
       builder: (context, setSheetState) {
@@ -1531,7 +1528,8 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
         context: context,
         useRootNavigator: false,
         builder: (dialogContext) => Dialog(
-          insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.xl),
+          insetPadding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.xl, vertical: AppSpacing.xl),
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 400),
             child: content,
@@ -1766,28 +1764,28 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
                 ),
               ]
             : templates
-                  .map(
-                    (t) => SimpleDialogOption(
-                      onPressed: () => Navigator.of(dialogContext).pop(t),
-                      child: ListTile(
-                        dense: true,
-                        leading: Icon(
-                          fieldFormCategoryIcon(t.category),
-                          size: 20,
-                          color: AppColors.primary,
-                        ),
-                        title: Text(t.name),
-                        subtitle: t.description != null
-                            ? Text(
-                                t.description!,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              )
-                            : null,
+                .map(
+                  (t) => SimpleDialogOption(
+                    onPressed: () => Navigator.of(dialogContext).pop(t),
+                    child: ListTile(
+                      dense: true,
+                      leading: Icon(
+                        fieldFormCategoryIcon(t.category),
+                        size: 20,
+                        color: AppColors.primary,
                       ),
+                      title: Text(t.name),
+                      subtitle: t.description != null
+                          ? Text(
+                              t.description!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            )
+                          : null,
                     ),
-                  )
-                  .toList(),
+                  ),
+                )
+                .toList(),
       ),
     );
 
@@ -1950,7 +1948,8 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
 
   /// SharedPreferences key base for the per-project "don't show again"
   /// dismiss state on the multi-zone nudge.
-  static const String _multiZoneNudgeDismissPrefix = 'filesView.nudge.dismissed.';
+  static const String _multiZoneNudgeDismissPrefix =
+      'filesView.nudge.dismissed.';
   static const int _multiZoneNudgeThreshold = 10;
 
   bool _multiZoneNudgeDismissed = false;
@@ -2074,7 +2073,8 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 6),
+      padding:
+          const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 6),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(color: Theme.of(context).dividerColor),
@@ -2178,7 +2178,8 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
     await _runBulk(
       label: 'Tagging',
       task: (file) async {
-        final current = await ServiceLocator.fileTagService.getTagsForFile(file.id);
+        final current =
+            await ServiceLocator.fileTagService.getTagsForFile(file.id);
         final ids = current.map((t) => t.id).toSet()..add(tag.id);
         await _storageService.updateFileMetadata(
           fileId: file.id,
@@ -2195,7 +2196,8 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
     await _runBulk(
       label: 'Untagging',
       task: (file) async {
-        final current = await ServiceLocator.fileTagService.getTagsForFile(file.id);
+        final current =
+            await ServiceLocator.fileTagService.getTagsForFile(file.id);
         final ids = current
             .where((t) => t.name.toLowerCase() != target)
             .map((t) => t.id)
@@ -2330,7 +2332,6 @@ class ProjectFilesScreenState extends State<ProjectFilesScreen> {
       },
     );
   }
-
 }
 
 class _BreadcrumbTile extends StatelessWidget {
@@ -2353,7 +2354,8 @@ class _BreadcrumbTile extends StatelessWidget {
     );
     if (onTap == null) {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: 2),
+        padding:
+            const EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: 2),
         child: Text(label, style: style),
       );
     }
@@ -2361,7 +2363,8 @@ class _BreadcrumbTile extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(AppRadius.xs),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: 2),
+        padding:
+            const EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: 2),
         child: Text(label, style: style),
       ),
     );

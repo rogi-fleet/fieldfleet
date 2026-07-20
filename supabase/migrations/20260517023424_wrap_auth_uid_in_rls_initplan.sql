@@ -197,12 +197,17 @@ CREATE POLICY messages_select ON public.messages AS PERMISSIVE FOR SELECT USING 
   WHERE ((c.id = messages.conversation_id) AND ((SELECT auth.uid()) = ANY (c.participant_ids))))));
 DROP POLICY IF EXISTS messages_update ON public.messages;
 CREATE POLICY messages_update ON public.messages AS PERMISSIVE FOR UPDATE USING ((sender_id = (SELECT auth.uid())));
-DROP POLICY IF EXISTS notes_delete ON public.notes;
-CREATE POLICY notes_delete ON public.notes AS PERMISSIVE FOR DELETE USING ((author_id = (SELECT auth.uid())));
-DROP POLICY IF EXISTS notes_insert ON public.notes;
-CREATE POLICY notes_insert ON public.notes AS PERMISSIVE FOR INSERT WITH CHECK ((is_workspace_member(workspace_id) AND (author_id = (SELECT auth.uid()))));
-DROP POLICY IF EXISTS notes_update ON public.notes;
-CREATE POLICY notes_update ON public.notes AS PERMISSIVE FOR UPDATE USING ((author_id = (SELECT auth.uid()))) WITH CHECK ((author_id = (SELECT auth.uid())));
+DO $$
+BEGIN
+  IF to_regclass('public.notes') IS NOT NULL THEN
+    EXECUTE 'DROP POLICY IF EXISTS notes_delete ON public.notes';
+    EXECUTE 'CREATE POLICY notes_delete ON public.notes AS PERMISSIVE FOR DELETE USING ((author_id = (SELECT auth.uid())))';
+    EXECUTE 'DROP POLICY IF EXISTS notes_insert ON public.notes';
+    EXECUTE 'CREATE POLICY notes_insert ON public.notes AS PERMISSIVE FOR INSERT WITH CHECK ((is_workspace_member(workspace_id) AND (author_id = (SELECT auth.uid()))))';
+    EXECUTE 'DROP POLICY IF EXISTS notes_update ON public.notes';
+    EXECUTE 'CREATE POLICY notes_update ON public.notes AS PERMISSIVE FOR UPDATE USING ((author_id = (SELECT auth.uid()))) WITH CHECK ((author_id = (SELECT auth.uid())))';
+  END IF;
+END $$;
 DROP POLICY IF EXISTS "Users can update own notifications" ON public.notifications;
 CREATE POLICY "Users can update own notifications" ON public.notifications AS PERMISSIVE FOR UPDATE USING (((SELECT auth.uid()) = user_id));
 DROP POLICY IF EXISTS "Users can view own notifications" ON public.notifications;

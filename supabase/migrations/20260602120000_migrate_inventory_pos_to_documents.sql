@@ -20,10 +20,10 @@
 -- 1. Promote suppliers to vendors (only those without a name match already).
 INSERT INTO vendors (
   workspace_id, company_name, website, address, notes,
-  is_active, business_phone, business_email, created_by
+  is_active, created_by
 )
 SELECT s.workspace_id, s.name, s.website, s.address, s.notes,
-       s.is_active, s.phone, s.email, s.created_by
+       s.is_active, s.created_by
 FROM inventory_suppliers s
 WHERE NOT EXISTS (
   SELECT 1 FROM vendors v

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math' show max;
-import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -107,7 +106,8 @@ class _ProjectHeaderState extends State<ProjectHeader> {
     final hasAddress = address.isNotEmpty;
     final serial = widget.project.serialNumber?.trim();
     final hasSerial = serial != null && serial.isNotEmpty;
-    final customerName = _customerLoaded ? _liveCustomerName : widget.project.customerName;
+    final customerName =
+        _customerLoaded ? _liveCustomerName : widget.project.customerName;
     final businessPhone = _liveBusinessPhone;
     final businessEmail = _liveBusinessEmail;
 
@@ -165,9 +165,11 @@ class _ProjectHeaderState extends State<ProjectHeader> {
                       const SizedBox(width: 8),
                       _buildSerialBadge(context, serial),
                     ],
-                    if (widget.project.purchaseOrderNumber?.trim().isNotEmpty == true) ...[
+                    if (widget.project.purchaseOrderNumber?.trim().isNotEmpty ==
+                        true) ...[
                       const SizedBox(width: 8),
-                      _buildPOBadge(context, widget.project.purchaseOrderNumber!.trim()),
+                      _buildPOBadge(
+                          context, widget.project.purchaseOrderNumber!.trim()),
                     ],
                     const Spacer(),
                     _buildActions(context, isCompact),
@@ -177,23 +179,26 @@ class _ProjectHeaderState extends State<ProjectHeader> {
 
               // Row 2: Address + Customer + Business contacts
               if (hasAddress ||
-                  (customerName != null && customerName!.isNotEmpty) ||
+                  (customerName != null && customerName.isNotEmpty) ||
                   businessPhone != null ||
                   businessEmail != null) ...[
                 const SizedBox(height: 3),
                 Padding(
-                  padding: EdgeInsets.only(left: isCompact ? 0 : leadingPadding),
+                  padding:
+                      EdgeInsets.only(left: isCompact ? 0 : leadingPadding),
                   child: isCompact
                       // Compact: customer above address
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            if ((customerName != null && customerName!.isNotEmpty) ||
+                            if ((customerName != null &&
+                                    customerName.isNotEmpty) ||
                                 businessPhone != null ||
                                 businessEmail != null) ...[
                               Row(
                                 children: [
-                                  if (customerName != null && customerName!.isNotEmpty)
+                                  if (customerName != null &&
+                                      customerName.isNotEmpty)
                                     Flexible(
                                       child: GestureDetector(
                                         onTap: widget.project.clientId != null
@@ -202,32 +207,45 @@ class _ProjectHeaderState extends State<ProjectHeader> {
                                                 )
                                             : null,
                                         child: MouseRegion(
-                                          cursor: widget.project.clientId != null
-                                              ? SystemMouseCursors.click
-                                              : MouseCursor.defer,
+                                          cursor:
+                                              widget.project.clientId != null
+                                                  ? SystemMouseCursors.click
+                                                  : MouseCursor.defer,
                                           child: Text(
-                                            customerName!,
-                                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                              color: chrome.isDark ? AppColors.primaryLight : Theme.of(context).colorScheme.primary,
-                                            ),
+                                            customerName,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall
+                                                ?.copyWith(
+                                                  color: chrome.isDark
+                                                      ? AppColors.primaryLight
+                                                      : Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
+                                                ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   if (businessPhone != null) ...[
                                     const SizedBox(width: 8),
-                                    _buildBusinessContactIcon(Icons.phone, businessPhone, 'tel', chrome),
+                                    _buildBusinessContactIcon(Icons.phone,
+                                        businessPhone, 'tel', chrome),
                                   ],
                                   if (businessEmail != null) ...[
                                     const SizedBox(width: 6),
-                                    _buildBusinessContactIcon(Icons.email_outlined, businessEmail, 'mailto', chrome),
+                                    _buildBusinessContactIcon(
+                                        Icons.email_outlined,
+                                        businessEmail,
+                                        'mailto',
+                                        chrome),
                                   ],
                                 ],
                               ),
                             ],
                             if (hasAddress) ...[
                               if (customerName != null &&
-                                  customerName!.isNotEmpty)
+                                  customerName.isNotEmpty)
                                 const SizedBox(height: 2),
                               GestureDetector(
                                 onTap: () {
@@ -245,9 +263,12 @@ class _ProjectHeaderState extends State<ProjectHeader> {
                                   cursor: SystemMouseCursors.click,
                                   child: Text(
                                     address,
-                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: chrome.text,
-                                    ),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                          color: chrome.text,
+                                        ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -277,9 +298,12 @@ class _ProjectHeaderState extends State<ProjectHeader> {
                                     cursor: SystemMouseCursors.click,
                                     child: Text(
                                       address,
-                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                        color: chrome.text,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: chrome.text,
+                                          ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -288,11 +312,13 @@ class _ProjectHeaderState extends State<ProjectHeader> {
                               ),
                             ],
                             if (hasAddress &&
-                                ((customerName != null && customerName!.isNotEmpty) ||
+                                ((customerName != null &&
+                                        customerName.isNotEmpty) ||
                                     businessPhone != null ||
                                     businessEmail != null)) ...[
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: AppSpacing.sm),
                                 child: Text(
                                   '·',
                                   style: TextStyle(
@@ -302,10 +328,12 @@ class _ProjectHeaderState extends State<ProjectHeader> {
                                 ),
                               ),
                             ],
-                            if ((customerName != null && customerName!.isNotEmpty) ||
+                            if ((customerName != null &&
+                                    customerName.isNotEmpty) ||
                                 businessPhone != null ||
                                 businessEmail != null) ...[
-                              if (customerName != null && customerName!.isNotEmpty)
+                              if (customerName != null &&
+                                  customerName.isNotEmpty)
                                 GestureDetector(
                                   onTap: widget.project.clientId != null
                                       ? () => context.go(
@@ -317,10 +345,17 @@ class _ProjectHeaderState extends State<ProjectHeader> {
                                         ? SystemMouseCursors.click
                                         : MouseCursor.defer,
                                     child: Text(
-                                      customerName!,
-                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                        color: chrome.isDark ? AppColors.primaryLight : Theme.of(context).colorScheme.primary,
-                                      ),
+                                      customerName,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: chrome.isDark
+                                                ? AppColors.primaryLight
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                          ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -328,11 +363,13 @@ class _ProjectHeaderState extends State<ProjectHeader> {
                                 ),
                               if (businessPhone != null) ...[
                                 const SizedBox(width: 8),
-                                _buildBusinessContactIcon(Icons.phone, businessPhone, 'tel', chrome),
+                                _buildBusinessContactIcon(
+                                    Icons.phone, businessPhone, 'tel', chrome),
                               ],
                               if (businessEmail != null) ...[
                                 const SizedBox(width: 6),
-                                _buildBusinessContactIcon(Icons.email_outlined, businessEmail, 'mailto', chrome),
+                                _buildBusinessContactIcon(Icons.email_outlined,
+                                    businessEmail, 'mailto', chrome),
                               ],
                             ],
                           ],
@@ -386,9 +423,7 @@ class _ProjectHeaderState extends State<ProjectHeader> {
           duration: const Duration(milliseconds: 150),
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
           decoration: BoxDecoration(
-            color: _isHovering
-                ? chrome.hover
-                : Colors.transparent,
+            color: _isHovering ? chrome.hover : Colors.transparent,
             borderRadius: BorderRadius.circular(AppRadius.sm),
           ),
           child: content,
@@ -480,9 +515,9 @@ class _ProjectHeaderState extends State<ProjectHeader> {
       child: Text(
         widget.project.name,
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-          fontWeight: FontWeight.w600,
-          color: chrome.textActive,
-        ),
+              fontWeight: FontWeight.w600,
+              color: chrome.textActive,
+            ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -500,9 +535,9 @@ class _ProjectHeaderState extends State<ProjectHeader> {
       child: Text(
         '#$serial',
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: chrome.text,
-          fontWeight: FontWeight.w600,
-        ),
+              color: chrome.text,
+              fontWeight: FontWeight.w600,
+            ),
       ),
     );
   }
@@ -518,9 +553,9 @@ class _ProjectHeaderState extends State<ProjectHeader> {
       child: Text(
         'PO $po',
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: chrome.text,
-          fontWeight: FontWeight.w500,
-        ),
+              color: chrome.text,
+              fontWeight: FontWeight.w500,
+            ),
       ),
     );
   }
@@ -540,9 +575,9 @@ class _ProjectHeaderState extends State<ProjectHeader> {
             child: Text(
               widget.project.name,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: chrome.textActive,
-              ),
+                    fontWeight: FontWeight.w600,
+                    color: chrome.textActive,
+                  ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -654,7 +689,8 @@ class _ProjectHeaderState extends State<ProjectHeader> {
   Widget _buildActions(BuildContext context, bool isCompact) {
     final chrome = ChromeColors.of(context);
     final authProvider = context.watch<AuthProvider>();
-    final singular = singularProjectTerminology(context.watch<WorkspaceProvider>().projectTerminology);
+    final singular = singularProjectTerminology(
+        context.watch<WorkspaceProvider>().projectTerminology);
     final iconSize = isCompact ? 19.0 : 20.0;
     final density = isCompact ? VisualDensity.standard : VisualDensity.compact;
     final constraints = isCompact
@@ -665,7 +701,8 @@ class _ProjectHeaderState extends State<ProjectHeader> {
       mainAxisSize: MainAxisSize.min,
       children: [
         IconButton(
-          icon: Icon(Icons.auto_awesome, size: iconSize, color: AppColors.secondaryDark),
+          icon: Icon(Icons.auto_awesome,
+              size: iconSize, color: AppColors.secondaryDark),
           onPressed: () {
             showAiProjectSetupWizard(
               context,
@@ -753,9 +790,11 @@ class _ProjectHeaderState extends State<ProjectHeader> {
                 value: 'delete',
                 child: Row(
                   children: [
-                    Icon(Icons.delete_outline, size: 18, color: Colors.red.shade700),
+                    Icon(Icons.delete_outline,
+                        size: 18, color: Colors.red.shade700),
                     const SizedBox(width: 12),
-                    Text('Delete $singular', style: TextStyle(color: Colors.red.shade700)),
+                    Text('Delete $singular',
+                        style: TextStyle(color: Colors.red.shade700)),
                   ],
                 ),
               ),
@@ -769,7 +808,8 @@ class _ProjectHeaderState extends State<ProjectHeader> {
   Future<void> _onMenuAction(BuildContext context, String value) async {
     final project = widget.project;
     final projectService = ServiceLocator.projectService;
-    final singular = singularProjectTerminology(context.read<WorkspaceProvider>().projectTerminology);
+    final singular = singularProjectTerminology(
+        context.read<WorkspaceProvider>().projectTerminology);
 
     switch (value) {
       case 'save_template':
@@ -790,7 +830,9 @@ class _ProjectHeaderState extends State<ProjectHeader> {
         } catch (e) {
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Failed to duplicate ${singular.toLowerCase()}: $e')),
+              SnackBar(
+                  content: Text(
+                      'Failed to duplicate ${singular.toLowerCase()}: $e')),
             );
           }
         }
@@ -937,7 +979,8 @@ class _ProjectDropdownState extends State<_ProjectDropdown> {
   }
 
   Color? get _filterColor {
-    if (_statusFilter != null) return ProjectStatusTheme.colorDark(_statusFilter!);
+    if (_statusFilter != null)
+      return ProjectStatusTheme.colorDark(_statusFilter!);
     if (_jobTypeFilter != null) return _jobTypeFilter!.color;
     return null;
   }
@@ -1038,7 +1081,8 @@ class _FilterHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final chrome = ChromeColors.of(context);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+      padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md, vertical: AppSpacing.sm),
       decoration: BoxDecoration(
         color: chrome.hover,
         border: Border(
@@ -1097,7 +1141,8 @@ class _StatusBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = _color();
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: AppSpacing.xs),
+      padding:
+          const EdgeInsets.symmetric(horizontal: 10, vertical: AppSpacing.xs),
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(AppRadius.xs),

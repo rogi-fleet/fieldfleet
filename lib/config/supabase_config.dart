@@ -25,7 +25,7 @@ class SupabaseConfig {
   /// Local development configuration
   /// Local Supabase CLI endpoint.
   static const _local = _SupabaseEnvConfig(
-    url: 'http://127.0.0.1:54321',
+    url: 'http://127.0.0.1:55321',
     anonKey: 'your-local-supabase-anon-key',
   );
 

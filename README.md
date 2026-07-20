@@ -105,14 +105,22 @@ Prerequisites: [Flutter SDK](https://docs.flutter.dev/get-started/install),
 # Install dependencies
 flutter pub get
 
-# Start the local Supabase stack and apply the schema
+# Start this checkout's isolated local Supabase stack and apply the schema
 supabase start
 supabase migration up --local
 
-# Run the app against local Supabase (default URL: http://127.0.0.1:54321)
+# Run the app against local Supabase (default URL: http://127.0.0.1:55321)
 flutter run -d chrome \
   --dart-define=SUPABASE_ANON_KEY=your-local-supabase-anon-key
 ```
+
+This public checkout uses Supabase project id `fieldfleet_public` and local
+ports `55321`-`55329` so it can run next to another Supabase project on the
+standard `54321` ports. Before running migrations on a machine that already
+has Supabase containers, use `supabase status` and `docker ps --filter
+name=supabase_` to confirm which stack is active. Do not run `supabase db
+reset`, `supabase migration repair`, or `supabase db pull` against a database
+that contains data you need.
 
 For a non-local environment, pass explicit build-time values:
 

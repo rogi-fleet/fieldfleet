@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../models/capacity_planning.dart';
 import '../../models/project.dart';
@@ -51,11 +50,11 @@ class _TeamCapacityTabState extends State<TeamCapacityTab> {
   }
 
   Future<void> _loadPermissions() async {
-    final allowed = await ServiceLocator.capacityPlanningService
-        .canExecuteRebalanceActions(
-          workspaceId: widget.workspaceId,
-          userId: widget.currentUserId,
-        );
+    final allowed =
+        await ServiceLocator.capacityPlanningService.canExecuteRebalanceActions(
+      workspaceId: widget.workspaceId,
+      userId: widget.currentUserId,
+    );
     if (!mounted) return;
     setState(() => _canRebalance = allowed);
   }
@@ -85,15 +84,15 @@ class _TeamCapacityTabState extends State<TeamCapacityTab> {
               child: snapshot.connectionState == ConnectionState.waiting
                   ? const Center(child: CircularProgressIndicator())
                   : snapshot.hasError
-                  ? Center(
-                      child: Text(
-                        UserFacingError.uiMessage(
-                          snapshot.error,
-                          action: 'load capacity',
-                        ),
-                      ),
-                    )
-                  : _buildContent(snapshot.data!),
+                      ? Center(
+                          child: Text(
+                            UserFacingError.uiMessage(
+                              snapshot.error,
+                              action: 'load capacity',
+                            ),
+                          ),
+                        )
+                      : _buildContent(snapshot.data!),
             ),
           ],
         );
@@ -103,7 +102,8 @@ class _TeamCapacityTabState extends State<TeamCapacityTab> {
 
   Widget _buildToolbar() {
     final chrome = ChromeColors.of(context);
-    final projectTerminology = context.watch<WorkspaceProvider>().projectTerminology;
+    final projectTerminology =
+        context.watch<WorkspaceProvider>().projectTerminology;
     return Padding(
       padding: const EdgeInsets.all(AppSpacing.base),
       child: Wrap(
@@ -134,8 +134,8 @@ class _TeamCapacityTabState extends State<TeamCapacityTab> {
                       days == 7
                           ? '1 week'
                           : days == 14
-                          ? '2 weeks'
-                          : '1 month',
+                              ? '2 weeks'
+                              : '1 month',
                     ),
                   ),
                 )
@@ -279,9 +279,8 @@ class _TeamCapacityTabState extends State<TeamCapacityTab> {
                   subtitle: Text(
                     '${issue.committedHours.toStringAsFixed(1)}h / ${issue.capacityHours.toStringAsFixed(1)}h (${(issue.utilizationPct * 100).toStringAsFixed(0)}%)',
                   ),
-                  trailing: _canRebalance
-                      ? const Icon(Icons.chevron_right)
-                      : null,
+                  trailing:
+                      _canRebalance ? const Icon(Icons.chevron_right) : null,
                   onTap: _canRebalance
                       ? () => _openRebalanceActions(snapshot, issue)
                       : null,
@@ -374,11 +373,9 @@ class _TeamCapacityTabState extends State<TeamCapacityTab> {
     CapacitySnapshot snapshot,
     CapacityIssue issue,
   ) async {
-    final tasks =
-        await ServiceLocator.taskService
-                .getAllWorkspaceTasks(widget.workspaceId)
-                .first
-            as List<Task>;
+    final tasks = await ServiceLocator.taskService
+        .getAllWorkspaceTasks(widget.workspaceId)
+        .first as List<Task>;
     final day = _dayOnly(issue.date);
     final candidateTasks = tasks.where((task) {
       if (task.isComplete) return false;
@@ -534,9 +531,8 @@ class _TeamCapacityTabState extends State<TeamCapacityTab> {
           assigneeIds: assignees,
         );
       } else {
-        final showBusinessDaysOnly = context
-            .read<WorkspaceProvider>()
-            .showBusinessDaysOnly;
+        final showBusinessDaysOnly =
+            context.read<WorkspaceProvider>().showBusinessDaysOnly;
         final range = _taskRange(selectedTask);
         final newStart = _shiftDate(
           range.$1,
@@ -565,12 +561,12 @@ class _TeamCapacityTabState extends State<TeamCapacityTab> {
   }
 
   Future<void> _openAvailabilityManager() async {
-    final snapshot = await ServiceLocator.capacityPlanningService
-        .getCapacitySnapshot(
-          workspaceId: widget.workspaceId,
-          start: _start,
-          end: _end,
-        );
+    final snapshot =
+        await ServiceLocator.capacityPlanningService.getCapacitySnapshot(
+      workspaceId: widget.workspaceId,
+      start: _start,
+      end: _end,
+    );
     if (!mounted) return;
     if (snapshot.members.isEmpty) {
       ScaffoldMessenger.of(
@@ -702,8 +698,7 @@ class _ManageAvailabilityDialogState extends State<_ManageAvailabilityDialog> {
   @override
   void initState() {
     super.initState();
-    _selectedUserId =
-        widget.initialUserId != null &&
+    _selectedUserId = widget.initialUserId != null &&
             widget.members.any((m) => m.userId == widget.initialUserId)
         ? widget.initialUserId
         : widget.members.first.userId;
@@ -724,18 +719,18 @@ class _ManageAvailabilityDialogState extends State<_ManageAvailabilityDialog> {
     if (userId == null) return;
     setState(() => _loading = true);
     try {
-      final weekly = await ServiceLocator.capacityPlanningService
-          .getMemberWeeklyCapacity(
-            workspaceId: widget.workspaceId,
-            userId: userId,
-          );
+      final weekly =
+          await ServiceLocator.capacityPlanningService.getMemberWeeklyCapacity(
+        workspaceId: widget.workspaceId,
+        userId: userId,
+      );
       final exceptions = await ServiceLocator.capacityPlanningService
           .getMemberCapacityExceptions(
-            workspaceId: widget.workspaceId,
-            userId: userId,
-            start: widget.rangeStart,
-            end: widget.rangeEnd,
-          );
+        workspaceId: widget.workspaceId,
+        userId: userId,
+        start: widget.rangeStart,
+        end: widget.rangeEnd,
+      );
       if (!mounted) return;
       setState(() {
         _weeklyCapacityController.text = weekly?.toStringAsFixed(1) ?? '';
@@ -793,17 +788,16 @@ class _ManageAvailabilityDialogState extends State<_ManageAvailabilityDialog> {
     }
     setState(() => _savingException = true);
     try {
-      await ServiceLocator.capacityPlanningService
-          .createCapacityException(
-            workspaceId: widget.workspaceId,
-            userId: userId,
-            startDate: _exceptionStart,
-            endDate: _exceptionEnd,
-            capacityMultiplier: _exceptionMultiplier,
-            reason: _reasonController.text.trim().isEmpty
-                ? null
-                : _reasonController.text.trim(),
-          );
+      await ServiceLocator.capacityPlanningService.createCapacityException(
+        workspaceId: widget.workspaceId,
+        userId: userId,
+        startDate: _exceptionStart,
+        endDate: _exceptionEnd,
+        capacityMultiplier: _exceptionMultiplier,
+        reason: _reasonController.text.trim().isEmpty
+            ? null
+            : _reasonController.text.trim(),
+      );
       _reasonController.clear();
       _didUpdate = true;
       await _loadSelectedMember();

@@ -634,9 +634,7 @@ class SupabaseWorkspaceService {
       // Upload to Supabase Storage (unique path per upload for cache-busting)
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final storagePath = 'workspaces/$workspaceId/avatar_$timestamp.jpg';
-      await _supabase.storage
-          .from(_workspaceAvatarBucket)
-          .uploadBinary(
+      await _supabase.storage.from(_workspaceAvatarBucket).uploadBinary(
             storagePath,
             imageBytes,
             fileOptions: FileOptions(
@@ -649,13 +647,10 @@ class SupabaseWorkspaceService {
           .from(_workspaceAvatarBucket)
           .getPublicUrl(storagePath);
 
-      await _supabase
-          .from('workspaces')
-          .update({
-            'avatar_url': downloadUrl,
-            'updated_at': DateTime.now().toIso8601String(),
-          })
-          .eq('id', workspaceId);
+      await _supabase.from('workspaces').update({
+        'avatar_url': downloadUrl,
+        'updated_at': DateTime.now().toIso8601String(),
+      }).eq('id', workspaceId);
 
       AppLogger.info(
         'Workspace avatar uploaded',
@@ -688,13 +683,10 @@ class SupabaseWorkspaceService {
         );
       }
 
-      await _supabase
-          .from('workspaces')
-          .update({
-            'avatar_url': null,
-            'updated_at': DateTime.now().toIso8601String(),
-          })
-          .eq('id', workspaceId);
+      await _supabase.from('workspaces').update({
+        'avatar_url': null,
+        'updated_at': DateTime.now().toIso8601String(),
+      }).eq('id', workspaceId);
 
       AppLogger.info(
         'Workspace avatar removed',
@@ -706,13 +698,10 @@ class SupabaseWorkspaceService {
         metadata: {'workspaceId': workspaceId, 'error': e.toString()},
       );
       try {
-        await _supabase
-            .from('workspaces')
-            .update({
-              'avatar_url': null,
-              'updated_at': DateTime.now().toIso8601String(),
-            })
-            .eq('id', workspaceId);
+        await _supabase.from('workspaces').update({
+          'avatar_url': null,
+          'updated_at': DateTime.now().toIso8601String(),
+        }).eq('id', workspaceId);
       } catch (updateError) {
         AppLogger.error(
           'Failed to update workspace after avatar deletion error',
@@ -748,12 +737,4 @@ class SupabaseWorkspaceService {
     if (fileName.endsWith('.heic')) return 'image/heic';
     return 'image/jpeg';
   }
-}
-
-class _FakeTimestamp {
-  final DateTime _dateTime;
-
-  _FakeTimestamp(this._dateTime);
-
-  DateTime toDate() => _dateTime;
 }

@@ -131,7 +131,29 @@ docker compose logs -f
 
 ## Local Startup For This Repo
 
-This repository uses the Supabase CLI with Podman or Docker for local development. On macOS with Podman, a reboot can leave the local Supabase containers stopped until the Podman VM is started again.
+This repository uses the Supabase CLI with Podman or Docker for local
+development. The public checkout is configured as Supabase project
+`fieldfleet_public` on ports `55321`-`55329`. Those nonstandard ports avoid
+accidentally connecting to another local Supabase stack that uses the default
+`54321`-`54329` range.
+
+Before applying migrations on a workstation that already runs Supabase, inspect
+the active containers and migration history:
+
+```bash
+supabase status
+docker ps --filter name=supabase_
+docker exec supabase_db_fieldfleet_public psql -U postgres -d postgres \
+  -c "select count(*) from supabase_migrations.schema_migrations;"
+```
+
+If the database has migration versions that are not present in this checkout,
+or if it contains data you need, do not run `supabase db reset`, `supabase
+migration repair`, or `supabase db pull`. Use a separate project id/port range
+or stop the unrelated stack intentionally before continuing.
+
+On macOS with Podman, a reboot can leave the local Supabase containers stopped
+until the Podman VM is started again.
 
 ### Start after reboot
 
@@ -141,35 +163,40 @@ podman machine start
 supabase start
 ```
 
-If `supabase start` reports that startup is already running, or the CLI gets stuck while the containers are still stopped, start the existing containers directly:
-
-```bash
-docker start supabase_db_taskfleet2 \
-  supabase_analytics_taskfleet2 \
-  supabase_vector_taskfleet2 \
-  supabase_kong_taskfleet2 \
-  supabase_auth_taskfleet2 \
-  supabase_realtime_taskfleet2 \
-  supabase_rest_taskfleet2 \
-  supabase_storage_taskfleet2 \
-  supabase_edge_runtime_taskfleet2 \
-  supabase_pg_meta_taskfleet2 \
-  supabase_studio_taskfleet2
-```
-
 ### Verify local endpoints
 
 ```bash
-curl -I http://127.0.0.1:54321
-curl -I http://127.0.0.1:54323
+curl -I http://127.0.0.1:55321
+curl -I http://127.0.0.1:55323
 docker ps --filter name=supabase_
 ```
 
 Expected ports:
 
-- API gateway: `54321`
-- Studio: `54323`
-- Postgres: `54322`
+- API gateway: `55321`
+- Studio: `55323`
+- Postgres: `55322`
+
+The API gateway root can return `404 Not Found` to a `curl -I` request and
+still be healthy; the important signal is that Kong responds on `55321`.
+Studio normally redirects to `/project/default`.
+
+### Fresh-install migration notes
+
+During public-checkout validation, a clean isolated replay exposed several
+classes of migration drift that should stay fixed:
+
+- Local project id and ports must not overlap another Supabase stack. This repo
+  uses `fieldfleet_public` and `55321`-`55329`.
+- Public migrations must not assume private-only tables such as `public.notes`.
+  Guard legacy-table policy or DDL changes with `to_regclass(...)` checks.
+- Migration filenames must have unique timestamp prefixes; duplicate versions
+  fail when Supabase records `schema_migrations`.
+- Index and function-hardening migrations should tolerate optional/private
+  schema objects by checking for the column or function before altering it.
+- Data migrations must target columns present in the public schema. Supplier
+  contact phone/email belongs in `vendor_contacts`, not nonexistent vendor
+  company phone/email columns.
 
 ### macOS Podman note
 

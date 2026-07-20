@@ -95,9 +95,9 @@ pw.Widget _headerBlock(Project project, int selectedCount) {
         project.name,
         style: pw.TextStyle(fontSize: 14, color: PdfColors.grey800),
       ),
-      if (project.address != null && project.address!.isNotEmpty)
+      if (project.address.isNotEmpty)
         pw.Text(
-          project.address!,
+          project.address,
           style: pw.TextStyle(fontSize: 11, color: PdfColors.grey600),
         ),
       pw.SizedBox(height: 4),
@@ -238,7 +238,8 @@ pw.TableRow _itemRow(BudgetItem node, int depth) {
         ),
       ),
       pw.Padding(
-        padding: const pw.EdgeInsets.symmetric(vertical: 6, horizontal: AppSpacing.xs),
+        padding: const pw.EdgeInsets.symmetric(
+            vertical: 6, horizontal: AppSpacing.xs),
         child: pw.Text(
           _fmtQty(node.quantity),
           textAlign: pw.TextAlign.right,
@@ -246,7 +247,8 @@ pw.TableRow _itemRow(BudgetItem node, int depth) {
         ),
       ),
       pw.Padding(
-        padding: const pw.EdgeInsets.symmetric(vertical: 6, horizontal: AppSpacing.xs),
+        padding: const pw.EdgeInsets.symmetric(
+            vertical: 6, horizontal: AppSpacing.xs),
         child: pw.Text(
           node.unit ?? '',
           style: pw.TextStyle(fontSize: 11),
@@ -258,7 +260,8 @@ pw.TableRow _itemRow(BudgetItem node, int depth) {
 
 pw.Widget _headerCell(String text, {pw.TextAlign align = pw.TextAlign.left}) {
   return pw.Padding(
-    padding: const pw.EdgeInsets.symmetric(vertical: 6, horizontal: AppSpacing.xs),
+    padding:
+        const pw.EdgeInsets.symmetric(vertical: 6, horizontal: AppSpacing.xs),
     child: pw.Text(
       text,
       textAlign: align,
@@ -278,8 +281,18 @@ String _fmtQty(double q) {
 
 String _formatDate(DateTime d) {
   const months = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
   return '${months[d.month - 1]} ${d.day}, ${d.year}';
 }

@@ -35,6 +35,7 @@ class DocumentDetailScreen extends StatefulWidget {
   final String documentId;
   final bool embedded;
   final VoidCallback? onBack;
+
   /// Embedded only — when non-null, renders a fullscreen toggle in the header.
   final VoidCallback? onToggleExpand;
   final bool isExpanded;
@@ -104,9 +105,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
         }
 
         // Load workspace
-        final workspaceData = await _workspaceService
-            .getWorkspace(document.workspaceId)
-            .first;
+        final workspaceData =
+            await _workspaceService.getWorkspace(document.workspaceId).first;
         Workspace? workspace;
         if (workspaceData != null) {
           workspace = Workspace.fromJson(workspaceData, document.workspaceId);
@@ -134,18 +134,16 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
 
         // Load invoice summary for invoices/progress invoices with a project
         ProjectInvoiceSummary? invoiceSummary;
-        final isInvoiceType =
-            document.documentType == DocumentType.invoice ||
+        final isInvoiceType = document.documentType == DocumentType.invoice ||
             document.documentType == DocumentType.progressInvoice;
         if (isInvoiceType &&
             document.projectId != null &&
             _documentService is SupabaseDocumentService) {
           try {
-            invoiceSummary = await (_documentService as SupabaseDocumentService)
-                .getProjectInvoiceSummary(
-                  document.projectId!,
-                  excludeDocumentId: document.id,
-                );
+            invoiceSummary = await _documentService.getProjectInvoiceSummary(
+              document.projectId!,
+              excludeDocumentId: document.id,
+            );
           } catch (_) {}
         }
 
@@ -319,8 +317,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
         try {
           final item = await _budgetService.getBudgetItem(id) as BudgetItem?;
           if (item == null) return null;
-          final amount =
-              linkAmounts[item.id] ??
+          final amount = linkAmounts[item.id] ??
               document.budgetItemAmounts?[item.id] ??
               item.approvedPrice;
           return _LinkedBudgetItemDisplay(
@@ -541,8 +538,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
       );
     }
 
-    final customerPayable =
-        type == DocumentType.invoice ||
+    final customerPayable = type == DocumentType.invoice ||
         type == DocumentType.progressInvoice ||
         type == DocumentType.deposit;
 
@@ -582,17 +578,14 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
     final now = DateTime.now();
     final isTerminal = status == DocumentStatus.signed;
     final category = document.documentType.category;
-    final isVendorRecipient =
-        category == TemplateCategory.vendorOrder ||
+    final isVendorRecipient = category == TemplateCategory.vendorOrder ||
         category == TemplateCategory.vendorBill;
     final recipientLabel = isVendorRecipient ? 'Vendor' : 'Customer';
     final recipientLower = recipientLabel.toLowerCase();
-    final customerPayable =
-        document.documentType == DocumentType.invoice ||
+    final customerPayable = document.documentType == DocumentType.invoice ||
         document.documentType == DocumentType.progressInvoice ||
         document.documentType == DocumentType.deposit;
-    final vendorPayable =
-        document.documentType == DocumentType.bill ||
+    final vendorPayable = document.documentType == DocumentType.bill ||
         document.documentType == DocumentType.expense;
 
     // --- Contextual alerts (prepended before status-specific steps) ---
@@ -877,7 +870,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
   Widget _buildActionStepRow(_ActionNextStep step, Color accentColor) {
     if (step.isInfo) {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.base, vertical: AppSpacing.md),
+        padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.base, vertical: AppSpacing.md),
         child: Row(
           children: [
             Icon(step.icon, size: 20, color: AppColors.textSecondary),
@@ -912,7 +906,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
     return InkWell(
       onTap: step.onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.base, vertical: AppSpacing.md),
+        padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.base, vertical: AppSpacing.md),
         child: Row(
           children: [
             Icon(
@@ -929,9 +924,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
                     step.label,
                     style: TextStyle(
                       fontSize: 14,
-                      fontWeight: step.primary
-                          ? FontWeight.w700
-                          : FontWeight.w600,
+                      fontWeight:
+                          step.primary ? FontWeight.w700 : FontWeight.w600,
                       color: step.primary ? accentColor : null,
                     ),
                   ),
@@ -962,8 +956,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
     final root = _treeRoot;
     if (root == null) return const SizedBox.shrink();
     final nextSteps = _nextStepsFor(document);
-    final hasPaidNode =
-        document.paidDate != null &&
+    final hasPaidNode = document.paidDate != null &&
         document.documentType.category == TemplateCategory.customerInvoice;
 
     // Single-node tree with nothing else to show: skip the card entirely so
@@ -989,9 +982,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
     // offered for the remaining document types (e.g. approved-price sync).
     final isVendorCommitmentDoc =
         document.documentType == DocumentType.purchaseOrder ||
-        document.documentType == DocumentType.requestForBid;
-    final showUpdateBudget =
-        document.status == DocumentStatus.signed &&
+            document.documentType == DocumentType.requestForBid;
+    final showUpdateBudget = document.status == DocumentStatus.signed &&
         document.budgetItemIds.isNotEmpty &&
         !isVendorCommitmentDoc;
     final chrome = ChromeColors.of(context);
@@ -1016,8 +1008,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
                   Text(
                     'Document Workflow',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: chrome.isDark ? chrome.textActive : null,
-                    ),
+                          color: chrome.isDark ? chrome.textActive : null,
+                        ),
                   ),
                 ],
               ),
@@ -1091,8 +1083,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
                   Text(
                     'Receiving',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: chrome.isDark ? chrome.textActive : null,
-                    ),
+                          color: chrome.isDark ? chrome.textActive : null,
+                        ),
                   ),
                   const Spacer(),
                   Container(
@@ -1190,8 +1182,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () =>
-                Navigator.of(context).pop(double.tryParse(controller.text.trim())),
+            onPressed: () => Navigator.of(context)
+                .pop(double.tryParse(controller.text.trim())),
             child: const Text('Receive'),
           ),
         ],
@@ -1268,8 +1260,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
     final chrome = ChromeColors.of(context);
     final statusColor = _getStatusColor(doc.status);
     final dateStr = DateFormat('MMM d').format(doc.createdAt);
-    final isInactive =
-        doc.status == DocumentStatus.draft && !isCurrent;
+    final isInactive = doc.status == DocumentStatus.draft && !isCurrent;
 
     return Padding(
       padding: EdgeInsets.only(
@@ -1280,12 +1271,13 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
         onTap: isCurrent ? null : () => context.push('/documents/${doc.id}'),
         borderRadius: BorderRadius.circular(AppRadius.sm),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
           decoration: BoxDecoration(
             color: isCurrent
                 ? (chrome.isDark
-                      ? AppColors.primaryLight.withValues(alpha: 0.12)
-                      : AppColors.primary.withValues(alpha: 0.06))
+                    ? AppColors.primaryLight.withValues(alpha: 0.12)
+                    : AppColors.primary.withValues(alpha: 0.06))
                 : null,
             borderRadius: BorderRadius.circular(AppRadius.sm),
             border: isCurrent
@@ -1325,18 +1317,15 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
                       doc.documentType.displayName,
                       style: TextStyle(
                         fontSize: 13,
-                        fontWeight: isCurrent
-                            ? FontWeight.w700
-                            : FontWeight.w600,
+                        fontWeight:
+                            isCurrent ? FontWeight.w700 : FontWeight.w600,
                         color: isCurrent
                             ? (chrome.isDark
-                                  ? AppColors.primaryLight
-                                  : AppColors.primary)
+                                ? AppColors.primaryLight
+                                : AppColors.primary)
                             : (isInactive
-                                  ? AppColors.textTertiary
-                                  : (chrome.isDark
-                                        ? chrome.textActive
-                                        : null)),
+                                ? AppColors.textTertiary
+                                : (chrome.isDark ? chrome.textActive : null)),
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -1397,9 +1386,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
     final ghostColor = chrome.isDark
         ? chrome.text.withValues(alpha: 0.7)
         : AppColors.textSecondary;
-    final borderColor = chrome.isDark
-        ? chrome.divider
-        : AppColors.cardBorder;
+    final borderColor = chrome.isDark ? chrome.divider : AppColors.cardBorder;
 
     return Padding(
       padding: EdgeInsets.only(left: depth * 22.0, bottom: 4),
@@ -1407,7 +1394,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
         onTap: step.onTap,
         borderRadius: BorderRadius.circular(AppRadius.sm),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(AppRadius.sm),
             border: Border.all(color: borderColor, style: BorderStyle.solid),
@@ -1444,9 +1432,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
                       step.label,
                       style: TextStyle(
                         fontSize: 13,
-                        fontWeight: step.primary
-                            ? FontWeight.w600
-                            : FontWeight.w500,
+                        fontWeight:
+                            step.primary ? FontWeight.w600 : FontWeight.w500,
                         color: ghostColor,
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -1487,7 +1474,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
         onTap: () => _showReceivePaymentDialog(doc),
         borderRadius: BorderRadius.circular(AppRadius.sm),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(AppRadius.sm),
             color: paidColor.withValues(alpha: chrome.isDark ? 0.18 : 0.08),
@@ -1546,40 +1534,35 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
   }
 
   Future<void> _showReceivePaymentDialog(GeneratedDocument document) async {
-    final isVendorPayable =
-        document.documentType == DocumentType.bill ||
+    final isVendorPayable = document.documentType == DocumentType.bill ||
         document.documentType == DocumentType.expense;
     final currency = _workspace?.currencyCode ?? 'USD';
-    final balance =
-        (document.totalAmount - document.amountPaid).clamp(0.0, double.infinity);
-    final result =
-        await showDialog<
-          ({
-            DateTime? date,
-            double? amount,
-            String? method,
-            String? reference,
-            String? attachmentUrl,
-          })
-        >(
-          context: context,
-          builder: (ctx) => _ReceivePaymentDialog(
-            title: isVendorPayable
-                ? 'Record Vendor Payment'
-                : 'Receive Payment',
-            amountLabel: isVendorPayable ? 'Amount to Pay' : 'Amount',
-            existingDate: document.paidDate,
-            existingMethod: document.paymentMethod,
-            existingReference: document.paymentReference,
-            existingAttachmentUrl: document.paymentAttachmentUrl,
-            totalAmount: document.totalAmount,
-            amountPaid: document.amountPaid,
-            balance: balance,
-            currencyCode: currency,
-            workspaceId: document.workspaceId,
-            documentId: document.id,
-          ),
-        );
+    final balance = (document.totalAmount - document.amountPaid)
+        .clamp(0.0, double.infinity);
+    final result = await showDialog<
+        ({
+          DateTime? date,
+          double? amount,
+          String? method,
+          String? reference,
+          String? attachmentUrl,
+        })>(
+      context: context,
+      builder: (ctx) => _ReceivePaymentDialog(
+        title: isVendorPayable ? 'Record Vendor Payment' : 'Receive Payment',
+        amountLabel: isVendorPayable ? 'Amount to Pay' : 'Amount',
+        existingDate: document.paidDate,
+        existingMethod: document.paymentMethod,
+        existingReference: document.paymentReference,
+        existingAttachmentUrl: document.paymentAttachmentUrl,
+        totalAmount: document.totalAmount,
+        amountPaid: document.amountPaid,
+        balance: balance,
+        currencyCode: currency,
+        workspaceId: document.workspaceId,
+        documentId: document.id,
+      ),
+    );
     if (result == null) return;
 
     final removing = result.date == null;
@@ -1689,9 +1672,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
                   Icon(
                     Icons.trending_up,
                     size: 20,
-                    color: chrome.isDark
-                        ? chrome.text
-                        : AppColors.financialAccent,
+                    color:
+                        chrome.isDark ? chrome.text : AppColors.financialAccent,
                   ),
                   const SizedBox(width: 8),
                   Text(
@@ -1699,8 +1681,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
                         ? 'Progress Billing Summary'
                         : 'Billing Summary',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: chrome.isDark ? chrome.textActive : null,
-                    ),
+                          color: chrome.isDark ? chrome.textActive : null,
+                        ),
                   ),
                 ],
               ),
@@ -1955,7 +1937,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
   ) async {
     if (_documentService is! SupabaseDocumentService) return;
     try {
-      await (_documentService as SupabaseDocumentService).applyDeposit(
+      await _documentService.applyDeposit(
         documentId: document.id,
         depositDocumentId: deposit.id,
         depositAmount: deposit.amount,
@@ -1973,7 +1955,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
   Future<void> _removeDeposit(GeneratedDocument document) async {
     if (_documentService is! SupabaseDocumentService) return;
     try {
-      await (_documentService as SupabaseDocumentService).removeDeposit(
+      await _documentService.removeDeposit(
         documentId: document.id,
       );
       if (mounted) await _loadDocument();
@@ -2030,8 +2012,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
     if (budgetItems.isEmpty || !mounted) return;
 
     final currencyCode = context.read<WorkspaceProvider>().currencyCode;
-    final isVendorDoc =
-        document.documentType == DocumentType.purchaseOrder ||
+    final isVendorDoc = document.documentType == DocumentType.purchaseOrder ||
         document.documentType == DocumentType.requestForBid ||
         document.documentType == DocumentType.bill ||
         document.documentType == DocumentType.vendorCredit ||
@@ -2043,9 +2024,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
     final diffs = <_BudgetDiffItem>[];
     for (final item in budgetItems) {
       final docAmount = docAmounts[item.id] ?? 0.0;
-      final currentAmount = isVendorDoc
-          ? item.committedCost
-          : item.approvedPrice;
+      final currentAmount =
+          isVendorDoc ? item.committedCost : item.approvedPrice;
       if ((docAmount - currentAmount).abs() > 0.01) {
         diffs.add(
           _BudgetDiffItem(
@@ -2148,8 +2128,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
         total: total,
         currencyCode: currencyCode,
         defaultDueDate: defaultDueDate,
-        customerName:
-            source.preparedFor?.organization ??
+        customerName: source.preparedFor?.organization ??
             source.preparedFor?.name ??
             source.customerName ??
             '',
@@ -2193,9 +2172,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
       final dateSuffix = now.millisecondsSinceEpoch.toString().substring(7);
 
       // Carry forward visible line items from source
-      final lineItems = source.lineItems
-          .where((item) => item.isVisible)
-          .toList();
+      final lineItems =
+          source.lineItems.where((item) => item.isVisible).toList();
       final visibleLeafItems = lineItems.where((i) => i.isItem).toList();
       final subtotal = visibleLeafItems.fold(0.0, (sum, i) => sum + i.total);
       final taxAmount = source.computedTaxAmount; // per-line taxability [M002]
@@ -2256,20 +2234,19 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
         },
         'lineItems': source.lineItemVisibility == LineItemVisibility.none
             ? visibleLeafItems
-                  .map(
-                    (item) => {
-                      'id': item.id,
-                      'name': item.name,
-                      'description':
-                          item.description?.trim().isNotEmpty == true
-                          ? item.description!.trim()
-                          : '',
-                      'quantity': item.quantity.toStringAsFixed(2),
-                      'rate': item.unitPrice.toStringAsFixed(2),
-                      'amount': item.total.toStringAsFixed(2),
-                    },
-                  )
-                  .toList()
+                .map(
+                  (item) => {
+                    'id': item.id,
+                    'name': item.name,
+                    'description': item.description?.trim().isNotEmpty == true
+                        ? item.description!.trim()
+                        : '',
+                    'quantity': item.quantity.toStringAsFixed(2),
+                    'rate': item.unitPrice.toStringAsFixed(2),
+                    'amount': item.total.toStringAsFixed(2),
+                  },
+                )
+                .toList()
             : <Map<String, dynamic>>[],
         'pricing': source.lineItemVisibility == LineItemVisibility.none,
       };
@@ -2398,8 +2375,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
   }
 
   List<Widget> _buildActions(BuildContext context, GeneratedDocument document) {
-    final primaryActionsLocked =
-        document.status == DocumentStatus.signed ||
+    final primaryActionsLocked = document.status == DocumentStatus.signed ||
         document.status == DocumentStatus.applied;
     return [
       if (!primaryActionsLocked) ...[
@@ -2524,7 +2500,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: AppSpacing.xs),
+            padding: const EdgeInsets.symmetric(
+                horizontal: 10, vertical: AppSpacing.xs),
             decoration: BoxDecoration(
               color: statusColor,
               borderRadius: BorderRadius.circular(AppRadius.r12),
@@ -2572,7 +2549,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
   Widget _buildUrgentBanner(_ActionNextStep step) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.base, vertical: 10),
+      padding:
+          const EdgeInsets.symmetric(horizontal: AppSpacing.base, vertical: 10),
       color: AppColors.warningLight,
       child: Row(
         children: [
@@ -2614,7 +2592,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          tilePadding: const EdgeInsets.symmetric(horizontal: AppSpacing.base, vertical: AppSpacing.xs),
+          tilePadding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.base, vertical: AppSpacing.xs),
           childrenPadding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
           title: Row(
             children: [
@@ -2805,9 +2784,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
       discountAmount: document.discountAmount,
       depositAmount:
           (document.metadata['applied_deposit_amount'] as num?)?.toDouble() ??
-          0,
-      depositLabel:
-          document.metadata['applied_deposit_document_id'] != null
+              0,
+      depositLabel: document.metadata['applied_deposit_document_id'] != null
           ? 'Less Deposit'
           : null,
       retainagePercent: document.retainagePercent,
@@ -3024,9 +3002,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
     // Reserve space below content on mobile so the floating bottom nav bar
     // (~70px + safe area + platform pad) doesn't cover the document footer.
     final isMobile = AppBreakpoints.isMobileContext(context);
-    final platformBottomPad = Theme.of(context).platform == TargetPlatform.iOS
-        ? 16.0
-        : 8.0;
+    final platformBottomPad =
+        Theme.of(context).platform == TargetPlatform.iOS ? 16.0 : 8.0;
     final bottomReserve = isMobile && !widget.embedded
         ? MediaQuery.paddingOf(context).bottom + platformBottomPad + 70 + 12
         : 0.0;
@@ -3035,8 +3012,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
       children: [
         LayoutBuilder(
           builder: (context, constraints) {
-            final isWide =
-                constraints.maxWidth >= AppBreakpoints.tablet;
+            final isWide = constraints.maxWidth >= AppBreakpoints.tablet;
             if (isWide) {
               return _buildTwoPaneBody(document, bottomReserve);
             }
@@ -3092,7 +3068,8 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
       return Column(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
+            padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(color: Theme.of(context).dividerColor),
@@ -3151,8 +3128,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
 
           // Capture pre-sign project status so we can detect if the DB trigger
           // auto-advanced the project when the quotation was signed.
-          final isQuotation =
-              _document?.documentType == DocumentType.quotation;
+          final isQuotation = _document?.documentType == DocumentType.quotation;
           final projectId = _document?.projectId;
           ProjectStatus? preSignStatus;
           if (isQuotation && projectId != null) {
@@ -3175,8 +3151,7 @@ class _DocumentDetailScreenState extends State<DocumentDetailScreen> {
             String message = 'Document signed successfully!';
             if (preSignStatus != null && preSignStatus.isPipeline) {
               try {
-                final project =
-                    await _projectService.getProject(projectId!);
+                final project = await _projectService.getProject(projectId!);
                 if (project != null &&
                     project.status == ProjectStatus.awarded) {
                   message =
@@ -3512,7 +3487,8 @@ class _UpdateBudgetDialogState extends State<_UpdateBudgetDialog> {
                   final diff = _diffs[index];
                   final delta = diff.documentAmount - diff.currentAmount;
                   return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: AppSpacing.xs),
                     child: Row(
                       children: [
                         SizedBox(
@@ -3554,7 +3530,8 @@ class _UpdateBudgetDialogState extends State<_UpdateBudgetDialog> {
                           ),
                         ),
                         const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: AppSpacing.sm),
                           child: Icon(Icons.arrow_forward, size: 14),
                         ),
                         Expanded(
@@ -3586,8 +3563,8 @@ class _UpdateBudgetDialogState extends State<_UpdateBudgetDialog> {
           onPressed: selectedCount == 0
               ? null
               : () => Navigator.of(
-                  context,
-                ).pop(_diffs.where((d) => d.selected).toList()),
+                    context,
+                  ).pop(_diffs.where((d) => d.selected).toList()),
           child: Text(
             'Update $selectedCount item${selectedCount == 1 ? '' : 's'}',
           ),
@@ -3980,9 +3957,8 @@ class _ReceivePaymentDialogState extends State<_ReceivePaymentDialog> {
       return lastSegment;
     }
 
-    final normalized = value.endsWith('/')
-        ? value.substring(0, value.length - 1)
-        : value;
+    final normalized =
+        value.endsWith('/') ? value.substring(0, value.length - 1) : value;
     final slashIndex = normalized.lastIndexOf('/');
     if (slashIndex >= 0 && slashIndex < normalized.length - 1) {
       return normalized.substring(slashIndex + 1);
@@ -4059,8 +4035,7 @@ class _ReceivePaymentDialogState extends State<_ReceivePaymentDialog> {
     }
     if (amount > widget.balance + 0.005) {
       setState(
-        () => _amountError =
-            'Amount exceeds the outstanding balance '
+        () => _amountError = 'Amount exceeds the outstanding balance '
             '(${CurrencyUtils.formatCurrency(widget.balance, widget.currencyCode)}).',
       );
       return;

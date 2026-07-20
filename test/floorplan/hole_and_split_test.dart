@@ -2,7 +2,6 @@ import 'dart:ui' show Offset;
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskfleet_ops/models/floorplan/hole.dart';
-import 'package:taskfleet_ops/models/floorplan/layer.dart';
 import 'package:taskfleet_ops/models/floorplan/line.dart';
 import 'package:taskfleet_ops/models/floorplan/vertex.dart';
 import 'package:taskfleet_ops/services/floorplan/class/hole_ops.dart';
@@ -135,7 +134,9 @@ void main() {
           'v1': Vertex(id: 'v1', x: 0, y: 0, lineIds: const {'l1'}),
           'v2': Vertex(id: 'v2', x: 100, y: 0, lineIds: const {'l1'}),
         },
-        lines: {'l1': FloorLine(id: 'l1', vertexIds: ['v1', 'v2'])},
+        lines: {
+          'l1': FloorLine(id: 'l1', vertexIds: ['v1', 'v2'])
+        },
       ));
       expect(
         WallOps.split(scene: scene, ids: ids, lineId: 'l1', tSplit: 0),
@@ -147,8 +148,7 @@ void main() {
       );
     });
 
-    test('split refused when a hole window straddles the split point',
-        () {
+    test('split refused when a hole window straddles the split point', () {
       // 100-cm wall with a door 30 cm wide centered at offset 0.5
       // (covers world x=35..65). A split at t=0.5 would cut through
       // the door — refused.

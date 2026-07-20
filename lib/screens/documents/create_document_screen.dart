@@ -110,11 +110,11 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
   String get _successMessage => _isEditing
       ? 'Document updated successfully'
       : 'Document created successfully';
+
   /// True when the active template is a vendor-facing document
   /// (purchase order, bill, expense, request-for-bid, etc.). When true the
   /// "prepared for" party is a Vendor; otherwise it is a Customer.
-  bool get _isVendorDocument =>
-      _selectedTemplate?.type.isVendorSide ?? false;
+  bool get _isVendorDocument => _selectedTemplate?.type.isVendorSide ?? false;
 
   String? get _effectiveVendorId {
     if (_isVendorDocument) {
@@ -153,9 +153,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
   late final AnimationController _shakeController;
 
   // Stable document number suffix generated once per session
-  final String _dateSuffix = DateTime.now().millisecondsSinceEpoch
-      .toString()
-      .substring(7);
+  final String _dateSuffix =
+      DateTime.now().millisecondsSinceEpoch.toString().substring(7);
 
   List<DocumentTemplate> _templates = [];
   List<Project> _projects = [];
@@ -225,6 +224,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
   final _footerSectionKey = GlobalKey();
   final _lineItemSectionKey = GlobalKey();
   final _photoSectionKey = GlobalKey();
+  // ignore: unused_field
   final _aiDraftSectionKey = GlobalKey();
   final _editorScrollController = ScrollController();
 
@@ -270,12 +270,12 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
 
   // Contact info helpers (single source of truth for all callers)
   DocumentContactInfo get _preparedByInfo => DocumentContactInfo(
-    name: _preparedByNameController.text.trim(),
-    organization: _preparedByOrgController.text.trim(),
-    phone: _preparedByPhoneController.text.trim(),
-    email: _preparedByEmailController.text.trim(),
-    address: _preparedByAddressController.text.trim(),
-  );
+        name: _preparedByNameController.text.trim(),
+        organization: _preparedByOrgController.text.trim(),
+        phone: _preparedByPhoneController.text.trim(),
+        email: _preparedByEmailController.text.trim(),
+        address: _preparedByAddressController.text.trim(),
+      );
 
   DocumentContactInfo? get _preparedForInfo {
     if (_isVendorDocument) {
@@ -380,8 +380,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
     if (document.retainagePercent > 0 || document.retainageAmount > 0) {
       _applyHoldback = true;
       _holdbackPercent = document.retainagePercent;
-      _holdbackPercentController.text = document.retainagePercent
-          .toStringAsFixed(1);
+      _holdbackPercentController.text =
+          document.retainagePercent.toStringAsFixed(1);
     } else {
       _applyHoldback = false;
     }
@@ -428,8 +428,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
         budgetItemId: row['budgetItemId'] as String?,
         type: DocumentLineItemType.item,
         sortOrder: index,
-        name:
-            (row['name'] as String?) ??
+        name: (row['name'] as String?) ??
             (row['description'] as String?) ??
             'Line Item',
         description: row['description'] as String?,
@@ -567,7 +566,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
   }
 
   /// Whether the current layout is desktop (side-by-side preview + editor).
-  bool get _isDesktopLayout => MediaQuery.of(context).size.width >= AppBreakpoints.desktop;
+  bool get _isDesktopLayout =>
+      MediaQuery.of(context).size.width >= AppBreakpoints.desktop;
 
   /// Edit affordance: on desktop scroll to section; on mobile open a bottom
   /// sheet with the relevant fields so tapping in the preview feels like a
@@ -673,6 +673,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
     );
   }
 
+  // ignore: unused_element
   void _editFooter() {
     if (_isDesktopLayout) {
       _scrollToSection(_footerSectionKey);
@@ -797,9 +798,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
       final templates = results[1] as List<DocumentTemplate>;
       final projects = results[2] as List<Project>;
       final customers = results[3] as List<Customer>;
-      final vendors = (results[4] as List<Vendor>)
-          .where((v) => v.isActive)
-          .toList();
+      final vendors =
+          (results[4] as List<Vendor>).where((v) => v.isActive).toList();
 
       setState(() {
         if (workspaceData != null) {
@@ -829,9 +829,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
         _templates = templates;
         // Pre-select template if provided
         if (widget.templateId != null) {
-          _selectedTemplate = templates
-              .where((t) => t.id == widget.templateId)
-              .firstOrNull;
+          _selectedTemplate =
+              templates.where((t) => t.id == widget.templateId).firstOrNull;
 
           if (_selectedTemplate != null) {
             _expandedCategories.add(_selectedTemplate!.category);
@@ -874,9 +873,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
         }
         // Pre-select project if provided
         if (widget.projectId != null) {
-          _selectedProject = projects
-              .where((p) => p.id == widget.projectId)
-              .firstOrNull;
+          _selectedProject =
+              projects.where((p) => p.id == widget.projectId).firstOrNull;
 
           // If project has a client, pre-select the customer (for
           // customer-facing documents only).
@@ -978,9 +976,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
     setState(() {
       _customers = customers;
       if (selectCustomerId != null) {
-        _selectedCustomer = customers
-            .where((c) => c.id == selectCustomerId)
-            .firstOrNull;
+        _selectedCustomer =
+            customers.where((c) => c.id == selectCustomerId).firstOrNull;
         _applyCustomerTaxExemption();
         _selectedCustomerContact = _getDefaultCustomerContact(
           _selectedCustomer,
@@ -1340,20 +1337,18 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
     final now = _documentDate;
     final dateFormat = DateFormat('MM/dd/yyyy');
     final dateSuffix = _dateSuffix;
-    final visibleContextItems = _lineItems
-        .where((item) => item.isVisible)
-        .toList();
-    final visibleLeafItems = visibleContextItems
-        .where((item) => item.isItem)
-        .toList();
+    final visibleContextItems =
+        _lineItems.where((item) => item.isVisible).toList();
+    final visibleLeafItems =
+        visibleContextItems.where((item) => item.isItem).toList();
     final scopeDescription =
         _aiDraftScope ?? _selectedProject?.description ?? '';
 
     Map<String, dynamic> toTemplateLineItem(DocumentLineItem item) {
       final description =
           (item.description != null && item.description!.trim().isNotEmpty)
-          ? item.description!.trim()
-          : item.name;
+              ? item.description!.trim()
+              : item.name;
       return {
         'id': item.id,
         'name': item.name,
@@ -1371,8 +1366,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
     Map<String, dynamic> toSelectionItem(DocumentLineItem item) {
       final selection =
           (item.description != null && item.description!.trim().isNotEmpty)
-          ? item.description!.trim()
-          : item.name;
+              ? item.description!.trim()
+              : item.name;
       return {
         'itemName': item.name,
         'selection': selection,
@@ -1446,9 +1441,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
           (item) => {'name': item.name, 'description': item.description ?? ''},
         )
         .toList();
-    final actionItems = visibleLeafItems
-        .map((item) => {'action': item.name})
-        .toList();
+    final actionItems =
+        visibleLeafItems.map((item) => {'action': item.name}).toList();
     final materialItems = visibleLeafItems
         .map(
           (item) => {
@@ -1490,9 +1484,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
           },
         )
         .toList();
-    final requirements = visibleLeafItems
-        .map((item) => {'requirement': item.name})
-        .toList();
+    final requirements =
+        visibleLeafItems.map((item) => {'requirement': item.name}).toList();
     final selectionsTotal = visibleLeafItems.fold<double>(
       0,
       (sum, item) => sum + item.total,
@@ -1502,15 +1495,14 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
         : _preparedByOrgController.text.trim();
     final workspaceAddress =
         _workspace?.fullCompanyAddress?.replaceAll('\n', ', ').trim() ??
-        _preparedByAddressController.text.trim();
+            _preparedByAddressController.text.trim();
 
-    final projectTerminology = context
-        .read<WorkspaceProvider>()
-        .projectTerminology;
+    final projectTerminology =
+        context.read<WorkspaceProvider>().projectTerminology;
     final projectTerminologySingular =
         projectTerminology.endsWith('s') && projectTerminology.length > 1
-        ? projectTerminology.substring(0, projectTerminology.length - 1)
-        : projectTerminology;
+            ? projectTerminology.substring(0, projectTerminology.length - 1)
+            : projectTerminology;
 
     return {
       'project_terminology': projectTerminologySingular,
@@ -1557,8 +1549,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
         },
       if (!_isVendorDocument && _selectedCustomer != null)
         'customer': {
-          'name':
-              _resolveSelectedCustomerContact(_selectedCustomer)?.name ??
+          'name': _resolveSelectedCustomerContact(_selectedCustomer)?.name ??
               _selectedCustomer!.displayName,
           'email':
               _resolveSelectedCustomerContact(_selectedCustomer)?.email ?? '',
@@ -1569,17 +1560,14 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
         },
       if (_isVendorDocument && _selectedVendor != null)
         'vendor': {
-          'name':
-              _resolveSelectedVendorContact(_selectedVendor)?.name ??
-                  _selectedVendor!.displayName,
-          'email':
-              _resolveSelectedVendorContact(_selectedVendor)?.email ??
-                  _selectedVendor!.businessEmail ??
-                  '',
-          'phone':
-              _resolveSelectedVendorContact(_selectedVendor)?.phone ??
-                  _selectedVendor!.businessPhone ??
-                  '',
+          'name': _resolveSelectedVendorContact(_selectedVendor)?.name ??
+              _selectedVendor!.displayName,
+          'email': _resolveSelectedVendorContact(_selectedVendor)?.email ??
+              _selectedVendor!.businessEmail ??
+              '',
+          'phone': _resolveSelectedVendorContact(_selectedVendor)?.phone ??
+              _selectedVendor!.businessPhone ??
+              '',
           'address': _selectedVendor!.fullAddress ?? '',
           'company': _selectedVendor!.companyName,
         }
@@ -1684,9 +1672,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
         'materialsTotal': _subtotal.toStringAsFixed(2),
         'total': _grandTotal.toStringAsFixed(2),
       },
-      'restorationItems': visibleLeafItems
-          .map((item) => {'item': item.name})
-          .toList(),
+      'restorationItems':
+          visibleLeafItems.map((item) => {'item': item.name}).toList(),
       'credit': {
         'number': 'CR-$dateSuffix',
         'originalInvoice': '',
@@ -1779,10 +1766,10 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
     final body = _isLoading
         ? const Center(child: CircularProgressIndicator())
         : isDesktop
-        ? _buildDesktopLayout()
-        : _showPreview
-        ? _buildPreviewPanel()
-        : _buildEditorPanel();
+            ? _buildDesktopLayout()
+            : _showPreview
+                ? _buildPreviewPanel()
+                : _buildEditorPanel();
 
     if (widget.embedded) {
       // Embedded mode: no Scaffold/AppBar, just body with a toolbar row
@@ -1936,7 +1923,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
   Widget _buildCreateStepActionBar() {
     final chrome = ChromeColors.of(context);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+      padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg, vertical: AppSpacing.md),
       decoration: BoxDecoration(
         color: chrome.background,
         border: chrome.isDark
@@ -1955,9 +1943,10 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
               return Transform.translate(offset: Offset(dx, 0), child: child);
             },
             child: FilledButton.icon(
-              onPressed: (_isCreating || !context.read<AuthProvider>().canUploadFiles)
-                  ? null
-                  : () => _submitDocument(),
+              onPressed:
+                  (_isCreating || !context.read<AuthProvider>().canUploadFiles)
+                      ? null
+                      : () => _submitDocument(),
               icon: _isCreating
                   ? const SizedBox(
                       width: 16,
@@ -2061,14 +2050,16 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
           },
         ),
         const SizedBox(height: 6),
-        Text(switch (_lineItemVisibility) {
-          LineItemVisibility.all =>
-            'Show all line items and groups in the document.',
-          LineItemVisibility.topLevel =>
-            'Show only top-level groups with totals, hide individual items.',
-          LineItemVisibility.none =>
-            'Hide the line items table. Pricing from the template text will be used instead.',
-        }, style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+        Text(
+            switch (_lineItemVisibility) {
+              LineItemVisibility.all =>
+                'Show all line items and groups in the document.',
+              LineItemVisibility.topLevel =>
+                'Show only top-level groups with totals, hide individual items.',
+              LineItemVisibility.none =>
+                'Hide the line items table. Pricing from the template text will be used instead.',
+            },
+            style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
       ],
     );
   }
@@ -2344,12 +2335,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
                 card: _buildProjectSelector(),
               );
               final customerCell = cell(
-                title: _isVendorDocument
-                    ? 'Select Vendor'
-                    : 'Select Customer',
-                icon: _isVendorDocument
-                    ? Icons.local_shipping
-                    : Icons.person,
+                title: _isVendorDocument ? 'Select Vendor' : 'Select Customer',
+                icon: _isVendorDocument ? Icons.local_shipping : Icons.person,
                 isComplete: _isVendorDocument
                     ? _selectedVendor != null
                     : _selectedCustomer != null,
@@ -2358,17 +2345,6 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
                     : _buildCustomerSelector(),
                 sectionKey: _customerSectionKey,
               );
-
-              Widget rowOf(Widget left, Widget right) => IntrinsicHeight(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(child: left),
-                        const SizedBox(width: 12),
-                        Expanded(child: right),
-                      ],
-                    ),
-                  );
 
               if (_isDesktopLayout) {
                 final rightStack = Column(
@@ -2472,9 +2448,10 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
             return Transform.translate(offset: Offset(dx, 0), child: child);
           },
           child: ElevatedButton.icon(
-            onPressed: (_isCreating || !context.read<AuthProvider>().canUploadFiles)
-                ? null
-                : () => _submitDocument(),
+            onPressed:
+                (_isCreating || !context.read<AuthProvider>().canUploadFiles)
+                    ? null
+                    : () => _submitDocument(),
             icon: _isCreating
                 ? const SizedBox(
                     width: 20,
@@ -2533,7 +2510,9 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        kIsWeb ? 'Click any field in the preview to quickly edit it.' : 'Tap any field in the preview to quickly edit it.',
+                        kIsWeb
+                            ? 'Click any field in the preview to quickly edit it.'
+                            : 'Tap any field in the preview to quickly edit it.',
                         style: TextStyle(
                           fontSize: 11,
                           color: ChromeColors.of(context).textActive,
@@ -2937,10 +2916,10 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
                   final cardWidth = constraints.maxWidth > 800
                       ? (constraints.maxWidth - 48) / 4
                       : constraints.maxWidth > 600
-                      ? (constraints.maxWidth - 32) / 3
-                      : constraints.maxWidth > 400
-                      ? (constraints.maxWidth - 16) / 2
-                      : constraints.maxWidth;
+                          ? (constraints.maxWidth - 32) / 3
+                          : constraints.maxWidth > 400
+                              ? (constraints.maxWidth - 16) / 2
+                              : constraints.maxWidth;
 
                   return Wrap(
                     spacing: 8,
@@ -2987,7 +2966,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
         },
         borderRadius: BorderRadius.circular(AppRadius.md),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: AppSpacing.sm),
+          padding: const EdgeInsets.symmetric(
+              horizontal: 10, vertical: AppSpacing.sm),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(AppRadius.sm),
             border: Border.all(
@@ -3001,20 +2981,16 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
               Icon(
                 _getIconForType(template.type),
                 size: 14,
-                color: isSelected
-                    ? category.color
-                    : AppColors.textSecondary,
+                color: isSelected ? category.color : AppColors.textSecondary,
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   template.name,
                   style: TextStyle(
-                    fontWeight:
-                        isSelected ? FontWeight.w600 : FontWeight.w500,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                     fontSize: 12,
-                    color:
-                        isSelected ? category.color : AppColors.textPrimary,
+                    color: isSelected ? category.color : AppColors.textPrimary,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -3197,8 +3173,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
                   child: Text(
                     'Customer',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+                          fontWeight: FontWeight.w600,
+                        ),
                   ),
                 ),
                 if (_selectedCustomer != null)
@@ -3351,7 +3327,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
                           Text(
                             _resolveSelectedCustomerContact(
                               _selectedCustomer,
-                            )!.email!,
+                            )!
+                                .email!,
                             style: TextStyle(
                               color: AppColors.textSecondary,
                               fontSize: 11,
@@ -3377,7 +3354,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
                           Text(
                             _resolveSelectedCustomerContact(
                               _selectedCustomer,
-                            )!.phone!,
+                            )!
+                                .phone!,
                             style: TextStyle(
                               color: AppColors.textSecondary,
                               fontSize: 11,
@@ -3497,6 +3475,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
   }
 
   /// Lays out [first] and [second] side-by-side on desktop, stacked on mobile.
+  // ignore: unused_element
   List<Widget> _buildFieldPair({
     required Widget first,
     required Widget second,
@@ -3517,10 +3496,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
 
   Future<void> _loadWorkspaceCountryCode() async {
     try {
-      final workspaceId = context
-          .read<AuthProvider>()
-          .appUser
-          ?.currentWorkspaceId;
+      final workspaceId =
+          context.read<AuthProvider>().appUser?.currentWorkspaceId;
       if (workspaceId == null) return;
       final data = await _workspaceService.getWorkspace(workspaceId).first;
       if (data == null || !mounted) return;
@@ -3801,7 +3778,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
                       ),
                     ),
                     if (((currentContact?.email ?? '').isNotEmpty) ||
-                        ((_selectedVendor!.businessEmail ?? '').isNotEmpty)) ...[
+                        ((_selectedVendor!.businessEmail ?? '')
+                            .isNotEmpty)) ...[
                       const SizedBox(height: 4),
                       Row(
                         children: [
@@ -3823,7 +3801,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
                       ),
                     ],
                     if (((currentContact?.phone ?? '').isNotEmpty) ||
-                        ((_selectedVendor!.businessPhone ?? '').isNotEmpty)) ...[
+                        ((_selectedVendor!.businessPhone ?? '')
+                            .isNotEmpty)) ...[
                       const SizedBox(height: 4),
                       Row(
                         children: [
@@ -3897,8 +3876,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
                   child: Text(
                     'From',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+                          fontWeight: FontWeight.w600,
+                        ),
                   ),
                 ),
                 IconButton(
@@ -3938,9 +3917,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: org.isEmpty
-                                  ? AppColors.textTertiary
-                                  : null,
+                              color:
+                                  org.isEmpty ? AppColors.textTertiary : null,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -4062,6 +4040,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
     });
   }
 
+  // ignore: unused_element
   Widget _buildAiDraftCard() {
     final hasTemplate = _selectedTemplate != null;
     final canGenerate = hasTemplate && !_isGeneratingAiDraft;
@@ -4151,8 +4130,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
     // Warn if user has manually entered content that would be overwritten,
     // but skip the dialog when regenerating (AI content is already applied)
     final isRegenerating = _aiDraftScope != null;
-    final hasExistingContent =
-        !isRegenerating &&
+    final hasExistingContent = !isRegenerating &&
         (_footerController.text.trim().isNotEmpty ||
             _emailSubjectController.text.trim().isNotEmpty ||
             _emailMessageController.text.trim().isNotEmpty);
@@ -4317,6 +4295,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
     }
   }
 
+  // ignore: unused_element
   Widget _buildFooterSection() {
     return Card(
       child: Padding(
@@ -4395,10 +4374,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
   Future<void> _loadAttachedPhotosForProject(String projectId) async {
     if (_attachedPhotoIds.isEmpty) return;
 
-    final workspaceId = context
-        .read<AuthProvider>()
-        .appUser
-        ?.currentWorkspaceId;
+    final workspaceId =
+        context.read<AuthProvider>().appUser?.currentWorkspaceId;
     if (workspaceId == null) return;
 
     try {
@@ -4408,9 +4385,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen>
       if (!mounted) return;
 
       setState(() {
-        _attachedPhotos = files
-            .where((file) => _attachedPhotoIds.contains(file.id))
-            .toList();
+        _attachedPhotos =
+            files.where((file) => _attachedPhotoIds.contains(file.id)).toList();
       });
     } catch (e) {
       debugPrint('Error loading attached document photos: $e');

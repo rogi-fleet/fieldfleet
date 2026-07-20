@@ -234,11 +234,11 @@ class _TasksMapPanelState extends State<TasksMapPanel> {
                     ),
                   ],
                 ),
-                if ((pin.project.address ?? '').isNotEmpty)
+                if (pin.project.address.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 4, left: 28),
                     child: Text(
-                      pin.project.address ?? '',
+                      pin.project.address,
                       style: TextStyle(
                         fontSize: 12,
                         color: AppColors.textSecondary,
