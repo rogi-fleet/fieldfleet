@@ -98,6 +98,13 @@
   .metric .num .accent { color: var(--orange); }
   .metric .label { font-size: 14px; color: var(--text-muted); font-weight: 500; }
 
+  /* Demo video */
+  .video-frame {
+    max-width: 960px; margin: 0 auto; border-radius: 16px; overflow: hidden;
+    box-shadow: var(--shadow); border: 1px solid var(--border); background: #050a12;
+  }
+  .video-frame video { display: block; width: 100%; height: auto; }
+
   /* Sections */
   section { padding: 72px 0; }
   .section-head { max-width: 640px; margin: 0 auto 48px; text-align: center; }
@@ -202,6 +209,7 @@
       FieldFleet
     </a>
     <div class="nav-links">
+      <a href="#demo">Demo</a>
       <a href="#features">Features</a>
       <a href="#restoration">Field Work</a>
       <a href="#architecture">Architecture</a>
@@ -240,6 +248,23 @@
     </div>
   </div>
 </div>
+
+<section id="demo">
+  <div class="container">
+    <div class="section-head">
+      <div class="kicker">Product Tour</div>
+      <h2>See the whole job lifecycle in 45 seconds</h2>
+      <p>Recorded from a live local FieldFleet workspace — dashboard, projects, budgets, CRM, and more.</p>
+    </div>
+    <div class="video-frame">
+      <video controls preload="metadata" poster="assets/fieldfleet-demo-poster.jpg" width="1920" height="1080">
+        <source src="assets/fieldfleet-demo.mp4" type="video/mp4">
+        Your browser doesn't support embedded video.
+        <a href="assets/fieldfleet-demo.mp4">Download the demo (MP4)</a>.
+      </video>
+    </div>
+  </div>
+</section>
 
 <section id="features">
   <div class="container">
