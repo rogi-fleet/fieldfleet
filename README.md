@@ -28,6 +28,15 @@ FieldFleet itself to third parties as a hosted or managed service — that
 requires a commercial agreement. FieldFleet is built by
 [TaskFleet](https://taskfleet.app).
 
+## Screenshots
+
+Screenshots below use the disposable local demo workspace documented in
+[Quick Start](#quick-start).
+
+![FieldFleet login screen](docs/screenshots/fieldfleet-login.png)
+
+![FieldFleet dashboard](docs/screenshots/fieldfleet-dashboard.png)
+
 ## Why FieldFleet
 
 Most field-service tools cover scheduling or invoicing. FieldFleet covers the
