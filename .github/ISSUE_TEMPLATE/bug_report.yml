@@ -1,0 +1,62 @@
+name: Bug report
+description: Something in FieldFleet doesn't work as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. For security
+        vulnerabilities, please use private vulnerability reporting
+        (Security tab) instead of a public issue.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+      placeholder: Steps to reproduce, expected behavior, actual behavior.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Projects / scheduling
+        - CRM / customers / vendors
+        - Financials / invoicing
+        - Field ops (time tracking, forms, inventory, fleet)
+        - Documents / files
+        - Floor plans / room scanning
+        - Messaging / notifications
+        - AI copilot
+        - Portals (client / vendor / employee)
+        - Supabase schema / migrations / edge functions
+        - Deployment / self-hosting
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      multiple: true
+      options:
+        - Web
+        - Android
+        - iOS
+        - macOS
+        - Linux
+        - Windows
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Flutter version, Supabase CLI version, OS. Never paste secrets or real customer data.
+      placeholder: |
+        flutter --version
+        supabase --version
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs or screenshots
+      description: Redact anything sensitive before posting.

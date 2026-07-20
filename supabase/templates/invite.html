@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>You have been invited to FieldFleet</title>
+  </head>
+  <body style="margin: 0; padding: 20px; background: #f5f8fc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #1f2937;">
+    <div style="max-width: 620px; margin: 0 auto;">
+      <div style="background: linear-gradient(140deg, #0a1628 0%, #0d4f8b 70%, #1565a8 100%); color: #ffffff; padding: 26px 28px; border-radius: 12px 12px 0 0;">
+        <h1 style="margin: 0; font-size: 24px; line-height: 1.3;">You Are Invited</h1>
+      </div>
+      <div style="background: #ffffff; border: 1px solid #dbe4ef; border-top: none; padding: 28px;">
+        <p style="margin: 0 0 12px 0;">You have been invited to join FieldFleet.</p>
+        <p style="margin: 0 0 12px 0;">Accept the invitation to continue.</p>
+        <div style="text-align: center; margin: 24px 0;">
+          <a href="{{ .ConfirmationURL }}" style="display: inline-block; background: #0d4f8b; color: #ffffff; text-decoration: none; padding: 12px 26px; border-radius: 8px; font-weight: 600;">Accept Invite</a>
+        </div>
+        <p style="margin: 0; font-size: 13px; color: #516173;">If the button does not work, open this link:<br/><a href="{{ .ConfirmationURL }}" style="color: #0d4f8b; word-break: break-all;">{{ .ConfirmationURL }}</a></p>
+      </div>
+      <div style="background: #eef3f9; color: #516173; font-size: 13px; padding: 18px 24px; border-radius: 0 0 12px 12px; border: 1px solid #dbe4ef; border-top: none;">
+        <p style="margin: 0;">If this was not expected, you can ignore this email.</p>
+      </div>
+    </div>
+  </body>
+</html>

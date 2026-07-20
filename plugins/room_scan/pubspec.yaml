@@ -1,0 +1,21 @@
+name: room_scan
+description: Native room-scan plugin for FieldFleet. iOS uses RoomPlan + ARKit; Android uses ARCore. Exposes channels consumed directly by the host app.
+version: 0.1.0
+publish_to: 'none'
+
+environment:
+  sdk: ^3.6.0
+  flutter: '>=3.10.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.taskfleet.room_scan
+        pluginClass: RoomScanPlugin
+      ios:
+        pluginClass: RoomScanPlugin

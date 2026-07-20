@@ -1,0 +1,329 @@
+# FieldFleet Self-Hosted Supabase
+# Portable deployment - can run on any Docker host
+
+version: "3.8"
+
+services:
+  # ===========================================
+  # PostgreSQL Database
+  # ===========================================
+  db:
+    image: supabase/postgres:15.1.1.61
+    container_name: taskfleet-db
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXP: ${JWT_EXP:-3600}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - taskfleet
+
+  # ===========================================
+  # Supabase Auth (GoTrue)
+  # ===========================================
+  auth:
+    image: supabase/gotrue:v2.143.0
+    container_name: taskfleet-auth
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      API_EXTERNAL_URL: ${API_EXTERNAL_URL}
+
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-postgres}
+
+      GOTRUE_SITE_URL: ${SITE_URL}
+      GOTRUE_URI_ALLOW_LIST: ${URI_ALLOW_LIST:-}
+      GOTRUE_DISABLE_SIGNUP: ${DISABLE_SIGNUP:-false}
+
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_EXP: ${JWT_EXP:-3600}
+      GOTRUE_JWT_SECRET: ${JWT_SECRET}
+
+      # Email
+      GOTRUE_SMTP_HOST: ${SMTP_HOST:-smtp.resend.com}
+      GOTRUE_SMTP_PORT: ${SMTP_PORT:-465}
+      GOTRUE_SMTP_USER: ${SMTP_USER:-resend}
+      GOTRUE_SMTP_PASS: ${SMTP_PASS}
+      GOTRUE_SMTP_ADMIN_EMAIL: ${SMTP_ADMIN_EMAIL}
+      GOTRUE_SMTP_MAX_FREQUENCY: 1ns
+      GOTRUE_MAILER_OTP_EXP: 3600
+      GOTRUE_MAILER_AUTOCONFIRM: ${MAILER_AUTOCONFIRM:-false}
+      GOTRUE_MAILER_URLPATHS_INVITE: /auth/v1/verify
+      GOTRUE_MAILER_URLPATHS_CONFIRMATION: /auth/v1/verify
+      GOTRUE_MAILER_URLPATHS_RECOVERY: /auth/v1/verify
+      GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: /auth/v1/verify
+
+      # Custom email templates (OTP-only; defeats link-prefetch scanners
+      # and avoids the multi-tab confusion of a clickable confirm link).
+      GOTRUE_MAILER_SUBJECTS_CONFIRMATION: "Confirm your FieldFleet account"
+      GOTRUE_MAILER_TEMPLATES_CONFIRMATION: file:///etc/gotrue/templates/confirmation.html
+
+      # Google OAuth (optional)
+      GOTRUE_EXTERNAL_GOOGLE_ENABLED: ${GOOGLE_OAUTH_ENABLED:-false}
+      GOTRUE_EXTERNAL_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOTRUE_EXTERNAL_GOOGLE_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GOTRUE_EXTERNAL_GOOGLE_REDIRECT_URI: ${API_EXTERNAL_URL}/auth/v1/callback
+
+      # Rate limiting
+      GOTRUE_RATE_LIMIT_HEADER: X-Forwarded-For
+      GOTRUE_RATE_LIMIT_EMAIL_SENT: 100
+    volumes:
+      - ./templates:/etc/gotrue/templates:ro
+    networks:
+      - taskfleet
+
+  # ===========================================
+  # PostgREST API
+  # ===========================================
+  rest:
+    image: postgrest/postgrest:v12.0.2
+    container_name: taskfleet-rest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-postgres}
+      PGRST_DB_SCHEMAS: public,storage,graphql_public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+      PGRST_APP_SETTINGS_JWT_SECRET: ${JWT_SECRET}
+      PGRST_APP_SETTINGS_JWT_EXP: ${JWT_EXP:-3600}
+    networks:
+      - taskfleet
+
+  # ===========================================
+  # Realtime
+  # ===========================================
+  realtime:
+    image: supabase/realtime:v2.27.5
+    container_name: taskfleet-realtime
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT: 4000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: supabase_admin
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB:-postgres}
+      DB_AFTER_CONNECT_QUERY: 'SET search_path TO _realtime'
+      DB_ENC_KEY: supabaserealtime
+      API_JWT_SECRET: ${JWT_SECRET}
+      FLY_ALLOC_ID: fly123
+      FLY_APP_NAME: realtime
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE:?set SECRET_KEY_BASE}
+      ERL_AFLAGS: -proto_dist inet_tcp
+      ENABLE_TAILSCALE: "false"
+      DNS_NODES: "''"
+    networks:
+      - taskfleet
+
+  # ===========================================
+  # Storage
+  # ===========================================
+  storage:
+    image: supabase/storage-api:v0.46.4
+    container_name: taskfleet-storage
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ANON_KEY: ${ANON_KEY}
+      SERVICE_KEY: ${SERVICE_ROLE_KEY}
+      POSTGREST_URL: http://rest:3000
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      DATABASE_URL: postgres://supabase_storage_admin:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-postgres}
+      FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-209715200}
+      STORAGE_BACKEND: file
+      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
+      TENANT_ID: stub
+      REGION: local
+      GLOBAL_S3_BUCKET: stub
+      ENABLE_IMAGE_TRANSFORMATION: "true"
+      IMGPROXY_URL: http://imgproxy:8080
+    volumes:
+      - storage-data:/var/lib/storage
+    networks:
+      - taskfleet
+
+  # ===========================================
+  # Image Proxy (for transformations)
+  # ===========================================
+  imgproxy:
+    image: darthsim/imgproxy:v3.21
+    container_name: taskfleet-imgproxy
+    restart: unless-stopped
+    environment:
+      IMGPROXY_BIND: ":8080"
+      IMGPROXY_LOCAL_FILESYSTEM_ROOT: /
+      IMGPROXY_USE_ETAG: "true"
+      IMGPROXY_ENABLE_WEBP_DETECTION: "true"
+    volumes:
+      - storage-data:/var/lib/storage:ro
+    networks:
+      - taskfleet
+
+  # ===========================================
+  # Kong API Gateway
+  # ===========================================
+  kong:
+    image: kong:2.8.1
+    container_name: taskfleet-kong
+    restart: unless-stopped
+    depends_on:
+      - auth
+      - rest
+      - realtime
+      - storage
+    ports:
+      - "${KONG_HTTP_PORT:-8000}:8000"
+      - "${KONG_HTTPS_PORT:-8443}:8443"
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /var/lib/kong/kong.yml
+      KONG_DNS_ORDER: LAST,A,CNAME
+      KONG_PLUGINS: request-transformer,cors,key-auth,acl,basic-auth
+      # Prevent 413 from default nginx body limits on Storage uploads.
+      KONG_NGINX_PROXY_CLIENT_MAX_BODY_SIZE: ${KONG_CLIENT_MAX_BODY_SIZE:-100m}
+      KONG_NGINX_PROXY_PROXY_BUFFER_SIZE: 160k
+      KONG_NGINX_PROXY_PROXY_BUFFERS: 64 160k
+      SUPABASE_ANON_KEY: ${ANON_KEY}
+      SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
+    volumes:
+      - ./kong.yml:/var/lib/kong/kong.yml.template:ro
+    entrypoint: >
+      /bin/sh -c "sed 's|\$${SUPABASE_ANON_KEY}|'\"$$SUPABASE_ANON_KEY\"'|g; s|\$${SUPABASE_SERVICE_KEY}|'\"$$SUPABASE_SERVICE_KEY\"'|g' /var/lib/kong/kong.yml.template > /tmp/kong.yml &&
+      KONG_DECLARATIVE_CONFIG=/tmp/kong.yml /docker-entrypoint.sh kong docker-start"
+    networks:
+      - taskfleet
+
+  # ===========================================
+  # Studio (Admin Dashboard) - Optional
+  # ===========================================
+  studio:
+    image: supabase/studio:20240101-8e4a094
+    container_name: taskfleet-studio
+    restart: unless-stopped
+    depends_on:
+      - kong
+    ports:
+      - "${STUDIO_PORT:-3000}:3000"
+    environment:
+      STUDIO_PG_META_URL: http://meta:8080
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DEFAULT_ORGANIZATION_NAME: ${STUDIO_ORG:-FieldFleet}
+      DEFAULT_PROJECT_NAME: ${STUDIO_PROJECT:-FieldFleet}
+      SUPABASE_URL: http://kong:8000
+      SUPABASE_PUBLIC_URL: ${API_EXTERNAL_URL}
+      SUPABASE_ANON_KEY: ${ANON_KEY}
+      SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
+    networks:
+      - taskfleet
+
+  # ===========================================
+  # Postgres Meta (for Studio)
+  # ===========================================
+  meta:
+    image: supabase/postgres-meta:v0.75.0
+    container_name: taskfleet-meta
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PG_META_PORT: 8080
+      PG_META_DB_HOST: db
+      PG_META_DB_PORT: 5432
+      PG_META_DB_NAME: ${POSTGRES_DB:-postgres}
+      PG_META_DB_USER: supabase_admin
+      PG_META_DB_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - taskfleet
+
+  # ===========================================
+  # Edge Functions (Deno)
+  # ===========================================
+  functions:
+    image: supabase/edge-runtime:v1.33.5
+    container_name: taskfleet-functions
+    restart: unless-stopped
+    depends_on:
+      - kong
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      VERIFY_JWT: "false"
+      SUPABASE_URL: http://kong:8000
+      SUPABASE_ANON_KEY: ${ANON_KEY}
+      SUPABASE_SERVICE_ROLE_KEY: ${SERVICE_ROLE_KEY}
+      SUPABASE_DB_URL: postgres://postgres:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-postgres}
+      # Custom env vars for functions
+      SITE_URL: ${SITE_URL:-https://app.example.com}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+    volumes:
+      - ./functions:/home/deno/functions:ro
+    command:
+      - start
+      - --main-service
+      - /home/deno/functions/main
+    networks:
+      - taskfleet
+
+  # ===========================================
+  # Caddy (Reverse Proxy + HTTPS)
+  # ===========================================
+  caddy:
+    image: caddy:2-alpine
+    container_name: taskfleet-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      API_DOMAIN: ${API_DOMAIN:-api.localhost}
+      STUDIO_DOMAIN: ${STUDIO_DOMAIN:-studio.localhost}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks:
+      - taskfleet
+
+volumes:
+  db-data:
+    driver: local
+  storage-data:
+    driver: local
+  caddy-data:
+    driver: local
+  caddy-config:
+    driver: local
+
+networks:
+  taskfleet:
+    driver: bridge

@@ -1,0 +1,18 @@
+# Environment files (contain secrets)
+.env
+.env.local
+.env.*.local
+
+# Backup files (can be large)
+backups/
+
+# Docker volumes (local data)
+volumes/
+
+# Logs
+*.log
+logs/
+
+# Restored env files
+.env.restored
+.env.old

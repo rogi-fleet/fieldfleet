@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FieldFleet — Form Templates</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f1c2e;
+    --navy-mid: #1a2d45;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --blue: #1d4ed8;
+    --blue-light: #eff6ff;
+    --green: #16a34a;
+    --green-light: #f0fdf4;
+    --red: #dc2626;
+    --red-light: #fef2f2;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-900: #0f172a;
+    --white: #ffffff;
+    --font: 'Plus Jakarta Sans', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font);
+    background: var(--gray-100);
+    color: var(--gray-900);
+    min-height: 100vh;
+  }
+
+  /* ── SHELL ── */
+  .shell { display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 280px;
+    background: var(--navy);
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    overflow-y: auto;
+  }
+
+  .sidebar-logo {
+    padding: 24px 24px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-mark {
+    width: 36px; height: 36px;
+    background: var(--orange);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    color: white;
+    font-size: 16px;
+    letter-spacing: -1px;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    color: white;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.3px;
+  }
+
+  .logo-sub {
+    color: rgba(255,255,255,0.4);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  .sidebar-section {
+    padding: 20px 16px 8px;
+  }
+
+  .sidebar-label {
+    color: rgba(255,255,255,0.3);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 0 8px;
+    margin-bottom: 8px;
+  }
+
+  .form-nav-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 2px;
+    transition: background 0.15s;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+  }
+
+  .form-nav-btn:hover { background: rgba(255,255,255,0.06); }
+  .form-nav-btn.active { background: rgba(249,115,22,0.18); }
+
+  .nav-icon {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 13px;
+    margin-top: 1px;
+  }
+
+  .nav-text { flex: 1; }
+
+  .nav-title {
+    color: rgba(255,255,255,0.85);
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .form-nav-btn.active .nav-title { color: var(--orange); }
+
+  .nav-badge {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 3px;
+  }
+
+  .badge-generic { background: rgba(29,78,216,0.25); color: #93c5fd; }
+  .badge-install { background: rgba(22,163,74,0.25); color: #86efac; }
+  .badge-iicrc   { background: rgba(249,115,22,0.25); color: #fed7aa; }
+  .badge-hr      { background: rgba(220,38,38,0.2);   color: #fca5a5; }
+  .badge-hr12    { background: rgba(220,38,38,0.25);   color: #fca5a5; }
+  .badge-emp     { background: rgba(139,92,246,0.25);  color: #c4b5fd; }
+  .badge-com     { background: rgba(6,182,212,0.2);    color: #67e8f9; }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 16px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .print-all-btn {
+    width: 100%;
+    padding: 10px;
+    background: var(--orange);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: background 0.15s;
+  }
+
+  .print-all-btn:hover { background: #ea6c00; }
+
+  /* ── MAIN CONTENT ── */
+  .main { margin-left: 280px; padding: 32px; }
+
+  .page-header {
+    margin-bottom: 28px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .page-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--gray-900);
+    letter-spacing: -0.5px;
+  }
+
+  .page-subtitle {
+    color: var(--gray-500);
+    font-size: 13.5px;
+    margin-top: 4px;
+  }
+
+  .header-actions { display: flex; gap: 8px; }
+
+  .btn-outline {
+    padding: 8px 16px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 7px;
+    background: white;
+    color: var(--gray-700);
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+  }
+
+  .btn-outline:hover { border-color: var(--gray-300); background: var(--gray-50); }
+
+  .btn-primary {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 7px;
+    background: var(--orange);
+    color: white;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s;
+  }
+
+  .btn-primary:hover { background: #ea6c00; }
+
+  /* ── FORM PANEL ── */
+  .form-panel { display: none; }
+  .form-panel.active { display: block; }
+
+  /* ── FORM CARD ── */
+  .form-card {
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+    overflow: hidden;
+    max-width: 900px;
+  }
+
+  /* ── FORM HEADER BAND ── */
+  .form-header-band {
+    padding: 28px 36px 22px;
+    border-bottom: 2px solid var(--gray-100);
+    position: relative;
+  }
+
+  .form-header-band.navy-band { background: var(--navy); }
+
+  .fh-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .fh-left {}
+
+  .fh-company {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .navy-band .fh-company { color: var(--orange); }
+  .light-band .fh-company { color: var(--blue); }
+  .orange-band .fh-company { color: var(--orange); }
+
+  .fh-form-title {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    line-height: 1.2;
+  }
+
+  .navy-band .fh-form-title { color: white; }
+  .light-band .fh-form-title { color: var(--gray-900); }
+
+  .fh-form-subtitle {
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  .navy-band .fh-form-subtitle { color: rgba(255,255,255,0.5); }
+  .light-band .fh-form-subtitle { color: var(--gray-500); }
+
+  .fh-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .fh-logo-mark {
+    width: 42px; height: 42px;
+    background: var(--orange);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    color: white;
+    font-size: 18px;
+    letter-spacing: -1px;
+  }
+
+  .fh-form-id {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .navy-band .fh-form-id { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); }
+  .light-band .fh-form-id { background: var(--gray-100); color: var(--gray-500); }
+
+  .fh-meta-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid;
+  }
+
+  .navy-band .fh-meta-row { border-color: rgba(255,255,255,0.1); }
+  .light-band .fh-meta-row { border-color: var(--gray-100); }
+
+  .fh-meta-item label {
+    display: block;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  .navy-band .fh-meta-item label { color: rgba(255,255,255,0.35); }
+  .light-band .fh-meta-item label { color: var(--gray-400); }
+
+  .fh-meta-item .field-line {
+    border-bottom: 1.5px solid;
+    height: 24px;
+    border-radius: 0;
+  }
+
+  .navy-band .fh-meta-item .field-line { border-color: rgba(255,255,255,0.2); }
+  .light-band .fh-meta-item .field-line { border-color: var(--gray-300); }
+
+  /* ── FORM BODY ── */
+  .form-body { padding: 28px 36px 36px; }
+
+  /* ── SECTION ── */
+  .form-section {
+    margin-bottom: 28px;
+  }
+
+  .section-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid var(--gray-100);
+  }
+
+  .section-icon {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .icon-blue  { background: var(--blue-light);  color: var(--blue); }
+  .icon-green { background: var(--green-light); color: var(--green); }
+  .icon-orange{ background: var(--orange-light);color: var(--orange); }
+  .icon-red   { background: var(--red-light);   color: var(--red); }
+  .icon-gray  { background: var(--gray-100);    color: var(--gray-500); }
+  .icon-purple{ background: #f5f3ff;            color: #7c3aed; }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray-700);
+    letter-spacing: -0.1px;
+  }
+
+  .section-num {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gray-300);
+    font-weight: 500;
+  }
+
+  /* ── FIELD GRID ── */
+  .field-grid {
+    display: grid;
+    gap: 14px 20px;
+  }
+
+  .cols-1 { grid-template-columns: 1fr; }
+  .cols-2 { grid-template-columns: 1fr 1fr; }
+  .cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .cols-2-1 { grid-template-columns: 2fr 1fr; }
+  .cols-1-2 { grid-template-columns: 1fr 2fr; }
+
+  .field-group { display: flex; flex-direction: column; gap: 5px; }
+  .field-group.span-2 { grid-column: span 2; }
+  .field-group.span-3 { grid-column: span 3; }
+  .field-group.span-4 { grid-column: span 4; }
+
+  .field-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .field-input {
+    border: none;
+    border-bottom: 1.5px solid var(--gray-200);
+    padding: 6px 0;
+    font-family: var(--font);
+    font-size: 13px;
+    color: var(--gray-900);
+    background: transparent;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .field-input:focus { border-color: var(--blue); }
+
+  .field-input.tall {
+    min-height: 52px;
+    resize: none;
+    padding-top: 8px;
+    line-height: 1.5;
+  }
+
+  .field-input-box {
+    border: 1.5px solid var(--gray-200);
+    border-radius: 7px;
+    padding: 8px 12px;
+    font-family: var(--font);
+    font-size: 13px;
+    color: var(--gray-900);
+    background: var(--gray-50);
+    width: 100%;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .field-input-box:focus { border-color: var(--blue); background: white; }
+
+  /* ── TABLE FIELDS ── */
+  .form-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+
+  .form-table th {
+    background: var(--gray-50);
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: 1.5px solid var(--gray-200);
+  }
+
+  .form-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--gray-100);
+    vertical-align: top;
+  }
+
+  .form-table td input, .form-table td textarea, .form-table td select {
+    border: none;
+    background: transparent;
+    font-family: var(--font);
+    font-size: 12.5px;
+    color: var(--gray-900);
+    width: 100%;
+    outline: none;
+    resize: none;
+  }
+
+  .form-table tr:last-child td { border-bottom: none; }
+  .form-table tr:hover td { background: var(--gray-50); }
+
+  .table-wrapper {
+    border: 1.5px solid var(--gray-200);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  /* ── CHECKBOX GRID ── */
+  .checkbox-grid {
+    display: grid;
+    gap: 8px 16px;
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .checkbox-box {
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--gray-300);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .checkbox-item input[type="checkbox"] { display: none; }
+  .checkbox-item input:checked + .checkbox-box {
+    background: var(--blue);
+    border-color: var(--blue);
+  }
+
+  .checkbox-item input:checked + .checkbox-box::after {
+    content: '✓';
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .checkbox-text {
+    font-size: 13px;
+    color: var(--gray-700);
+    line-height: 1.4;
+  }
+
+  /* ── RADIO GROUP ── */
+  .radio-group { display: flex; gap: 20px; flex-wrap: wrap; }
+
+  .radio-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+  }
+
+  .radio-dot {
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--gray-300);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .radio-item input[type="radio"] { display: none; }
+  .radio-item input:checked + .radio-dot { border-color: var(--blue); }
+  .radio-item input:checked + .radio-dot::after {
+    content: '';
+    width: 8px; height: 8px;
+    background: var(--blue);
+    border-radius: 50%;
+<div class="form-panel active" id="form10">
+  <div class="form-card">
+    <div class="form-header-band navy-band">
+      <div class="fh-row">
+        <div class="fh-left"><div class="fh-company" style="color:#c4b5fd;">FieldFleet · Security &amp; Technology</div><div class="fh-form-title">CCTV / Camera Systems Work Order</div><div class="fh-form-subtitle">Installation · Repair · Upgrade · Maintenance</div></div>
+        <div class="fh-right"><div class="fh-logo-mark">TF</div><div class="fh-form-id">TF-WO-CCTV-010</div></div>
+      </div>
+      <div class="fh-meta-row" style="grid-template-columns:repeat(5,1fr);">
+        <div class="fh-meta-item"><label>Work Order #</label><div class="field-line"></div></div>
+        <div class="fh-meta-item"><label>Date</label><div class="field-line"></div></div>
+        <div class="fh-meta-item"><label>Technician</label><div class="field-line"></div></div>
+        <div class="fh-meta-item"><label>System Brand</label><div class="field-line"></div></div>
+        <div class="fh-meta-item"><label>Priority</label><div class="field-line"></div></div>
+      </div>
+    </div>
+    <div class="form-body">
+      <div class="form-section">
+        <div class="section-heading"><div class="section-icon icon-blue">👤</div><div class="section-title">Client &amp; Site Information</div><div class="section-num">01</div></div>
+        <div class="field-grid cols-3">
+          <div class="field-group"><label class="field-label">Client / Company Name</label><input class="field-input" type="text"></div>
+          <div class="field-group"><label class="field-label">Phone</label><input class="field-input" type="tel" placeholder="(000) 000-0000"></div>
+          <div class="field-group"><label class="field-label">Email</label><input class="field-input" type="email"></div>
+          <div class="field-group span-2"><label class="field-label">Service Address</label><input class="field-input" type="text" placeholder="Full address"></div>
+          <div class="field-group"><label class="field-label">Site Access Instructions</label><input class="field-input" type="text" placeholder="Key code, contact…"></div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="section-heading"><div class="section-icon icon-purple">📷</div><div class="section-title">System Details &amp; Scope</div><div class="section-num">02</div></div>
+        <div class="field-grid cols-3">
+          <div class="field-group"><label class="field-label">System Type</label><select class="field-select"><option value="">Select…</option><option>IP / Network (PoE)</option><option>Analog / HD-TVI</option><option>Hybrid (IP + Analog)</option><option>Wireless / WiFi</option><option>PTZ System</option><option>Cloud-Based</option></select></div>
+          <div class="field-group"><label class="field-label">Service Type</label><select class="field-select"><option value="">Select…</option><option>New Installation</option><option>Add Cameras to Existing</option><option>System Upgrade</option><option>Repair / Troubleshoot</option><option>Preventive Maintenance</option><option>Remote Access Setup</option></select></div>
+          <div class="field-group"><label class="field-label">Number of Cameras</label><input class="field-input" type="number" placeholder="0"></div>
+          <div class="field-group"><label class="field-label">DVR / NVR Brand &amp; Model</label><input class="field-input" type="text" placeholder="e.g. Hikvision DS-7616NI-I2/16P"></div>
+          <div class="field-group"><label class="field-label">Storage (TB)</label><input class="field-input" type="text" placeholder="e.g. 4TB HDD"></div>
+          <div class="field-group"><label class="field-label">Retention Target (days)</label><input class="field-input" type="number" placeholder="30"></div>
+          <div class="field-group span-3"><label class="field-label">Scope / Special Instructions</label><textarea class="field-input tall" placeholder="Camera coverage requirements, specific areas to monitor, height restrictions, lighting conditions, vandal-proof requirements…" rows="2"></textarea></div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="section-heading"><div class="section-icon icon-orange">☑️</div><div class="section-title">Pre-Install Checklist</div><div class="section-num">03</div></div>
+        <div class="checkbox-grid" style="grid-template-columns:1fr 1fr;gap:10px 28px;">
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Site survey and camera placement plan approved</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Cable routing path planned and clear</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Power outlets confirmed at DVR/NVR location</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Network access and static IP addresses confirmed</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">All cameras, cables, and hardware on hand</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Mounting hardware (brackets, junction boxes) loaded</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Client network credentials and router access available</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Remote access app and credentials prepared for client</span></label>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="section-heading"><div class="section-icon icon-purple">📍</div><div class="section-title">Camera Installation Log</div><div class="section-num">04</div></div>
+        <div class="table-wrapper">
+          <table class="form-table">
+            <thead><tr><th>Cam #</th><th>Location / Description</th><th>Camera Model</th><th>IP Address</th><th>Resolution</th><th>Mount Type</th><th>Coverage Area</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><input type="text" placeholder="CAM-01"></td><td><input type="text" placeholder="Front entrance"></td><td><input type="text" placeholder="Model #"></td><td><input type="text" placeholder="192.168.1.101"></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>1080p</option><option>4MP</option><option>4K/8MP</option><option>720p</option></select></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>Wall</option><option>Ceiling</option><option>Corner</option><option>Pole</option></select></td><td><input type="text" placeholder="Wide / Narrow"></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>✅ Online</option><option>⚠ Adjusted</option><option>❌ Issue</option></select></td></tr>
+              <tr><td><input type="text" placeholder="CAM-02"></td><td><input type="text" placeholder="Rear exit"></td><td><input type="text"></td><td><input type="text" placeholder="192.168.1.102"></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>1080p</option><option>4MP</option><option>4K/8MP</option><option>720p</option></select></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>Wall</option><option>Ceiling</option><option>Corner</option><option>Pole</option></select></td><td><input type="text"></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>✅ Online</option><option>⚠ Adjusted</option><option>❌ Issue</option></select></td></tr>
+              <tr><td><input type="text" placeholder="CAM-03"></td><td><input type="text" placeholder="Parking lot"></td><td><input type="text"></td><td><input type="text" placeholder="192.168.1.103"></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>1080p</option><option>4MP</option><option>4K/8MP</option><option>720p</option></select></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>Wall</option><option>Ceiling</option><option>Corner</option><option>Pole</option></select></td><td><input type="text"></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>✅ Online</option><option>⚠ Adjusted</option><option>❌ Issue</option></select></td></tr>
+              <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>1080p</option><option>4MP</option><option>4K/8MP</option><option>720p</option></select></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>Wall</option><option>Ceiling</option><option>Corner</option><option>Pole</option></select></td><td><input type="text"></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>✅ Online</option><option>⚠ Adjusted</option><option>❌ Issue</option></select></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="section-heading"><div class="section-icon icon-blue">⏱️</div><div class="section-title">Labour &amp; Materials</div><div class="section-num">05</div></div>
+        <div class="table-wrapper" style="margin-bottom:14px;">
+          <table class="form-table">
+            <thead><tr><th>Technician</th><th>Time In</th><th>Time Out</th><th>Total Hrs</th></tr></thead>
+            <tbody>
+              <tr><td><input type="text" placeholder="Full name"></td><td><input type="time"></td><td><input type="time"></td><td><input type="number" placeholder="0.0"></td></tr>
+              <tr><td><input type="text"></td><td><input type="time"></td><td><input type="time"></td><td><input type="number" placeholder="0.0"></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-wrapper">
+          <table class="form-table">
+            <thead><tr><th style="width:40%">Material / Component</th><th>Qty</th><th>Unit</th><th>Unit Cost</th><th>Total</th></tr></thead>
+            <tbody>
+              <tr><td><input type="text" placeholder="Cat6 cable"></td><td><input type="number" placeholder="0"></td><td><input type="text" placeholder="ft / m"></td><td><input type="text" placeholder="$0.00"></td><td><input type="text" placeholder="$0.00"></td></tr>
+              <tr><td><input type="text" placeholder="PoE Switch"></td><td><input type="number" placeholder="0"></td><td><input type="text" placeholder="ea"></td><td><input type="text" placeholder="$0.00"></td><td><input type="text" placeholder="$0.00"></td></tr>
+              <tr><td><input type="text" placeholder="Camera — specify model"></td><td><input type="number" placeholder="0"></td><td><input type="text" placeholder="ea"></td><td><input type="text" placeholder="$0.00"></td><td><input type="text" placeholder="$0.00"></td></tr>
+              <tr><td><input type="text" placeholder="Hard drive (NVR/DVR)"></td><td><input type="number" placeholder="0"></td><td><input type="text" placeholder="ea"></td><td><input type="text" placeholder="$0.00"></td><td><input type="text" placeholder="$0.00"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="section-heading"><div class="section-icon icon-green">✅</div><div class="section-title">Commissioning &amp; Handover</div><div class="section-num">06</div></div>
+        <div class="checkbox-grid" style="grid-template-columns:1fr 1fr;gap:10px 28px;margin-bottom:14px;">
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">All cameras live and recording verified</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Motion detection configured and tested</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Remote viewing app installed and tested</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Client login credentials set and handed over</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Client trained on live view and playback</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Recording schedule confirmed (24/7 or motion)</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">All cable runs concealed / conduit installed</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">System diagram / camera map left with client</span></label>
+        </div>
+        <div class="field-grid cols-1">
+          <div class="field-group"><label class="field-label">Technical Notes / Configuration Details</label><textarea class="field-input tall" placeholder="DVR/NVR admin credentials (if leaving on-site), network config, port forwarding, DDNS setup, any issues encountered…" rows="3"></textarea></div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="section-heading"><div class="section-icon icon-orange">💰</div><div class="section-title">Cost Summary</div><div class="section-num">07</div></div>
+        <div style="max-width:340px;margin-left:auto;">
+          <div class="table-wrapper">
+            <table class="form-table"><tbody>
+              <tr><td style="color:var(--gray-600)">Labour</td><td style="text-align:right"><input type="text" style="text-align:right;width:110px;border:none;border-bottom:1.5px solid var(--gray-200);background:transparent;outline:none;font-family:var(--font);" placeholder="$0.00"></td></tr>
+              <tr><td style="color:var(--gray-600)">Equipment &amp; Parts</td><td style="text-align:right"><input type="text" style="text-align:right;width:110px;border:none;border-bottom:1.5px solid var(--gray-200);background:transparent;outline:none;font-family:var(--font);" placeholder="$0.00"></td></tr>
+              <tr><td style="color:var(--gray-600)">Cabling &amp; Hardware</td><td style="text-align:right"><input type="text" style="text-align:right;width:110px;border:none;border-bottom:1.5px solid var(--gray-200);background:transparent;outline:none;font-family:var(--font);" placeholder="$0.00"></td></tr>
+              <tr style="border-top:2px solid var(--gray-200)"><td style="font-weight:700">Subtotal</td><td style="text-align:right"><input type="text" style="text-align:right;width:110px;border:none;border-bottom:1.5px solid var(--gray-200);background:transparent;outline:none;font-family:var(--font);font-weight:700;" placeholder="$0.00"></td></tr>
+              <tr><td style="color:var(--gray-600)">HST / GST</td><td style="text-align:right"><input type="text" style="text-align:right;width:110px;border:none;border-bottom:1.5px solid var(--gray-200);background:transparent;outline:none;font-family:var(--font);" placeholder="$0.00"></td></tr>
+              <tr style="background:var(--navy)"><td style="color:white;font-weight:700;padding:12px;">TOTAL DUE</td><td style="text-align:right;padding:12px;"><input type="text" style="text-align:right;width:120px;font-size:16px;font-weight:800;color:var(--orange);background:transparent;border:none;outline:none;font-family:var(--font);" placeholder="$0.00"></td></tr>
+            </tbody></table>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="section-heading"><div class="section-icon icon-gray">✍️</div><div class="section-title">Authorization &amp; Signatures</div><div class="section-num">08</div></div>
+        <div class="sig-row">
+          <div class="sig-block"><div class="sig-label">Client / Authorized Representative</div><div class="sig-line">Sign above</div><div class="field-grid cols-2" style="margin-top:8px;"><div class="field-group"><label class="field-label">Print Name</label><input class="field-input" type="text"></div><div class="field-group"><label class="field-label">Date</label><input class="field-input" type="date"></div></div></div>
+          <div class="sig-block"><div class="sig-label">Lead Technician</div><div class="sig-line">Sign above</div><div class="field-grid cols-2" style="margin-top:8px;"><div class="field-group"><label class="field-label">Name &amp; Employee ID</label><input class="field-input" type="text"></div><div class="field-group"><label class="field-label">Date</label><input class="field-input" type="date"></div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="form-footer"><div class="footer-version">TF-WO-CCTV-010 · Rev 1.0 · example.com</div><div class="footer-actions"><button class="btn-outline">Reset</button><button class="btn-primary">Save &amp; Submit</button></div></div>
+  </div>
+</div>
+
+<!-- ══ FORM 11 ══ -->
+  </main>
+</div>
+
+<script>
+  const formTitles = {
+    form1: ['Generic Work Order', 'All service types · Field + Office use · TF-WO-GEN-001'],
+    form2: ['Installation Service Work Order', 'Equipment and systems installation documentation'],
+    form3: ['12-Hour Mitigation Report — Residential', 'IICRC S500 Compliant · Must be submitted within 12 hours of arrival'],
+    form4: ['Initial Inspection — Residential', 'IICRC S500 / S520 Field Inspection · Xactimate Integration'],
+    form5: ['Employee Clock-Out Questionnaire', 'End-of-shift safety & task completion report · HR & Compliance'],
+    form6: ['Daily Job Site Log', 'Field reporting · One log per job per day · Crew lead completes at end of shift'],
+    form7: ['12-Hour Mitigation Report — Multi-Res / Commercial', 'IICRC S500 · Multi-unit & commercial properties · TF-EM-12HR-COM-007'],
+    form8: ['Initial Inspection — Multi-Res / Commercial', 'IICRC S500 / S520 · Multi-Residential & Commercial · TF-EM-INSP-COM-008'],
+    form9:  ['Moving Company Work Order', 'Residential & Commercial Moves · Local & Long Distance · TF-WO-MOV-009'],
+    form10: ['CCTV / Camera Systems Work Order', 'Installation · Repair · Upgrade · Maintenance · TF-WO-CCTV-010'],
+    form11: ['Delivery Company Work Order', 'Parcel · Freight · Courier Services · TF-WO-DEL-011'],
+    form12: ['Cleaning Company Work Order', 'Residential & Commercial · Regular & Specialty Cleaning · TF-WO-CLN-012'],
+    form13: ['Plumbing Work Order', 'Residential & Commercial Plumbing Service & Repair · TF-WO-PLM-013'],
+    form14: ['HVAC Work Order', 'Heating · Cooling · Ventilation · Refrigeration · TF-WO-HVAC-014'],
+    form15: ['Landscaping Work Order', 'Grounds Maintenance · Design · Installation · TF-WO-LND-015'],
+    form16: ['Snow Removal Work Order', 'Plowing · Shoveling · Salting · De-Icing · TF-WO-SNW-016'],
+    form17: ['Electrical Work Order', 'Residential & Commercial Electrical Services · TF-WO-ELC-017'],
+    form18: ['Access Control Work Order', 'Keycard · Biometric · Keypad · Gate & Intercom Systems · TF-WO-ACC-018'],
+    form19: ['Fire Safety Work Order', 'Inspection · Testing · Repair · Installation · Certification · TF-WO-FIRE-019'],
+    form20: ['Roofing Work Order', 'Repair · Replacement · Inspection · Flat & Pitched · TF-WO-ROOF-020'],
+    form21: ['Painting Work Order', 'Interior & Exterior · Residential & Commercial · TF-WO-PAINT-021'],
+    form22: ['Pool Services Work Order', 'Opening · Closing · Maintenance · Chemical Balance · TF-WO-POOL-022'],
+  };
+
+  // Simulate auto-populate from clock-in data
+  function populateTaskFromClockIn() {
+    const tasks = [
+      'WO-2024-1042 · Water mitigation — Unit 301, Lakeview Condominiums',
+      'WO-2024-1039 · Drying monitoring visit — 47 Elmwood Ave',
+      'WO-2024-1044 · Demolition & debris removal — Floor 3 corridor',
+      'WO-2024-1041 · Equipment pick-up & dehumidifier swap — 82 King St W',
+    ];
+    const el = document.getElementById('autoTaskValue');
+    if (el) {
+      // In production this pulls from the clock-in session record
+      el.textContent = tasks[Math.floor(Math.random() * tasks.length)];
+    }
+  }
+  document.addEventListener('DOMContentLoaded', populateTaskFromClockIn);
+
+  function setWOStatus(btn) {
+    const bar = btn.closest('div[style*="flex:1"]');
+    bar.querySelectorAll('.tl-step').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function showForm(formId, btn) {
+    document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.form-nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(formId).classList.add('active');
+    btn.classList.add('active');
+    const [title, sub] = formTitles[formId];
+    document.getElementById('pageTitle').textContent = title;
+    document.getElementById('pageSubtitle').textContent = sub;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleTag(el) { el.classList.toggle('sel'); }
+
+  function selectTaskStatus(card, type) {
+    document.querySelectorAll('.task-status-card').forEach(c => {
+      c.classList.remove('sel-complete','sel-partial','sel-not');
+    });
+    card.classList.add('sel-' + type);
+  }
+
+  function toggleYN(btn, which, isAccident) {
+    const prefix = btn.id.split('-')[0];
+    const yesBtn = document.getElementById(prefix + '-yes');
+    const noBtn  = document.getElementById(prefix + '-no');
+    yesBtn.classList.remove('yes-active');
+    noBtn.classList.remove('no-active');
+    if (which === 'yes') {
+      btn.classList.add('yes-active');
+      if (isAccident) document.getElementById('incident-panel').classList.add('show');
+    } else {
+      btn.classList.add('no-active');
+      if (isAccident) document.getElementById('incident-panel').classList.remove('show');
+    }
+  }
+
+  // Wire all YES/NO buttons
+  document.querySelectorAll('.yn-btn').forEach(btn => {
+    if (!btn.getAttribute('onclick')) {
+      btn.addEventListener('click', function() {
+        const prefix = this.id.split('-')[0];
+        const yesBtn = document.getElementById(prefix + '-yes');
+        const noBtn  = document.getElementById(prefix + '-no');
+        yesBtn.classList.remove('yes-active');
+        noBtn.classList.remove('no-active');
+        if (this.id.endsWith('-yes')) this.classList.add('yes-active');
+        else this.classList.add('no-active');
+      });
+    }
+  });
+
+  function rateStar(groupId, val) {
+    const stars = document.querySelectorAll('#' + groupId + ' .star-btn');
+    stars.forEach((s, i) => {
+      s.classList.toggle('active', i < val);
+    });
+  }
+</script>
+
+</body>
+</html>

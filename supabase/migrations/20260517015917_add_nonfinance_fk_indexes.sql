@@ -1,0 +1,139 @@
+-- =============================================================================
+-- Add covering indexes for foreign keys on non-finance tables.
+--
+-- Surfaced by the Supabase performance advisor (unindexed_foreign_keys).
+-- 183 missing FK indexes across tasks, projects, files, inventory,
+-- catalog, AI, vehicles, properties, etc. Postgres
+-- does not auto-create FK indexes, so without these JOINs and WHERE
+-- filters on these columns fall back to sequential scans. List views,
+-- drill-down queries, and cascading deletes all benefit.
+--
+-- All idempotent. Applied to live DB via supabase MCP apply_migration.
+-- =============================================================================
+
+CREATE INDEX IF NOT EXISTS idx_ai_copilot_events_project_id ON public.ai_copilot_events (project_id);
+CREATE INDEX IF NOT EXISTS idx_ai_copilot_events_user_id ON public.ai_copilot_events (user_id);
+CREATE INDEX IF NOT EXISTS idx_areas_project_id ON public.areas (project_id);
+CREATE INDEX IF NOT EXISTS idx_areas_workspace_id ON public.areas (workspace_id);
+CREATE INDEX IF NOT EXISTS idx_asset_events_actor_id ON public.asset_events (actor_id);
+CREATE INDEX IF NOT EXISTS idx_assets_assigned_to_user_id ON public.assets (assigned_to_user_id);
+CREATE INDEX IF NOT EXISTS idx_automation_rules_created_by ON public.automation_rules (created_by);
+CREATE INDEX IF NOT EXISTS idx_automation_rules_updated_by ON public.automation_rules (updated_by);
+CREATE INDEX IF NOT EXISTS idx_bid_packages_awarded_document_id ON public.bid_packages (awarded_document_id);
+CREATE INDEX IF NOT EXISTS idx_bid_requests_approved_by ON public.bid_requests (approved_by);
+CREATE INDEX IF NOT EXISTS idx_bid_requests_created_by ON public.bid_requests (created_by);
+CREATE INDEX IF NOT EXISTS idx_bills_created_by ON public.bills (created_by);
+CREATE INDEX IF NOT EXISTS idx_bills_project_id ON public.bills (project_id);
+CREATE INDEX IF NOT EXISTS idx_bills_purchase_order_id ON public.bills (purchase_order_id);
+CREATE INDEX IF NOT EXISTS idx_budget_templates_created_by ON public.budget_templates (created_by);
+CREATE INDEX IF NOT EXISTS idx_catalog_items_default_expense_account_id ON public.catalog_items (default_expense_account_id);
+CREATE INDEX IF NOT EXISTS idx_catalog_items_default_income_account_id ON public.catalog_items (default_income_account_id);
+CREATE INDEX IF NOT EXISTS idx_catalog_items_default_vendor_id ON public.catalog_items (default_vendor_id);
+CREATE INDEX IF NOT EXISTS idx_catalog_items_inventory_item_id ON public.catalog_items (inventory_item_id);
+CREATE INDEX IF NOT EXISTS idx_change_orders_approved_by ON public.change_orders (approved_by);
+CREATE INDEX IF NOT EXISTS idx_change_orders_created_by ON public.change_orders (created_by);
+CREATE INDEX IF NOT EXISTS idx_client_portal_invites_sent_by ON public.client_portal_invites (sent_by);
+CREATE INDEX IF NOT EXISTS idx_construction_plans_project_id ON public.construction_plans (project_id);
+CREATE INDEX IF NOT EXISTS idx_construction_plans_uploaded_by ON public.construction_plans (uploaded_by);
+CREATE INDEX IF NOT EXISTS idx_construction_plans_workspace_id ON public.construction_plans (workspace_id);
+CREATE INDEX IF NOT EXISTS idx_conversations_last_message_sender_id ON public.conversations (last_message_sender_id);
+CREATE INDEX IF NOT EXISTS idx_cost_categories_workspace_id ON public.cost_categories (workspace_id);
+CREATE INDEX IF NOT EXISTS idx_cost_items_category_id ON public.cost_items (category_id);
+CREATE INDEX IF NOT EXISTS idx_cost_items_created_by ON public.cost_items (created_by);
+CREATE INDEX IF NOT EXISTS idx_custom_field_definitions_created_by ON public.custom_field_definitions (created_by);
+CREATE INDEX IF NOT EXISTS idx_customers_account_owner_id ON public.customers (account_owner_id);
+CREATE INDEX IF NOT EXISTS idx_customers_parent_customer_id ON public.customers (parent_customer_id);
+CREATE INDEX IF NOT EXISTS idx_document_activity_log_workspace_id ON public.document_activity_log (workspace_id);
+CREATE INDEX IF NOT EXISTS idx_document_templates_created_by ON public.document_templates (created_by);
+CREATE INDEX IF NOT EXISTS idx_email_notification_queue_notification_id ON public.email_notification_queue (notification_id);
+CREATE INDEX IF NOT EXISTS idx_email_notification_queue_type ON public.email_notification_queue (type);
+CREATE INDEX IF NOT EXISTS idx_equipment_rentals_created_by ON public.equipment_rentals (created_by);
+CREATE INDEX IF NOT EXISTS idx_feedback_user_id ON public.feedback (user_id);
+CREATE INDEX IF NOT EXISTS idx_field_form_sign_links_created_by ON public.field_form_sign_links (created_by);
+CREATE INDEX IF NOT EXISTS idx_field_form_sign_links_workspace_id ON public.field_form_sign_links (workspace_id);
+CREATE INDEX IF NOT EXISTS idx_field_form_submissions_filled_by_id ON public.field_form_submissions (filled_by_id);
+CREATE INDEX IF NOT EXISTS idx_field_form_templates_created_by ON public.field_form_templates (created_by);
+CREATE INDEX IF NOT EXISTS idx_file_attachment_tags_created_by ON public.file_attachment_tags (created_by);
+CREATE INDEX IF NOT EXISTS idx_file_attachments_folder_id ON public.file_attachments (folder_id);
+CREATE INDEX IF NOT EXISTS idx_file_attachments_message_id ON public.file_attachments (message_id);
+CREATE INDEX IF NOT EXISTS idx_file_attachments_uploaded_by ON public.file_attachments (uploaded_by);
+CREATE INDEX IF NOT EXISTS idx_file_comments_author_id ON public.file_comments (author_id);
+CREATE INDEX IF NOT EXISTS idx_file_events_actor_id ON public.file_events (actor_id);
+CREATE INDEX IF NOT EXISTS idx_file_folders_created_by ON public.file_folders (created_by);
+CREATE INDEX IF NOT EXISTS idx_file_markup_layers_author_id ON public.file_markup_layers (author_id);
+CREATE INDEX IF NOT EXISTS idx_file_tags_created_by ON public.file_tags (created_by);
+CREATE INDEX IF NOT EXISTS idx_floorplan_generations_project_id ON public.floorplan_generations (project_id);
+CREATE INDEX IF NOT EXISTS idx_floorplan_generations_user_id ON public.floorplan_generations (user_id);
+CREATE INDEX IF NOT EXISTS idx_floorplan_scenes_last_edited_by ON public.floorplan_scenes (last_edited_by);
+CREATE INDEX IF NOT EXISTS idx_forms_created_by ON public.forms (created_by);
+CREATE INDEX IF NOT EXISTS idx_inventory_items_created_by ON public.inventory_items (created_by);
+CREATE INDEX IF NOT EXISTS idx_inventory_purchase_order_lines_workspace_id ON public.inventory_purchase_order_lines (workspace_id);
+CREATE INDEX IF NOT EXISTS idx_inventory_purchase_orders_created_by ON public.inventory_purchase_orders (created_by);
+CREATE INDEX IF NOT EXISTS idx_inventory_stock_movements_created_by ON public.inventory_stock_movements (created_by);
+CREATE INDEX IF NOT EXISTS idx_inventory_suppliers_created_by ON public.inventory_suppliers (created_by);
+CREATE INDEX IF NOT EXISTS idx_invoices_client_id ON public.invoices (client_id);
+CREATE INDEX IF NOT EXISTS idx_invoices_created_by ON public.invoices (created_by);
+CREATE INDEX IF NOT EXISTS idx_maintenance_logs_performed_by ON public.maintenance_logs (performed_by);
+CREATE INDEX IF NOT EXISTS idx_maintenance_logs_project_id ON public.maintenance_logs (project_id);
+CREATE INDEX IF NOT EXISTS idx_maintenance_logs_workspace_id ON public.maintenance_logs (workspace_id);
+CREATE INDEX IF NOT EXISTS idx_message_bookmarks_conversation_id ON public.message_bookmarks (conversation_id);
+CREATE INDEX IF NOT EXISTS idx_messages_sender_id ON public.messages (sender_id);
+CREATE INDEX IF NOT EXISTS idx_messages_workspace_id ON public.messages (workspace_id);
+CREATE INDEX IF NOT EXISTS idx_project_daily_logs_approved_by ON public.project_daily_logs (approved_by);
+CREATE INDEX IF NOT EXISTS idx_project_daily_logs_submitted_by ON public.project_daily_logs (submitted_by);
+CREATE INDEX IF NOT EXISTS idx_project_inspection_items_workspace_id ON public.project_inspection_items (workspace_id);
+CREATE INDEX IF NOT EXISTS idx_project_inspections_created_by ON public.project_inspections (created_by);
+CREATE INDEX IF NOT EXISTS idx_project_inspections_performed_by ON public.project_inspections (performed_by);
+CREATE INDEX IF NOT EXISTS idx_project_punch_list_items_completed_by ON public.project_punch_list_items (completed_by);
+CREATE INDEX IF NOT EXISTS idx_project_punch_list_items_created_by ON public.project_punch_list_items (created_by);
+CREATE INDEX IF NOT EXISTS idx_project_punch_list_items_verified_by ON public.project_punch_list_items (verified_by);
+CREATE INDEX IF NOT EXISTS idx_project_punch_list_items_workspace_id ON public.project_punch_list_items (workspace_id);
+CREATE INDEX IF NOT EXISTS idx_project_punch_lists_created_by ON public.project_punch_lists (created_by);
+CREATE INDEX IF NOT EXISTS idx_project_warranties_created_by ON public.project_warranties (created_by);
+CREATE INDEX IF NOT EXISTS idx_project_warranty_claims_created_by ON public.project_warranty_claims (created_by);
+CREATE INDEX IF NOT EXISTS idx_project_warranty_claims_workspace_id ON public.project_warranty_claims (workspace_id);
+CREATE INDEX IF NOT EXISTS idx_projects_project_manager_id ON public.projects (project_manager_id);
+CREATE INDEX IF NOT EXISTS idx_projects_salesperson_id ON public.projects (salesperson_id);
+CREATE INDEX IF NOT EXISTS idx_properties_created_by ON public.properties (created_by);
+CREATE INDEX IF NOT EXISTS idx_property_contents_area_id ON public.property_contents (area_id);
+CREATE INDEX IF NOT EXISTS idx_property_contents_project_id ON public.property_contents (project_id);
+CREATE INDEX IF NOT EXISTS idx_property_contents_property_id ON public.property_contents (property_id);
+CREATE INDEX IF NOT EXISTS idx_property_contents_workspace_id ON public.property_contents (workspace_id);
+CREATE INDEX IF NOT EXISTS idx_property_notes_area_id ON public.property_notes (area_id);
+CREATE INDEX IF NOT EXISTS idx_property_notes_author_id ON public.property_notes (author_id);
+CREATE INDEX IF NOT EXISTS idx_property_notes_project_id ON public.property_notes (project_id);
+CREATE INDEX IF NOT EXISTS idx_property_notes_property_id ON public.property_notes (property_id);
+CREATE INDEX IF NOT EXISTS idx_property_notes_workspace_id ON public.property_notes (workspace_id);
+CREATE INDEX IF NOT EXISTS idx_purchase_orders_created_by ON public.purchase_orders (created_by);
+CREATE INDEX IF NOT EXISTS idx_purchase_orders_project_id ON public.purchase_orders (project_id);
+CREATE INDEX IF NOT EXISTS idx_push_delivery_logs_device_id ON public.push_delivery_logs (device_id);
+CREATE INDEX IF NOT EXISTS idx_refunds_approved_by ON public.refunds (approved_by);
+CREATE INDEX IF NOT EXISTS idx_refunds_created_by ON public.refunds (created_by);
+CREATE INDEX IF NOT EXISTS idx_refunds_customer_id ON public.refunds (customer_id);
+CREATE INDEX IF NOT EXISTS idx_refunds_invoice_id ON public.refunds (invoice_id);
+CREATE INDEX IF NOT EXISTS idx_service_agreements_created_by ON public.service_agreements (created_by);
+CREATE INDEX IF NOT EXISTS idx_service_agreements_customer_id ON public.service_agreements (customer_id);
+CREATE INDEX IF NOT EXISTS idx_task_comments_sender_id ON public.task_comments (sender_id);
+CREATE INDEX IF NOT EXISTS idx_task_comments_task_id ON public.task_comments (task_id);
+CREATE INDEX IF NOT EXISTS idx_task_comments_workspace_id ON public.task_comments (workspace_id);
+CREATE INDEX IF NOT EXISTS idx_task_progress_history_recorded_by ON public.task_progress_history (recorded_by);
+CREATE INDEX IF NOT EXISTS idx_task_progress_history_task_id ON public.task_progress_history (task_id);
+CREATE INDEX IF NOT EXISTS idx_task_required_forms_submission_id ON public.task_required_forms (submission_id);
+CREATE INDEX IF NOT EXISTS idx_tasks_assigned_to ON public.tasks (assigned_to);
+CREATE INDEX IF NOT EXISTS idx_tasks_recurring_parent_id ON public.tasks (recurring_parent_id);
+CREATE INDEX IF NOT EXISTS idx_time_entries_approved_by ON public.time_entries (approved_by);
+CREATE INDEX IF NOT EXISTS idx_time_entries_task_id ON public.time_entries (task_id);
+CREATE INDEX IF NOT EXISTS idx_time_entry_location_audits_bypassed_by ON public.time_entry_location_audits (bypassed_by);
+CREATE INDEX IF NOT EXISTS idx_time_entry_templates_project_id ON public.time_entry_templates (project_id);
+CREATE INDEX IF NOT EXISTS idx_time_entry_templates_task_id ON public.time_entry_templates (task_id);
+CREATE INDEX IF NOT EXISTS idx_users_default_workspace_id ON public.users (default_workspace_id);
+CREATE INDEX IF NOT EXISTS idx_vendor_contacts_vendor_id ON public.vendor_contacts (vendor_id);
+CREATE INDEX IF NOT EXISTS idx_vendor_subdivisions_contact_id ON public.vendor_subdivisions (contact_id);
+CREATE INDEX IF NOT EXISTS idx_vendors_created_by ON public.vendors (created_by);
+CREATE INDEX IF NOT EXISTS idx_workspace_invitations_accepted_by ON public.workspace_invitations (accepted_by);
+CREATE INDEX IF NOT EXISTS idx_workspace_invitations_invited_by ON public.workspace_invitations (invited_by);
+CREATE INDEX IF NOT EXISTS idx_workspace_invitations_role_template_id ON public.workspace_invitations (role_template_id);
+CREATE INDEX IF NOT EXISTS idx_workspace_member_capacity_exceptions_created_by ON public.workspace_member_capacity_exceptions (created_by);
+CREATE INDEX IF NOT EXISTS idx_workspace_role_templates_created_by ON public.workspace_role_templates (created_by);
+CREATE INDEX IF NOT EXISTS idx_workspace_settings_profiles_created_by ON public.workspace_settings_profiles (created_by);
+CREATE INDEX IF NOT EXISTS idx_workspaces_owner_id ON public.workspaces (owner_id);

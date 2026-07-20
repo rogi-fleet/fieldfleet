@@ -1,0 +1,35 @@
+-- Allow the detailed vendor categories and types used by the Flutter UI.
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'electricalSupplier';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'plumbingSupplier';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'hvacSupplier';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'lumberYard';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'concreteSupplier';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'roofingSupplier';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'paintSupplier';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'flooringSupplier';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'cabinetry';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'windows';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'doors';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'electricalContractor';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'plumbingContractor';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'hvacContractor';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'framingContractor';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'roofingContractor';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'sidingContractor';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'drywall';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'painting';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'flooring';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'excavation';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'concrete';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'masonry';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'landscaping';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'equipmentRental';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'dumpsterRental';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'engineeringServices';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'architecture';
+ALTER TYPE vendor_category ADD VALUE IF NOT EXISTS 'inspection';
+
+ALTER TYPE vendor_type ADD VALUE IF NOT EXISTS 'materialSupplier';
+ALTER TYPE vendor_type ADD VALUE IF NOT EXISTS 'subcontractor';
+ALTER TYPE vendor_type ADD VALUE IF NOT EXISTS 'equipmentRental';
+ALTER TYPE vendor_type ADD VALUE IF NOT EXISTS 'professionalService';

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Universal Links: iOS will fetch
+	     https://<domain>/.well-known/apple-app-site-association
+	     on install, verify the appID matches this app, and route
+	     matching URLs to the app instead of Safari.
+	     Mirrors the host list in MobileAppLinks.deepLinkHosts. -->
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:example.com</string>
+		<string>applinks:app.example.com</string>
+		<!-- webcredentials lets iOS auto-fill FieldFleet passwords
+		     stored in iCloud Keychain on the web portal. Same AASA
+		     file declares both capabilities. -->
+		<string>webcredentials:example.com</string>
+		<string>webcredentials:app.example.com</string>
+	</array>
+</dict>
+</plist>

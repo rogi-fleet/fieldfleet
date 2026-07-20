@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FieldFleet — Form Templates</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f1c2e;
+    --navy-mid: #1a2d45;
+    --orange: #f97316;
+    --orange-light: #fff7ed;
+    --blue: #1d4ed8;
+    --blue-light: #eff6ff;
+    --green: #16a34a;
+    --green-light: #f0fdf4;
+    --red: #dc2626;
+    --red-light: #fef2f2;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-900: #0f172a;
+    --white: #ffffff;
+    --font: 'Plus Jakarta Sans', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font);
+    background: var(--gray-100);
+    color: var(--gray-900);
+    min-height: 100vh;
+  }
+
+  /* ── SHELL ── */
+  .shell { display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 280px;
+    background: var(--navy);
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    overflow-y: auto;
+  }
+
+  .sidebar-logo {
+    padding: 24px 24px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-mark {
+    width: 36px; height: 36px;
+    background: var(--orange);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    color: white;
+    font-size: 16px;
+    letter-spacing: -1px;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    color: white;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.3px;
+  }
+
+  .logo-sub {
+    color: rgba(255,255,255,0.4);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  .sidebar-section {
+    padding: 20px 16px 8px;
+  }
+
+  .sidebar-label {
+    color: rgba(255,255,255,0.3);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 0 8px;
+    margin-bottom: 8px;
+  }
+
+  .form-nav-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 2px;
+    transition: background 0.15s;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+  }
+
+  .form-nav-btn:hover { background: rgba(255,255,255,0.06); }
+  .form-nav-btn.active { background: rgba(249,115,22,0.18); }
+
+  .nav-icon {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 13px;
+    margin-top: 1px;
+  }
+
+  .nav-text { flex: 1; }
+
+  .nav-title {
+    color: rgba(255,255,255,0.85);
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .form-nav-btn.active .nav-title { color: var(--orange); }
+
+  .nav-badge {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 3px;
+  }
+
+  .badge-generic { background: rgba(29,78,216,0.25); color: #93c5fd; }
+  .badge-install { background: rgba(22,163,74,0.25); color: #86efac; }
+  .badge-iicrc   { background: rgba(249,115,22,0.25); color: #fed7aa; }
+  .badge-hr      { background: rgba(220,38,38,0.2);   color: #fca5a5; }
+  .badge-hr12    { background: rgba(220,38,38,0.25);   color: #fca5a5; }
+  .badge-emp     { background: rgba(139,92,246,0.25);  color: #c4b5fd; }
+  .badge-com     { background: rgba(6,182,212,0.2);    color: #67e8f9; }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 16px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .print-all-btn {
+    width: 100%;
+    padding: 10px;
+    background: var(--orange);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: background 0.15s;
+  }
+
+  .print-all-btn:hover { background: #ea6c00; }
+
+  /* ── MAIN CONTENT ── */
+  .main { margin-left: 280px; padding: 32px; }
+
+  .page-header {
+    margin-bottom: 28px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .page-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--gray-900);
+    letter-spacing: -0.5px;
+  }
+
+  .page-subtitle {
+    color: var(--gray-500);
+    font-size: 13.5px;
+    margin-top: 4px;
+  }
+
+  .header-actions { display: flex; gap: 8px; }
+
+  .btn-outline {
+    padding: 8px 16px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 7px;
+    background: white;
+    color: var(--gray-700);
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+  }
+
+  .btn-outline:hover { border-color: var(--gray-300); background: var(--gray-50); }
+
+  .btn-primary {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 7px;
+    background: var(--orange);
+    color: white;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s;
+  }
+
+  .btn-primary:hover { background: #ea6c00; }
+
+  /* ── FORM PANEL ── */
+  .form-panel { display: none; }
+  .form-panel.active { display: block; }
+
+  /* ── FORM CARD ── */
+  .form-card {
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+    overflow: hidden;
+    max-width: 900px;
+  }
+
+  /* ── FORM HEADER BAND ── */
+  .form-header-band {
+    padding: 28px 36px 22px;
+    border-bottom: 2px solid var(--gray-100);
+    position: relative;
+  }
+
+  .form-header-band.navy-band { background: var(--navy); }
+
+  .fh-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .fh-left {}
+
+  .fh-company {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .navy-band .fh-company { color: var(--orange); }
+  .light-band .fh-company { color: var(--blue); }
+  .orange-band .fh-company { color: var(--orange); }
+
+  .fh-form-title {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    line-height: 1.2;
+  }
+
+  .navy-band .fh-form-title { color: white; }
+  .light-band .fh-form-title { color: var(--gray-900); }
+
+  .fh-form-subtitle {
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  .navy-band .fh-form-subtitle { color: rgba(255,255,255,0.5); }
+  .light-band .fh-form-subtitle { color: var(--gray-500); }
+
+  .fh-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .fh-logo-mark {
+    width: 42px; height: 42px;
+    background: var(--orange);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    color: white;
+    font-size: 18px;
+    letter-spacing: -1px;
+  }
+
+  .fh-form-id {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .navy-band .fh-form-id { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); }
+  .light-band .fh-form-id { background: var(--gray-100); color: var(--gray-500); }
+
+  .fh-meta-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid;
+  }
+
+  .navy-band .fh-meta-row { border-color: rgba(255,255,255,0.1); }
+  .light-band .fh-meta-row { border-color: var(--gray-100); }
+
+  .fh-meta-item label {
+    display: block;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  .navy-band .fh-meta-item label { color: rgba(255,255,255,0.35); }
+  .light-band .fh-meta-item label { color: var(--gray-400); }
+
+  .fh-meta-item .field-line {
+    border-bottom: 1.5px solid;
+    height: 24px;
+    border-radius: 0;
+  }
+
+  .navy-band .fh-meta-item .field-line { border-color: rgba(255,255,255,0.2); }
+  .light-band .fh-meta-item .field-line { border-color: var(--gray-300); }
+
+  /* ── FORM BODY ── */
+  .form-body { padding: 28px 36px 36px; }
+
+  /* ── SECTION ── */
+  .form-section {
+    margin-bottom: 28px;
+  }
+
+  .section-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid var(--gray-100);
+  }
+
+  .section-icon {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .icon-blue  { background: var(--blue-light);  color: var(--blue); }
+  .icon-green { background: var(--green-light); color: var(--green); }
+  .icon-orange{ background: var(--orange-light);color: var(--orange); }
+  .icon-red   { background: var(--red-light);   color: var(--red); }
+  .icon-gray  { background: var(--gray-100);    color: var(--gray-500); }
+  .icon-purple{ background: #f5f3ff;            color: #7c3aed; }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray-700);
+    letter-spacing: -0.1px;
+  }
+
+  .section-num {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gray-300);
+    font-weight: 500;
+  }
+
+  /* ── FIELD GRID ── */
+  .field-grid {
+    display: grid;
+    gap: 14px 20px;
+  }
+
+  .cols-1 { grid-template-columns: 1fr; }
+  .cols-2 { grid-template-columns: 1fr 1fr; }
+  .cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .cols-2-1 { grid-template-columns: 2fr 1fr; }
+  .cols-1-2 { grid-template-columns: 1fr 2fr; }
+
+  .field-group { display: flex; flex-direction: column; gap: 5px; }
+  .field-group.span-2 { grid-column: span 2; }
+  .field-group.span-3 { grid-column: span 3; }
+  .field-group.span-4 { grid-column: span 4; }
+
+  .field-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .field-input {
+    border: none;
+    border-bottom: 1.5px solid var(--gray-200);
+    padding: 6px 0;
+    font-family: var(--font);
+    font-size: 13px;
+    color: var(--gray-900);
+    background: transparent;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .field-input:focus { border-color: var(--blue); }
+
+  .field-input.tall {
+    min-height: 52px;
+    resize: none;
+    padding-top: 8px;
+    line-height: 1.5;
+  }
+
+  .field-input-box {
+    border: 1.5px solid var(--gray-200);
+    border-radius: 7px;
+    padding: 8px 12px;
+    font-family: var(--font);
+    font-size: 13px;
+    color: var(--gray-900);
+    background: var(--gray-50);
+    width: 100%;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .field-input-box:focus { border-color: var(--blue); background: white; }
+
+  /* ── TABLE FIELDS ── */
+  .form-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+
+  .form-table th {
+    background: var(--gray-50);
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: 1.5px solid var(--gray-200);
+  }
+
+  .form-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--gray-100);
+    vertical-align: top;
+  }
+
+  .form-table td input, .form-table td textarea, .form-table td select {
+    border: none;
+    background: transparent;
+    font-family: var(--font);
+    font-size: 12.5px;
+    color: var(--gray-900);
+    width: 100%;
+    outline: none;
+    resize: none;
+  }
+
+  .form-table tr:last-child td { border-bottom: none; }
+  .form-table tr:hover td { background: var(--gray-50); }
+
+  .table-wrapper {
+    border: 1.5px solid var(--gray-200);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  /* ── CHECKBOX GRID ── */
+  .checkbox-grid {
+    display: grid;
+    gap: 8px 16px;
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .checkbox-box {
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--gray-300);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .checkbox-item input[type="checkbox"] { display: none; }
+  .checkbox-item input:checked + .checkbox-box {
+    background: var(--blue);
+    border-color: var(--blue);
+  }
+
+  .checkbox-item input:checked + .checkbox-box::after {
+    content: '✓';
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .checkbox-text {
+    font-size: 13px;
+    color: var(--gray-700);
+    line-height: 1.4;
+  }
+
+  /* ── RADIO GROUP ── */
+  .radio-group { display: flex; gap: 20px; flex-wrap: wrap; }
+
+  .radio-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+  }
+
+  .radio-dot {
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--gray-300);
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .radio-item input[type="radio"] { display: none; }
+  .radio-item input:checked + .radio-dot { border-color: var(--blue); }
+  .radio-item input:checked + .radio-dot::after {
+    content: '';
+    width: 8px; height: 8px;
+    background: var(--blue);
+    border-radius: 50%;
+    display: block;
+  }
+
+  .radio-text { font-size: 13px; color: var(--gray-700); }
+
+  /* ── SIGNATURE ── */
+  .sig-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 8px;
+  }
+
+  .sig-block { display: flex; flex-direction: column; gap: 8px; }
+
+  .sig-line {
+    height: 72px;
+    border: 1.5px dashed var(--gray-200);
+    border-radius: 8px;
+    background: var(--gray-50);
+    display: flex;
+    align-items: flex-end;
+    padding: 8px 12px;
+    color: var(--gray-300);
+    font-size: 11px;
+    font-style: italic;
+  }
+
+  .sig-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .sig-name-line {
+    border-bottom: 1.5px solid var(--gray-300);
+    padding: 4px 0;
+    margin-top: 2px;
+    font-size: 13px;
+    color: var(--gray-900);
+    min-height: 26px;
+  }
+
+  /* ── INFO CALLOUT ── */
+  .info-callout {
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+
+  .callout-orange { background: var(--orange-light); color: #92400e; border-left: 3px solid var(--orange); }
+  .callout-blue   { background: var(--blue-light); color: #1e3a8a; border-left: 3px solid var(--blue); }
+  .callout-red    { background: var(--red-light); color: #991b1b; border-left: 3px solid var(--red); }
+  .callout-green  { background: var(--green-light); color: #14532d; border-left: 3px solid var(--green); }
+
+  .callout-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .callout-text { line-height: 1.5; }
+  .callout-text strong { font-weight: 700; }
+
+  /* ── MOISTURE TABLE ── */
+  .moisture-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+  }
+
+  .moisture-cell {
+    border: 1.5px solid var(--gray-200);
+    border-radius: 6px;
+    padding: 8px 6px;
+    text-align: center;
+  }
+
+  .moisture-cell label {
+    display: block;
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .moisture-cell input {
+    width: 100%;
+    border: none;
+    border-bottom: 1.5px solid var(--gray-200);
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--blue);
+    background: transparent;
+    outline: none;
+    padding: 2px 0;
+  }
+
+  /* ── SEVERITY BADGES ── */
+  .severity-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .sev-badge {
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.15s;
+    opacity: 0.5;
+  }
+
+  .sev-badge.sel { opacity: 1; transform: scale(1.04); }
+  .sev-badge-1 { background: var(--green-light); color: var(--green); border-color: var(--green); }
+  .sev-badge-2 { background: var(--orange-light); color: var(--orange); border-color: var(--orange); }
+  .sev-badge-3 { background: var(--red-light); color: var(--red); border-color: var(--red); }
+
+  /* ── RATING ── */
+  .rating-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .rating-btn {
+    flex: 1;
+    padding: 10px 6px;
+    border: 1.5px solid var(--gray-200);
+    background: white;
+    font-family: var(--font);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-400);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+
+  .rating-btn:first-child { border-radius: 7px 0 0 7px; }
+  .rating-btn:last-child { border-radius: 0 7px 7px 0; }
+  .rating-btn + .rating-btn { border-left: none; }
+  .rating-btn.r-yes { background: var(--green-light); border-color: var(--green); color: var(--green); }
+  .rating-btn.r-no  { background: var(--red-light); border-color: var(--red); color: var(--red); }
+
+  .rating-btn:hover { background: var(--gray-50); color: var(--gray-700); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: var(--gray-100);
+    margin: 24px 0;
+  }
+
+  /* ── YES/NO QUESTION ROW ── */
+  .yn-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .yn-row:last-child { border-bottom: none; }
+
+  .yn-question {
+    font-size: 13px;
+    color: var(--gray-700);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .yn-question .yn-sub {
+    font-size: 11.5px;
+    color: var(--gray-400);
+    margin-top: 2px;
+  }
+
+  .yn-controls {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  .yn-btn {
+    padding: 5px 14px;
+    border-radius: 6px;
+    border: 1.5px solid var(--gray-200);
+    background: white;
+    font-family: var(--font);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--gray-500);
+  }
+
+  .yn-btn:hover { border-color: var(--gray-300); }
+
+  .yn-btn.yes-active { background: var(--green-light); border-color: var(--green); color: var(--green); }
+  .yn-btn.no-active  { background: var(--red-light); border-color: var(--red); color: var(--red); }
+
+  /* ── FORM FOOTER ── */
+  .form-footer {
+    background: var(--gray-50);
+    border-top: 1.5px solid var(--gray-100);
+    padding: 18px 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .footer-version {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gray-300);
+  }
+
+  .footer-actions { display: flex; gap: 8px; }
+
+  /* ── IICRC REFERENCE BOX ── */
+  .ref-box {
+    border: 1.5px solid var(--gray-200);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 12px;
+  }
+
+  .ref-box-header {
+    background: var(--navy);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ref-box-title { color: white; font-weight: 700; font-size: 11px; letter-spacing: 0.5px; }
+  .ref-box-badge {
+    background: var(--orange);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+  }
+
+  .ref-box-body {
+    padding: 12px 14px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 20px;
+  }
+
+  .ref-item { display: flex; flex-direction: column; gap: 3px; }
+  .ref-item-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .ref-item-val {
+    font-size: 12px;
+    color: var(--gray-700);
+    line-height: 1.4;
+  }
+
+  /* ── PHSYCHROMETRIC ── */
+  .psych-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+
+  .psych-cell {
+    background: var(--navy);
+    border-radius: 8px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+
+  .psych-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+
+  .psych-val {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--orange);
+    border-bottom: 1.5px solid rgba(255,255,255,0.1);
+    padding-bottom: 4px;
+    outline: none;
+    background: transparent;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    width: 100%;
+    text-align: center;
+  }
+
+  .psych-unit {
+    font-size: 9px;
+    color: rgba(255,255,255,0.3);
+    margin-top: 4px;
+  }
+
+  /* ── EQUIPMENT TABLE ── */
+  .equip-row {
+    display: grid;
+    grid-template-columns: 28px 1.5fr 1fr 1fr 1fr 80px;
+    gap: 0;
+    border-bottom: 1px solid var(--gray-100);
+    align-items: center;
+  }
+
+  .equip-row.header {
+    background: var(--gray-50);
+    border-bottom: 1.5px solid var(--gray-200);
+  }
+
+  .equip-cell {
+    padding: 9px 10px;
+    font-size: 12.5px;
+  }
+
+  .equip-row.header .equip-cell {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .equip-cell input {
+    border: none;
+    background: transparent;
+    font-family: var(--font);
+    font-size: 12.5px;
+    color: var(--gray-900);
+    width: 100%;
+    outline: none;
+  }
+
+  .equip-cell input[type="checkbox"] {
+    width: 14px; height: 14px;
+    cursor: pointer;
+  }
+
+  /* ── PHOTO GRID ── */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .photo-slot {
+    aspect-ratio: 4/3;
+    border: 1.5px dashed var(--gray-200);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--gray-50);
+    padding: 8px;
+  }
+
+  .photo-slot:hover { border-color: var(--blue); background: var(--blue-light); }
+  .photo-slot-icon { font-size: 20px; color: var(--gray-300); }
+  .photo-slot-label { font-size: 10px; color: var(--gray-400); font-weight: 600; text-align: center; }
+
+  /* ── AREA TAGS ── */
+  .area-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .area-tag {
+    padding: 4px 10px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .area-tag.sel { background: var(--blue); border-color: var(--blue); color: white; }
+  .area-tag:hover { border-color: var(--blue); color: var(--blue); }
+
+  /* ── SELECT ── */
+  .field-select {
+    border: none;
+    border-bottom: 1.5px solid var(--gray-200);
+    padding: 6px 0;
+    font-family: var(--font);
+    font-size: 13px;
+    color: var(--gray-900);
+    background: transparent;
+    width: 100%;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 4px center;
+  }
+
+  /* ── COMPLETION INDICATOR ── */
+  .completion-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--gray-50);
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
+  .completion-label { font-size: 12px; font-weight: 600; color: var(--gray-500); }
+
+  .progress-track {
+    flex: 1;
+    height: 6px;
+    background: var(--gray-200);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--blue);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  .completion-pct {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--blue);
+    min-width: 32px;
+  }
+
+  /* ── CLOCK CARD ── */
+  .clock-card {
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .clock-icon {
+    width: 52px; height: 52px;
+    background: rgba(249,115,22,0.2);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+  }
+
+  .clock-info .clock-time {
+    font-family: var(--mono);
+    font-size: 28px;
+    color: white;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+  }
+
+  .clock-info .clock-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 2px;
+  }
+
+  .clock-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-left: auto;
+  }
+
+  .clock-stat {
+    text-align: center;
+    background: rgba(255,255,255,0.07);
+    border-radius: 8px;
+    padding: 10px 14px;
+  }
+
+  .clock-stat-val {
+    font-family: var(--mono);
+    font-size: 16px;
+    color: var(--orange);
+    font-weight: 500;
+  }
+
+  .clock-stat-label {
+    font-size: 9.5px;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 2px;
+  }
+
+  /* ── INCIDENT PANEL ── */
+  .incident-panel {
+    border: 1.5px solid var(--red);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 12px;
+    display: none;
+  }
+
+  .incident-panel.show { display: block; }
+
+  .incident-header {
+    background: var(--red);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .incident-header-text {
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .incident-body { padding: 16px; }
+
+  /* ── TASK STATUS ── */
+  .task-status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+
+  .task-status-card {
+    border: 2px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+
+  .task-status-card:hover { border-color: var(--gray-300); background: var(--gray-50); }
+  .task-status-card.sel-complete { border-color: var(--green); background: var(--green-light); }
+  .task-status-card.sel-partial  { border-color: var(--orange); background: var(--orange-light); }
+  .task-status-card.sel-not      { border-color: var(--red); background: var(--red-light); }
+
+  .tsc-icon { font-size: 24px; margin-bottom: 6px; }
+  .tsc-label { font-size: 12px; font-weight: 700; color: var(--gray-700); }
+  .tsc-sub { font-size: 10.5px; color: var(--gray-400); margin-top: 2px; }
+
+  /* ── STAR RATING ── */
+  .star-row { display: flex; gap: 4px; }
+
+  .star-btn {
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--gray-200);
+    transition: color 0.1s;
+    background: none;
+    border: none;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .star-btn.active { color: #f59e0b; }
+
+  /* ── TIMELINE BAND ── */
+  .timeline-band {
+    display: flex;
+    gap: 0;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .tl-step {
+    flex: 1;
+    padding: 12px 10px;
+    text-align: center;
+    border-right: 1.5px solid var(--gray-200);
+    background: white;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .tl-step:last-child { border-right: none; }
+  .tl-step:hover { background: var(--gray-50); }
+  .tl-step.active { background: var(--blue); }
+
+  .tl-num { font-family: var(--mono); font-size: 18px; font-weight: 500; color: var(--gray-300); }
+  .tl-step.active .tl-num { color: white; }
+  .tl-name { font-size: 10px; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+  .tl-step.active .tl-name { color: rgba(255,255,255,0.8); }
+
+  /* ── PRINT STYLES ── */
+  @media print {
+    .sidebar, .page-header, .form-footer { display: none !important; }
+    .main { margin-left: 0; padding: 0; }
+    .form-panel { display: block !important; margin-bottom: 40px; }
+    .form-card { box-shadow: none; border: 1px solid #e2e8f0; }
+    body { background: white; }
+  }
+
+  /* ── ANIMATIONS ── */
+  .form-panel.active { animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ════════════════════ SIDEBAR ════════════════════ -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">TF</div>
+      <div>
+        <div class="logo-text">FieldFleet</div>
+        <div class="logo-sub">Form Templates</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Work Orders</div>
+
+      <a class="form-nav-btn" href="form1_generic_work_order.html">
+        <div class="nav-icon icon-blue">🔧</div>
+        <div class="nav-text">
+          <div class="nav-title">Generic Work Order</div>
+          <span class="nav-badge badge-generic">Generic · All Types</span>
+        </div>
+      </a>
+
+      <a class="form-nav-btn" href="form2_installation_service_work_order.html">
+        <div class="nav-icon icon-green">⚙️</div>
+        <div class="nav-text">
+          <div class="nav-title">Installation Service Work Order</div>
+          <span class="nav-badge badge-install">Installation</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Emergency Mitigation — Residential</div>
+
+      <a class="form-nav-btn" href="form3_12hour_mitigation_report__residential.html">
+        <div class="nav-icon icon-red">🚨</div>
+        <div class="nav-text">
+          <div class="nav-title">12-Hour Report — Residential</div>
+          <span class="nav-badge badge-hr12">IICRC · Xactimate</span>
+        </div>
+      </a>
+
+      <a class="form-nav-btn" href="form4_initial_inspection__residential.html">
+        <div class="nav-icon icon-orange">🔍</div>
+        <div class="nav-text">
+          <div class="nav-title">Initial Inspection — Residential</div>
+          <span class="nav-badge badge-iicrc">IICRC · Xactimate</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Emergency Mitigation — Multi-Res / Commercial</div>
+
+      <a class="form-nav-btn" href="form7_12hour_mitigation_report__multires__commercial.html">
+        <div class="nav-icon icon-red">🏢</div>
+        <div class="nav-text">
+          <div class="nav-title">12-Hour Report — Multi-Res / Commercial</div>
+          <span class="nav-badge badge-com">IICRC · Commercial</span>
+        </div>
+      </a>
+
+      <a class="form-nav-btn" href="form8_initial_inspection__multires__commercial.html">
+        <div class="nav-icon icon-orange">🔎</div>
+        <div class="nav-text">
+          <div class="nav-title">Initial Inspection — Multi-Res / Commercial</div>
+          <span class="nav-badge badge-com">IICRC · Commercial</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">HR & Compliance</div>
+
+      <a class="form-nav-btn" href="form5_employee_clockout_questionnaire.html">
+        <div class="nav-icon icon-purple">👤</div>
+        <div class="nav-text">
+          <div class="nav-title">Employee Clock-Out Questionnaire</div>
+          <span class="nav-badge badge-emp">HR · Safety</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Field Reporting</div>
+
+      <a class="form-nav-btn" href="form6_daily_job_site_log.html">
+        <div class="nav-icon icon-green">📅</div>
+        <div class="nav-text">
+          <div class="nav-title">Daily Job Site Log</div>
+          <span class="nav-badge badge-install">Field · Daily</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="print-all-btn" onclick="window.print()">🖨️ Print / Export All Forms</button>
+    </div>
+  </nav>
+
+  <!-- ════════════════════ MAIN ════════════════════ -->
+  <main class="main">
+
+    <div class="page-header">
+      <div>
+        <div class="page-title" id="pageTitle">Access Control Work Order</div>
+        <div class="page-subtitle" id="pageSubtitle">Keycard · Biometric · Keypad · Gate & Intercom Systems · TF-WO-ACC-018</div>
+      </div>
+      <div class="header-actions">
+        <button class="btn-outline" onclick="window.print()">🖨️ Print</button>
+        <button class="btn-primary">⬆ Upload to FieldFleet</button>
+      </div>
+    </div>
+    
+<div class="form-panel active"" id="form18">
+  <div class="form-card">
+    <div class="form-header-band navy-band">
+      <div class="fh-row">
+        <div class="fh-left"><div class="fh-company" style="color:#c4b5fd;">FieldFleet · Security &amp; Technology</div><div class="fh-form-title">Access Control Work Order</div><div class="fh-form-subtitle">Keycard · Biometric · Keypad · Gate &amp; Intercom Systems</div></div>
+        <div class="fh-right"><div class="fh-logo-mark">TF</div><div class="fh-form-id">TF-WO-ACC-018</div></div>
+      </div>
+      <div class="fh-meta-row" style="grid-template-columns:repeat(5,1fr);"><div class="fh-meta-item"><label>Work Order #</label><div class="field-line"></div></div><div class="fh-meta-item"><label>Date</label><div class="field-line"></div></div><div class="fh-meta-item"><label>Technician</label><div class="field-line"></div></div><div class="fh-meta-item"><label>Certification #</label><div class="field-line"></div></div><div class="fh-meta-item"><label>Priority</label><div class="field-line"></div></div></div>
+    </div>    <div style="display:flex;align-items:center;gap:0;border-bottom:2px solid var(--gray-100);background:var(--gray-50);">
+      <div style="padding:10px 20px;font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:1px;white-space:nowrap;">WO Status:</div>
+      <div style="display:flex;flex:1;"><button class="tl-step active" onclick="setWOStatus(this)" style="flex:1;padding:10px 8px;border:none;cursor:pointer;"><div class="tl-num" style="font-size:14px;">📋</div><div class="tl-name">Dispatched</div></button><button class="tl-step" onclick="setWOStatus(this)" style="flex:1;padding:10px 8px;border:none;cursor:pointer;border-left:1.5px solid var(--gray-200);"><div class="tl-num" style="font-size:14px;">🚗</div><div class="tl-name">En Route</div></button><button class="tl-step" onclick="setWOStatus(this)" style="flex:1;padding:10px 8px;border:none;cursor:pointer;border-left:1.5px solid var(--gray-200);"><div class="tl-num" style="font-size:14px;">🔧</div><div class="tl-name">In Progress</div></button><button class="tl-step" onclick="setWOStatus(this)" style="flex:1;padding:10px 8px;border:none;cursor:pointer;border-left:1.5px solid var(--gray-200);"><div class="tl-num" style="font-size:14px;">⏸</div><div class="tl-name">On Hold</div></button><button class="tl-step" onclick="setWOStatus(this)" style="flex:1;padding:10px 8px;border:none;cursor:pointer;border-left:1.5px solid var(--gray-200);"><div class="tl-num" style="font-size:14px;">✅</div><div class="tl-name">Completed</div></button><button class="tl-step" onclick="setWOStatus(this)" style="flex:1;padding:10px 8px;border:none;cursor:pointer;border-left:1.5px solid var(--gray-200);"><div class="tl-num" style="font-size:14px;">❌</div><div class="tl-name">Cancelled</div></button></div>
+    </div>    <div class="form-body">
+      <div class="form-section">
+        <div class="section-heading"><div class="section-icon icon-blue">👤</div><div class="section-title">Client &amp; Site Information</div><div class="section-num">01</div></div>
+        <div class="field-grid cols-3">
+          <div class="field-group"><label class="field-label">Client / Company Name</label><input class="field-input" type="text"></div>
+          <div class="field-group"><label class="field-label">Phone</label><input class="field-input" type="tel" placeholder="(000) 000-0000"></div>
+          <div class="field-group"><label class="field-label">Email</label><input class="field-input" type="email"></div>
+          <div class="field-group span-2"><label class="field-label">Service Address</label><input class="field-input" type="text" placeholder="Full address, unit, city, postal code"></div>
+          <div class="field-group"><label class="field-label">Site Access</label><input class="field-input" type="text" placeholder="Key code, on-site contact…"></div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="section-heading"><div class="section-icon icon-purple">🔐</div><div class="section-title">System Details &amp; Scope</div><div class="section-num">02</div></div>
+        <div class="field-grid cols-3">
+          <div class="field-group"><label class="field-label">System Type</label><select class="field-select"><option value="">Select…</option><option>Keycard / Fob (proximity)</option><option>Biometric (fingerprint / facial)</option><option>Keypad / PIN</option><option>Mobile / Smartphone credential</option><option>Video intercom</option><option>Gate / Barrier control</option><option>Multi-technology (combined)</option></select></div>
+          <div class="field-group"><label class="field-label">Service Type</label><select class="field-select"><option value="">Select…</option><option>New Installation</option><option>Add Doors / Readers</option><option>Repair / Troubleshoot</option><option>User Programming</option><option>Firmware Upgrade</option><option>Preventive Maintenance</option><option>System Expansion</option></select></div>
+          <div class="field-group"><label class="field-label">System Brand / Platform</label><input class="field-input" type="text" placeholder="e.g. Lenel, Honeywell, DSX, Paxton"></div>
+          <div class="field-group"><label class="field-label">Number of Doors / Readers</label><input class="field-input" type="number" placeholder="0"></div>
+          <div class="field-group"><label class="field-label">Controller / Panel Model</label><input class="field-input" type="text" placeholder="Panel make and model"></div>
+          <div class="field-group"><label class="field-label">Power Supply</label><select class="field-select"><option value="">Select…</option><option>PoE (802.3af/at)</option><option>12VDC local supply</option><option>24VAC</option><option>24VDC</option></select></div>
+          <div class="field-group span-3"><label class="field-label">Scope of Work</label><textarea class="field-input tall" placeholder="Doors to be controlled, areas affected, credential types, integration with existing alarm/CCTV…" rows="2"></textarea></div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="section-heading"><div class="section-icon icon-orange">☑️</div><div class="section-title">Pre-Job Checklist</div><div class="section-num">03</div></div>
+        <div class="checkbox-grid" style="grid-template-columns:1fr 1fr;gap:10px 28px;"><label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Door hardware compatibility confirmed</span></label><label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Cable routing and conduit requirements planned</span></label><label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Network / IP address range confirmed with IT</span></label><label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Power supply ampacity verified for all devices</span></label><label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Existing system backup completed</span></label><label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Fail-safe vs. fail-secure mode confirmed per door</span></label><label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Emergency egress / fire alarm override confirmed</span></label><label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Client admin credentials and software access prepared</span></label></div>
+      </div>
+      <div class="form-section">
+        <div class="section-heading"><div class="section-icon icon-purple">🚪</div><div class="section-title">Door / Reader Installation Log</div><div class="section-num">04</div></div>
+        <div class="table-wrapper"><table class="form-table">
+          <thead><tr><th>Door #</th><th>Location</th><th>Reader Model</th><th>Lock Type</th><th>Fail Mode</th><th>IP / Address</th><th>Tested?</th></tr></thead>
+          <tbody>
+            <tr><td><input type="text" placeholder="D-01"></td><td><input type="text" placeholder="Main entrance"></td><td><input type="text" placeholder="HID Multiclass"></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>Electric strike</option><option>Mag-lock</option><option>Electric deadbolt</option><option>Motorized latch</option></select></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>Fail-Safe (unlocked)</option><option>Fail-Secure (locked)</option></select></td><td><input type="text" placeholder="192.168.1.50"></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>✅ Pass</option><option>❌ Fail</option><option>Pending</option></select></td></tr>
+            <tr><td><input type="text" placeholder="D-02"></td><td><input type="text" placeholder="Server room"></td><td><input type="text"></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>Electric strike</option><option>Mag-lock</option><option>Electric deadbolt</option><option>Motorized latch</option></select></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>Fail-Safe (unlocked)</option><option>Fail-Secure (locked)</option></select></td><td><input type="text"></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>✅ Pass</option><option>❌ Fail</option><option>Pending</option></select></td></tr>
+            <tr><td><input type="text" placeholder="D-03"></td><td><input type="text" placeholder="Parking gate"></td><td><input type="text"></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>Electric strike</option><option>Mag-lock</option><option>Electric deadbolt</option><option>Motorized latch</option></select></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>Fail-Safe (unlocked)</option><option>Fail-Secure (locked)</option></select></td><td><input type="text"></td><td><select style="font-family:var(--font);font-size:11px;border:none;background:transparent;outline:none"><option>✅ Pass</option><option>❌ Fail</option><option>Pending</option></select></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="form-section">
+        <div class="section-heading"><div class="section-icon icon-green">📦</div><div class="section-title">Materials &amp; Parts Used</div><div class="section-num">05</div></div>
+        <div class="table-wrapper"><table class="form-table">
+          <thead><tr><th style="width:40%">Description</th><th>Qty</th><th>Unit</th><th>Unit Cost</th><th>Total</th></tr></thead>
+          <tbody><tr><td><input type="text" placeholder="Card reader — specify model"></td><td><input type="number" placeholder="0"></td><td><input type="text" placeholder="ea/sf/lf"></td><td><input type="text" placeholder="$0.00"></td><td><input type="text" placeholder="$0.00"></td></tr><tr><td><input type="text" placeholder="Access controller / panel"></td><td><input type="number" placeholder="0"></td><td><input type="text" placeholder="ea/sf/lf"></td><td><input type="text" placeholder="$0.00"></td><td><input type="text" placeholder="$0.00"></td></tr><tr><td><input type="text" placeholder="Electric strike — specify voltage"></td><td><input type="number" placeholder="0"></td><td><input type="text" placeholder="ea/sf/lf"></td><td><input type="text" placeholder="$0.00"></td><td><input type="text" placeholder="$0.00"></td></tr><tr><td><input type="text" placeholder="Mag-lock — specify holding force"></td><td><input type="number" placeholder="0"></td><td><input type="text" placeholder="ea/sf/lf"></td><td><input type="text" placeholder="$0.00"></td><td><input type="text" placeholder="$0.00"></td></tr><tr><td><input type="text" placeholder="Cat6 cable"></td><td><input type="number" placeholder="0"></td><td><input type="text" placeholder="ea/sf/lf"></td><td><input type="text" placeholder="$0.00"></td><td><input type="text" placeholder="$0.00"></td></tr><tr><td><input type="text" placeholder="Power supply — 12VDC / 24VAC"></td><td><input type="number" placeholder="0"></td><td><input type="text" placeholder="ea/sf/lf"></td><td><input type="text" placeholder="$0.00"></td><td><input type="text" placeholder="$0.00"></td></tr><tr><td><input type="text" placeholder="Cards / fobs — qty issued"></td><td><input type="number" placeholder="0"></td><td><input type="text" placeholder="ea/sf/lf"></td><td><input type="text" placeholder="$0.00"></td><td><input type="text" placeholder="$0.00"></td></tr><tr><td><input type="text" placeholder="Request-to-exit (RTE) sensor"></td><td><input type="number" placeholder="0"></td><td><input type="text" placeholder="ea/sf/lf"></td><td><input type="text" placeholder="$0.00"></td><td><input type="text" placeholder="$0.00"></td></tr></tbody>
+        </table></div>
+      </div>
+      <div class="form-section">
+        <div class="section-heading"><div class="section-icon icon-blue">⏱️</div><div class="section-title">Labour Record</div><div class="section-num">06</div></div>
+        <div class="table-wrapper"><table class="form-table">
+          <thead><tr><th style="width:30%">Technician Name</th><th>Role</th><th>Time In</th><th>Time Out</th><th>Break (min)</th><th>Total Hrs</th><th>Bill Rate</th></tr></thead>
+          <tbody>
+            <tr><td><input type="text" placeholder="Full name"></td><td><input type="text" placeholder="Lead / Tech"></td><td><input type="time"></td><td><input type="time"></td><td><input type="number" placeholder="30"></td><td><input type="number" placeholder="0.0"></td><td><input type="text" placeholder="$0.00/hr"></td></tr>
+            <tr><td><input type="text"></td><td><input type="text"></td><td><input type="time"></td><td><input type="time"></td><td><input type="number" placeholder="30"></td><td><input type="number" placeholder="0.0"></td><td><input type="text" placeholder="$0.00/hr"></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="form-section">
+        <div class="section-heading"><div class="section-icon icon-green">✅</div><div class="section-title">Programming &amp; Commissioning</div><div class="section-num">07a</div></div>
+        <div class="checkbox-grid" style="grid-template-columns:1fr 1fr;gap:10px 28px;margin-bottom:14px;">
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">All doors tested — grant and deny verified</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Access levels / zones configured per floor plan</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Time schedules programmed (business hours, after-hours)</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Cardholder / user database loaded</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Cards / fobs issued and logged</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Remote management / software access set up</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Fire alarm door-release integration tested</span></label>
+          <label class="checkbox-item"><input type="checkbox"><div class="checkbox-box"></div><span class="checkbox-text">Client admin trained on software and card issuing</span></label>
+        </div>
+        <div class="field-grid cols-2">
+          <div class="field-group"><label class="field-label">Total Users / Cards Programmed</label><input class="field-input" type="number" placeholder="0"></div>
+          <div class="field-group"><label class="field-label">Technical / Configuration Notes</label><input class="field-input" type="text" placeholder="IP address, default admin credentials left with client, etc."></div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="section-heading"><div class="section-icon icon-orange">💰</div><div class="section-title">Cost Summary</div><div class="section-num">07</div></div>
+        <div style="max-width:340px;margin-left:auto;">
+          <div class="table-wrapper"><table class="form-table"><tbody>
+            <tr><td style="color:var(--gray-600)">Labour Subtotal</td><td style="text-align:right"><input type="text" style="text-align:right;width:110px;border:none;border-bottom:1.5px solid var(--gray-200);background:transparent;outline:none;font-family:var(--font);" placeholder="$0.00"></td></tr>
+            <tr><td style="color:var(--gray-600)">Materials / Parts</td><td style="text-align:right"><input type="text" style="text-align:right;width:110px;border:none;border-bottom:1.5px solid var(--gray-200);background:transparent;outline:none;font-family:var(--font);" placeholder="$0.00"></td></tr>
+            <tr><td style="color:var(--gray-600)">Other Charges</td><td style="text-align:right"><input type="text" style="text-align:right;width:110px;border:none;border-bottom:1.5px solid var(--gray-200);background:transparent;outline:none;font-family:var(--font);" placeholder="$0.00"></td></tr>
+            <tr style="border-top:2px solid var(--gray-200)"><td style="font-weight:700">Subtotal</td><td style="text-align:right"><input type="text" style="text-align:right;width:110px;border:none;border-bottom:1.5px solid var(--gray-200);background:transparent;outline:none;font-family:var(--font);font-weight:700;" placeholder="$0.00"></td></tr>
+            <tr><td style="color:var(--gray-600)">HST / GST</td><td style="text-align:right"><input type="text" style="text-align:right;width:110px;border:none;border-bottom:1.5px solid var(--gray-200);background:transparent;outline:none;font-family:var(--font);" placeholder="$0.00"></td></tr>
+            <tr style="background:var(--navy)"><td style="color:white;font-weight:700;padding:12px;">TOTAL DUE</td><td style="text-align:right;padding:12px;"><input type="text" style="text-align:right;width:120px;font-size:16px;font-weight:800;color:var(--orange);background:transparent;border:none;outline:none;font-family:var(--font);" placeholder="$0.00"></td></tr>
+          </tbody></table></div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="section-heading"><div class="section-icon icon-gray">✍️</div><div class="section-title">Authorization &amp; Signatures</div><div class="section-num">08</div></div>
+        <div class="info-callout callout-blue"><span class="callout-icon">ℹ️</span><div class="callout-text"><strong>Client Acknowledgement:</strong> By signing, the client confirms all work has been completed to satisfaction and authorizes processing of the charges listed.</div></div>
+        <div class="sig-row">
+          <div class="sig-block"><div class="sig-label">Client / Authorized Representative</div><div class="sig-line">Sign above</div><div class="field-grid cols-2" style="margin-top:8px;"><div class="field-group"><label class="field-label">Print Name</label><input class="field-input" type="text"></div><div class="field-group"><label class="field-label">Date</label><input class="field-input" type="date"></div></div></div>
+          <div class="sig-block"><div class="sig-label">Lead Technician</div><div class="sig-line">Sign above</div><div class="field-grid cols-2" style="margin-top:8px;"><div class="field-group"><label class="field-label">Name &amp; Employee ID</label><input class="field-input" type="text"></div><div class="field-group"><label class="field-label">Date</label><input class="field-input" type="date"></div></div></div>
+        </div>
+      </div>    </div><div class="form-footer"><div class="footer-version">TF-WO-ACC-018 · Rev 1.0 · example.com</div><div class="footer-actions"><button class="btn-outline">Reset</button><button class="btn-primary">Save &amp; Submit</button></div></div>
+</div>
+
+<!-- FORM 19 -->
+
+  </main>
+</div>
+<script>
+  const formTitles = {
+    form1: ['Generic Work Order', 'All service types · Field + Office use · TF-WO-GEN-001'],
+    form2: ['Installation Service Work Order', 'Equipment and systems installation documentation'],
+    form3: ['12-Hour Mitigation Report — Residential', 'IICRC S500 Compliant · Must be submitted within 12 hours of arrival'],
+    form4: ['Initial Inspection — Residential', 'IICRC S500 / S520 Field Inspection · Xactimate Integration'],
+    form5: ['Employee Clock-Out Questionnaire', 'End-of-shift safety & task completion report · HR & Compliance'],
+    form6: ['Daily Job Site Log', 'Field reporting · One log per job per day · Crew lead completes at end of shift'],
+    form7: ['12-Hour Mitigation Report — Multi-Res / Commercial', 'IICRC S500 · Multi-unit & commercial properties · TF-EM-12HR-COM-007'],
+    form8: ['Initial Inspection — Multi-Res / Commercial', 'IICRC S500 / S520 · Multi-Residential & Commercial · TF-EM-INSP-COM-008'],
+    form9:  ['Moving Company Work Order', 'Residential & Commercial Moves · Local & Long Distance · TF-WO-MOV-009'],
+    form10: ['CCTV / Camera Systems Work Order', 'Installation · Repair · Upgrade · Maintenance · TF-WO-CCTV-010'],
+    form11: ['Delivery Company Work Order', 'Parcel · Freight · Courier Services · TF-WO-DEL-011'],
+    form12: ['Cleaning Company Work Order', 'Residential & Commercial · Regular & Specialty Cleaning · TF-WO-CLN-012'],
+    form13: ['Plumbing Work Order', 'Residential & Commercial Plumbing Service & Repair · TF-WO-PLM-013'],
+    form14: ['HVAC Work Order', 'Heating · Cooling · Ventilation · Refrigeration · TF-WO-HVAC-014'],
+    form15: ['Landscaping Work Order', 'Grounds Maintenance · Design · Installation · TF-WO-LND-015'],
+    form16: ['Snow Removal Work Order', 'Plowing · Shoveling · Salting · De-Icing · TF-WO-SNW-016'],
+    form17: ['Electrical Work Order', 'Residential & Commercial Electrical Services · TF-WO-ELC-017'],
+    form18: ['Access Control Work Order', 'Keycard · Biometric · Keypad · Gate & Intercom Systems · TF-WO-ACC-018'],
+    form19: ['Fire Safety Work Order', 'Inspection · Testing · Repair · Installation · Certification · TF-WO-FIRE-019'],
+    form20: ['Roofing Work Order', 'Repair · Replacement · Inspection · Flat & Pitched · TF-WO-ROOF-020'],
+    form21: ['Painting Work Order', 'Interior & Exterior · Residential & Commercial · TF-WO-PAINT-021'],
+    form22: ['Pool Services Work Order', 'Opening · Closing · Maintenance · Chemical Balance · TF-WO-POOL-022'],
+  };
+
+  // Simulate auto-populate from clock-in data
+  function populateTaskFromClockIn() {
+    const tasks = [
+      'WO-2024-1042 · Water mitigation — Unit 301, Lakeview Condominiums',
+      'WO-2024-1039 · Drying monitoring visit — 47 Elmwood Ave',
+      'WO-2024-1044 · Demolition & debris removal — Floor 3 corridor',
+      'WO-2024-1041 · Equipment pick-up & dehumidifier swap — 82 King St W',
+    ];
+    const el = document.getElementById('autoTaskValue');
+    if (el) {
+      // In production this pulls from the clock-in session record
+      el.textContent = tasks[Math.floor(Math.random() * tasks.length)];
+    }
+  }
+  document.addEventListener('DOMContentLoaded', populateTaskFromClockIn);
+
+  function setWOStatus(btn) {
+    const bar = btn.closest('div[style*="flex:1"]');
+    bar.querySelectorAll('.tl-step').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function showForm(formId, btn) {
+    document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.form-nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(formId).classList.add('active');
+    btn.classList.add('active');
+    const [title, sub] = formTitles[formId];
+    document.getElementById('pageTitle').textContent = title;
+    document.getElementById('pageSubtitle').textContent = sub;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleTag(el) { el.classList.toggle('sel'); }
+
+  function selectTaskStatus(card, type) {
+    document.querySelectorAll('.task-status-card').forEach(c => {
+      c.classList.remove('sel-complete','sel-partial','sel-not');
+    });
+    card.classList.add('sel-' + type);
+  }
+
+  function toggleYN(btn, which, isAccident) {
+    const prefix = btn.id.split('-')[0];
+    const yesBtn = document.getElementById(prefix + '-yes');
+    const noBtn  = document.getElementById(prefix + '-no');
+    yesBtn.classList.remove('yes-active');
+    noBtn.classList.remove('no-active');
+    if (which === 'yes') {
+      btn.classList.add('yes-active');
+      if (isAccident) document.getElementById('incident-panel').classList.add('show');
+    } else {
+      btn.classList.add('no-active');
+      if (isAccident) document.getElementById('incident-panel').classList.remove('show');
+    }
+  }
+
+  // Wire all YES/NO buttons
+  document.querySelectorAll('.yn-btn').forEach(btn => {
+    if (!btn.getAttribute('onclick')) {
+      btn.addEventListener('click', function() {
+        const prefix = this.id.split('-')[0];
+        const yesBtn = document.getElementById(prefix + '-yes');
+        const noBtn  = document.getElementById(prefix + '-no');
+        yesBtn.classList.remove('yes-active');
+        noBtn.classList.remove('no-active');
+        if (this.id.endsWith('-yes')) this.classList.add('yes-active');
+        else this.classList.add('no-active');
+      });
+    }
+  });
+
+  function rateStar(groupId, val) {
+    const stars = document.querySelectorAll('#' + groupId + ' .star-btn');
+    stars.forEach((s, i) => {
+      s.classList.toggle('active', i < val);
+    });
+  }
+</script>
+
+</body>
+</html>
+
+</body>
+</html>

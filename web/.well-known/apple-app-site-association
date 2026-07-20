@@ -1,0 +1,47 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "TEAMID.com.taskfleet.taskfleet",
+        "paths": [
+          "/projects/*",
+          "/plans/*",
+          "/customers/*",
+          "/tasks/*",
+          "/calendar/*",
+          "/messages/*",
+          "/financials",
+          "/budget",
+          "/files/*",
+          "/documents/*",
+          "/team",
+          "/hr/*",
+          "/vehicles/*",
+          "/assets/*",
+          "/inventory/*",
+          "/contents/*",
+          "/accounting/*",
+          "/catalog/*",
+          "/templates/*",
+          "/settings/*",
+          "/profile/*",
+          "/reports/*",
+          "/notifications",
+          "NOT /apps",
+          "NOT /login",
+          "NOT /signup",
+          "NOT /password-reset",
+          "NOT /verify-email*",
+          "NOT /portal/*",
+          "NOT /f/*",
+          "NOT /sign/*",
+          "NOT /invite/*"
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["TEAMID.com.taskfleet.taskfleet"]
+  }
+}

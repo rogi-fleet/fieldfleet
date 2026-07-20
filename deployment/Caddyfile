@@ -1,0 +1,64 @@
+# FieldFleet Caddy Configuration
+# Handles HTTPS and reverse proxy
+
+{$API_DOMAIN} {
+    # API Gateway
+    reverse_proxy kong:8000 {
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+    }
+
+    # WebSocket support for Realtime
+    @websockets {
+        header Connection *Upgrade*
+        header Upgrade websocket
+    }
+    reverse_proxy @websockets kong:8000
+
+    # Security headers
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        Referrer-Policy strict-origin-when-cross-origin
+        -Server
+    }
+
+    # Logging
+    log {
+        output file /data/logs/api.log {
+            roll_size 100mb
+            roll_keep 5
+        }
+    }
+}
+
+{$STUDIO_DOMAIN} {
+    # Admin Dashboard
+    reverse_proxy studio:3000
+
+    # Basic auth for studio (optional - uncomment to enable)
+    # basicauth {
+    #     admin $2a$14$... # Generate with: caddy hash-password
+    # }
+
+    # Security headers
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options SAMEORIGIN
+        -Server
+    }
+
+    log {
+        output file /data/logs/studio.log {
+            roll_size 50mb
+            roll_keep 3
+        }
+    }
+}
+
+# Health check endpoint (for monitoring)
+:8080 {
+    respond /health "OK" 200
+}
