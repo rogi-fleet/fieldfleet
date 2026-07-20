@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="FieldFleet is a source-available field operations platform for restoration, construction, and trade contractors."
+    >
+    <title>FieldFleet | Field Operations Platform</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header" aria-label="Primary navigation">
+      <a class="brand" href="#top" aria-label="FieldFleet home">
+        <span>FieldFleet</span>
+      </a>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#self-host">Self-host</a>
+        <a class="nav-button" href="https://github.com/rogi-fleet/fieldfleet">GitHub</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-label="FieldFleet overview">
+        <div class="hero-media" role="img" aria-label="FieldFleet dashboard screenshot"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <p class="eyebrow">Source-available field operations</p>
+          <h1>FieldFleet</h1>
+          <p class="hero-copy">
+            An all-in-one operations platform for restoration, construction,
+            and trade contractors, backed by Flutter, Supabase, and Postgres.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="https://github.com/rogi-fleet/fieldfleet">View source</a>
+            <a class="button secondary" href="#self-host">Run locally</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="summary" aria-label="Platform summary">
+        <div>
+          <strong>Project operations</strong>
+          <span>Tasks, schedules, capacity, work orders, files, and portals.</span>
+        </div>
+        <div>
+          <strong>Financial depth</strong>
+          <span>Budgets, invoices, pay applications, holdbacks, and bids.</span>
+        </div>
+        <div>
+          <strong>Field capture</strong>
+          <span>Forms, signatures, floor plans, inventory, assets, and fleet.</span>
+        </div>
+      </section>
+
+      <section id="features" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Built for field work</p>
+          <h2>One workspace from lead to closeout</h2>
+          <p>
+            FieldFleet brings the job lifecycle into one self-hostable codebase:
+            customer records, job setup, crew coordination, document generation,
+            field data capture, and reporting.
+          </p>
+        </div>
+        <div class="feature-grid">
+          <article>
+            <h3>Projects and scheduling</h3>
+            <p>Project health, Gantt planning, baselines, calendars, task dependencies, and capacity planning.</p>
+          </article>
+          <article>
+            <h3>CRM and portals</h3>
+            <p>Customers, vendors, opportunities, custom fields, and dedicated client, vendor, and employee portals.</p>
+          </article>
+          <article>
+            <h3>Financial workflows</h3>
+            <p>Budgets, cost catalogs, estimates, invoices, payment links, subcontracts, bid packages, and holdbacks.</p>
+          </article>
+          <article>
+            <h3>Field operations</h3>
+            <p>Dynamic forms, e-signing, time tracking, inventory, vehicles, assets, maintenance, and QR workflows.</p>
+          </article>
+          <article>
+            <h3>Documents and files</h3>
+            <p>Templates, PDF output, spec books, spec sheets, file folders, photo markup, and document activity.</p>
+          </article>
+          <article>
+            <h3>AI-assisted workflows</h3>
+            <p>AI copilot, text operations, daily summaries, and an MCP endpoint for agent integrations.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="screenshots" class="section screenshot-section">
+        <div class="section-heading">
+          <p class="eyebrow">Product preview</p>
+          <h2>Sanitized local demo screenshots</h2>
+          <p>
+            These images use the disposable local demo workspace included in
+            the public checkout. No customer data or production credentials are shown.
+          </p>
+        </div>
+        <div class="screenshots">
+          <figure>
+            <img src="screenshots/fieldfleet-dashboard.png" alt="FieldFleet dashboard with onboarding checklist and navigation">
+            <figcaption>Dashboard with setup checklist, navigation, summaries, and team capacity.</figcaption>
+          </figure>
+          <figure>
+            <img src="screenshots/fieldfleet-login.png" alt="FieldFleet login screen">
+            <figcaption>Local login screen for self-hosted or demo environments.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="self-host" class="section self-host">
+        <div class="section-heading">
+          <p class="eyebrow">Self-hostable</p>
+          <h2>Run FieldFleet locally</h2>
+          <p>
+            The public checkout uses an isolated Supabase project id and ports
+            so it can run next to another local Supabase stack.
+          </p>
+        </div>
+        <div class="terminal" role="img" aria-label="Quick start commands">
+          <pre><code>flutter pub get
+supabase start
+supabase migration up --local
+scripts/create_local_demo_user.sh
+flutter run -d chrome \
+  --dart-define=SUPABASE_ANON_KEY=your-local-supabase-anon-key</code></pre>
+        </div>
+        <div class="license-note">
+          <p>
+            FieldFleet is available under the Elastic License 2.0. You may use,
+            self-host, modify, and contribute. Offering FieldFleet as a hosted
+            or managed service requires a commercial agreement with TaskFleet.
+          </p>
+          <a class="button primary" href="https://github.com/rogi-fleet/fieldfleet#quick-start">Read the quick start</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>FieldFleet by <a href="https://taskfleet.app">TaskFleet</a></span>
+      <span><a href="https://github.com/rogi-fleet/fieldfleet/blob/main/LICENSE">Elastic License 2.0</a></span>
+    </footer>
+  </body>
+</html>
