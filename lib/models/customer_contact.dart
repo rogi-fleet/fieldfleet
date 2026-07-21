@@ -9,6 +9,9 @@ class CustomerContact {
   final bool isActive;
   /// Auth user linked to this contact as a portal customer, if any.
   final String? userId;
+  /// When set, this contact is a "unit holder" scoped to exactly one
+  /// property instead of the whole customer. Null = customer-wide (default).
+  final String? restrictedPropertyId;
 
   const CustomerContact({
     this.id,
@@ -20,6 +23,7 @@ class CustomerContact {
     this.isPrimary = false,
     this.isActive = true,
     this.userId,
+    this.restrictedPropertyId,
   });
 
   factory CustomerContact.fromJson(Map<String, dynamic> json) {
@@ -37,6 +41,9 @@ class CustomerContact {
       isActive:
           (json['isActive'] as bool?) ?? (json['is_active'] as bool?) ?? true,
       userId: (json['userId'] ?? json['user_id']) as String?,
+      restrictedPropertyId:
+          (json['restrictedPropertyId'] ?? json['restricted_property_id'])
+              as String?,
     );
   }
 
@@ -51,6 +58,7 @@ class CustomerContact {
       'isPrimary': isPrimary,
       'isActive': isActive,
       'userId': userId,
+      'restrictedPropertyId': restrictedPropertyId,
     };
   }
 
@@ -65,6 +73,7 @@ class CustomerContact {
     bool? isActive,
     String? userId,
     bool clearUserId = false,
+    String? restrictedPropertyId,
   }) {
     return CustomerContact(
       id: id ?? this.id,
@@ -76,8 +85,13 @@ class CustomerContact {
       isPrimary: isPrimary ?? this.isPrimary,
       isActive: isActive ?? this.isActive,
       userId: clearUserId ? null : (userId ?? this.userId),
+      restrictedPropertyId: restrictedPropertyId ?? this.restrictedPropertyId,
     );
   }
+
+  /// True if this contact is scoped to a single property ("unit holder")
+  /// rather than the whole customer.
+  bool get isUnitHolder => restrictedPropertyId != null;
 
   // Validation
   String? validate() {

@@ -18,6 +18,7 @@ import '../../models/document_type.dart';
 import '../../models/generated_document.dart';
 import '../../models/portal_invoice_summary.dart';
 import '../../models/project.dart';
+import '../../models/property_issue.dart';
 import '../../models/selection.dart';
 import '../../utils/app_logger.dart';
 import '../../utils/storage_path_utils.dart';
@@ -1370,6 +1371,111 @@ class SupabaseClientPortalService {
           error: e, stackTrace: st,
           metadata: {'conversationId': conversationId});
       // Non-fatal.
+    }
+  }
+
+  // ============================================================================
+  // Portal Property Scope (unit holders)
+  // ============================================================================
+
+  /// Returns the restricted property id for the current portal login, or
+  /// null if this contact is customer-wide (the common case). Called once
+  /// right after the portal dashboard mounts to decide whether to redirect
+  /// to the scoped single-property view instead.
+  Future<String?> getMyRestrictedPropertyId() async {
+    try {
+      final raw = await _supabase.rpc('portal_get_my_property_scope');
+      if (raw is List && raw.isNotEmpty) {
+        return (raw.first as Map)['restricted_property_id'] as String?;
+      }
+      return null;
+    } catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to load portal property scope',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      // Fail open to the normal dashboard rather than blocking login.
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> getPortalProperty(
+    String propertyId, {
+    String? previewCustomerId,
+  }) async {
+    try {
+      final params = <String, dynamic>{'p_property_id': propertyId};
+      if (previewCustomerId != null) {
+        params['p_preview_customer_id'] = previewCustomerId;
+      }
+      final raw = await _supabase.rpc('portal_get_property', params: params);
+      if (raw is! List || raw.isEmpty) return null;
+      return Map<String, dynamic>.from(raw.first as Map);
+    } catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to load portal property',
+        error: e,
+        stackTrace: stackTrace,
+        metadata: {'propertyId': propertyId},
+      );
+      rethrow;
+    }
+  }
+
+  Future<List<PropertyIssue>> getPortalPropertyIssues(
+    String propertyId, {
+    String? previewCustomerId,
+  }) async {
+    try {
+      final params = <String, dynamic>{'p_property_id': propertyId};
+      if (previewCustomerId != null) {
+        params['p_preview_customer_id'] = previewCustomerId;
+      }
+      final raw = await _supabase.rpc(
+        'portal_get_property_issues',
+        params: params,
+      );
+      if (raw is! List) return [];
+      return raw
+          .map((row) => PropertyIssue.fromRow(Map<String, dynamic>.from(row)))
+          .toList();
+    } catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to load portal property issues',
+        error: e,
+        stackTrace: stackTrace,
+        metadata: {'propertyId': propertyId},
+      );
+      rethrow;
+    }
+  }
+
+  Future<String> createPortalPropertyIssue({
+    required String propertyId,
+    required String title,
+    String? description,
+    String priority = 'normal',
+  }) async {
+    try {
+      final id = await _supabase.rpc(
+        'portal_create_property_issue',
+        params: {
+          'p_property_id': propertyId,
+          'p_title': title,
+          'p_description': description,
+          'p_priority': priority,
+        },
+      );
+      return id as String;
+    } catch (e, stackTrace) {
+      AppLogger.error(
+        'Failed to create portal property issue',
+        error: e,
+        stackTrace: stackTrace,
+        metadata: {'propertyId': propertyId},
+      );
+      rethrow;
     }
   }
 

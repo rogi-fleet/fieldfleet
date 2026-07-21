@@ -44,6 +44,7 @@ import 'supabase/budget_template_service.dart' as supabase_budget_template;
 import 'supabase/cost_service.dart' as supabase_cost;
 import 'supabase/cost_category_service.dart' as supabase_cost_category;
 import 'supabase/property_service.dart' as supabase_property;
+import 'supabase/property_issue_service.dart' as supabase_property_issue;
 import 'supabase/area_service.dart' as supabase_area;
 import 'supabase/property_contents_service.dart' as supabase_contents;
 import 'supabase/property_note_service.dart' as supabase_property_note;
@@ -271,6 +272,9 @@ class ServiceLocator {
 
   static dynamic get propertyService =>
       supabase_property.SupabasePropertyService();
+
+  static dynamic get propertyIssueService =>
+      supabase_property_issue.SupabasePropertyIssueService();
 
   static dynamic get areaService => supabase_area.SupabaseAreaService();
 

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../models/customer.dart';
+import '../../models/customer_contact.dart';
 import '../../models/project.dart';
 import '../../utils/app_logger.dart';
 import 'project_service.dart';
@@ -349,11 +350,15 @@ class SupabaseCustomerService {
       if (contacts != null) {
         // Diff-based sync: preserve ids (and their customer_contacts.user_id
         // portal linkage) for rows the caller still references. Only rows
-        // dropped from the input get deleted.
+        // dropped from the input get deleted. Unit holders (restricted_
+        // property_id set) are excluded — they're managed exclusively via
+        // createUnitHolderContact() on the property's Unit Holders tab, and
+        // this generic editor has no property context to reference them by.
         final existing = await _supabase
             .from('customer_contacts')
             .select('id')
-            .eq('customer_id', customerId);
+            .eq('customer_id', customerId)
+            .filter('restricted_property_id', 'is', null);
         final existingIds = (existing as List)
             .map((r) => (r as Map<String, dynamic>)['id'] as String)
             .toSet();
@@ -445,6 +450,70 @@ class SupabaseCustomerService {
         metadata: {'customerId': customerId},
       );
       throw Exception('Error updating customer: $e');
+    }
+  }
+
+  /// Contacts restricted to a single property ("unit holders"), for that
+  /// property's Unit Holders tab. Kept fully separate from the generic
+  /// contacts editor (updateCustomer's diff-sync) so adding/removing a unit
+  /// holder never touches the customer-wide contacts list.
+  Future<List<CustomerContact>> getUnitHolders(String propertyId) async {
+    try {
+      final response = await _supabase
+          .from('customer_contacts')
+          .select()
+          .eq('restricted_property_id', propertyId)
+          .order('created_at');
+      return (response as List)
+          .map((row) => CustomerContact.fromJson(row as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      AppLogger.error(
+        'Failed to fetch unit holders',
+        error: e,
+        metadata: {'propertyId': propertyId},
+      );
+      throw Exception('Error fetching unit holders: $e');
+    }
+  }
+
+  /// Create a unit holder: a customer_contacts row restricted to exactly
+  /// one property. `customerId` is the property's project's client_id.
+  Future<CustomerContact> createUnitHolderContact({
+    required String customerId,
+    required String restrictedPropertyId,
+    required String name,
+    String? title,
+    String? phone,
+    String? email,
+  }) async {
+    try {
+      final row = await _supabase
+          .from('customer_contacts')
+          .insert({
+            'customer_id': customerId,
+            'restricted_property_id': restrictedPropertyId,
+            'name': name,
+            'title': title,
+            'phone': phone,
+            'email': email,
+            'is_primary': false,
+            'is_active': true,
+            'created_at': DateTime.now().toIso8601String(),
+          })
+          .select()
+          .single();
+      return CustomerContact.fromJson(row);
+    } catch (e) {
+      AppLogger.error(
+        'Failed to create unit holder contact',
+        error: e,
+        metadata: {
+          'customerId': customerId,
+          'restrictedPropertyId': restrictedPropertyId,
+        },
+      );
+      throw Exception('Error creating unit holder contact: $e');
     }
   }
 
@@ -798,6 +867,11 @@ class SupabaseCustomerService {
       // Handle joined data
       contactsList = List<Map<String, dynamic>>.from(row['customer_contacts']);
     }
+    // Unit holders (restricted to a single property) are managed on that
+    // property's Unit Holders tab, not the customer's generic contacts list.
+    contactsList = contactsList
+        .where((c) => c['restricted_property_id'] == null)
+        .toList();
 
     // Get tag IDs from junction table if available
     List<String> tags = tagIds ?? [];

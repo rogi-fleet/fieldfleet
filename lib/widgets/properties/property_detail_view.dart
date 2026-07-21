@@ -12,6 +12,8 @@ import 'property_contents_tab.dart';
 import 'property_media_tab.dart';
 import '../notes/entity_notes_tab.dart';
 import 'property_tasks_tab.dart';
+import 'property_unit_holders_tab.dart';
+import 'property_issues_tab.dart';
 import '../adaptive_navigation.dart';
 import '../common/view_icon_button.dart';
 
@@ -45,6 +47,8 @@ class _PropertyDetailViewState extends State<PropertyDetailView> {
     ('contents', Icons.inventory_2, 'Contents'),
     ('media', Icons.photo_library, 'Media'),
     ('notes', Icons.note, 'Notes'),
+    ('unit_holders', Icons.badge, 'Unit Holders'),
+    ('issues', Icons.report_problem_outlined, 'Issues'),
   ];
 
   @override
@@ -157,6 +161,14 @@ class _PropertyDetailViewState extends State<PropertyDetailView> {
                         entityType: 'property',
                         entityId: property.id,
                         projectId: property.projectId,
+                      ),
+                      PropertyUnitHoldersTab(
+                        project: widget.project,
+                        property: property,
+                      ),
+                      PropertyIssuesTab(
+                        project: widget.project,
+                        property: property,
                       ),
                     ],
                   ),

@@ -39,6 +39,18 @@ class _PortalDashboardScreenState extends State<PortalDashboardScreen> {
   Future<void> _loadData() async {
     try {
       final preview = PortalPreviewScope.of(context);
+
+      // Preview always shows the customer-wide dashboard (staff already see
+      // the property directly) — only check restriction on a real login.
+      if (preview == null) {
+        final restrictedPropertyId =
+            await _portalService.getMyRestrictedPropertyId() as String?;
+        if (restrictedPropertyId != null) {
+          if (mounted) context.go('/portal/property/$restrictedPropertyId');
+          return;
+        }
+      }
+
       final projectsFuture =
           _portalService.getPortalProjects(previewCustomerId: preview);
       final invoicesFuture =

@@ -89,6 +89,7 @@ import 'screens/ai/ai_plan_review_screen.dart';
 import 'screens/client_portal/portal_login_screen.dart';
 import 'screens/client_portal/portal_dashboard_screen.dart';
 import 'screens/client_portal/portal_project_screen.dart';
+import 'screens/client_portal/portal_property_screen.dart';
 import 'screens/client_portal/portal_invoice_list_screen.dart';
 import 'screens/client_portal/portal_document_detail_screen.dart';
 import 'screens/client_portal/portal_invoice_detail_screen.dart';
@@ -525,6 +526,17 @@ class AppRouter {
               context,
               state,
               PortalProjectScreen(projectId: projectId),
+            ));
+          },
+        ),
+        GoRoute(
+          path: '/portal/property/:propertyId',
+          builder: (context, state) {
+            final propertyId = state.pathParameters['propertyId']!;
+            return _selectable(PortalPreviewScope.wrapRoute(
+              context,
+              state,
+              PortalPropertyScreen(propertyId: propertyId),
             ));
           },
         ),
