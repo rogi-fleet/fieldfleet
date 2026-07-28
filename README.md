@@ -32,17 +32,17 @@
 
 <p align="center">
   <a href="https://rogi-fleet.github.io/fieldfleet/#demo">
-    <img src="site/assets/fieldfleet-demo-poster.jpg" width="840" alt="FieldFleet projects board with restoration jobs, task progress, approved value, profit, and margin — click to watch the product tour" />
+    <img src="site/assets/fieldfleet-demo-poster.jpg" width="840" alt="FieldFleet projects board with restoration jobs, task progress, approved value, profit, and margin — click to watch the narrated product tour" />
   </a>
 </p>
 
 <p align="center">
-  <a href="https://rogi-fleet.github.io/fieldfleet/#demo"><strong>▶&nbsp; Watch the 45-second product tour</strong></a>
+  <a href="https://rogi-fleet.github.io/fieldfleet/#demo"><strong>▶&nbsp; Watch the 55-second narrated tour</strong></a>
   &nbsp;·&nbsp;
-  <a href="site/assets/fieldfleet-demo.mp4">Download the MP4</a> (27&nbsp;MB)
+  <a href="site/assets/fieldfleet-demo.mp4">Download the MP4</a> (18&nbsp;MB)
 </p>
 
-<p align="center"><sub>Recorded in a live local workspace — dashboard, projects, budgets, CRM, and more. No customer data.</sub></p>
+<p align="center"><sub>Narrated walkthrough recorded in a live local workspace — dashboard, projects, budgets, CRM, and more. No customer data.</sub></p>
 
 ---
 
@@ -72,7 +72,7 @@ lifecycle in one codebase, including the parts of field work that generic tools 
 ## Screenshots
 
 <p align="center">
-  <img src="site/assets/screenshots/dashboard.png" width="840" alt="FieldFleet dashboard with sidebar navigation, setup checklist, AI daily summary, weekly digest, and task widgets" />
+  <img src="site/assets/screenshots/dashboard.png" width="840" alt="FieldFleet dashboard with sidebar navigation, AI daily summary, project list, schedule, financial summary, and team utilization" />
 </p>
 
 <p align="center"><sub>Dashboard from the disposable local demo workspace documented in <a href="#quick-start">Quick start</a>.</sub></p>

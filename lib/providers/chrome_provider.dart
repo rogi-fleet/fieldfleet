@@ -14,7 +14,7 @@ class ChromeProvider extends ChangeNotifier {
   static const _prefKey = 'dark_chrome_enabled';
   static const _serverKey = 'appearance_theme';
 
-  bool _darkChrome = true;
+  bool _darkChrome = false;
   SharedPreferences? _prefs;
   StreamSubscription<AuthState>? _authSub;
 
@@ -48,7 +48,7 @@ class ChromeProvider extends ChangeNotifier {
 
   Future<void> _load() async {
     final prefs = _prefs ??= await SharedPreferences.getInstance();
-    final localValue = prefs.getBool(_prefKey) ?? true;
+    final localValue = prefs.getBool(_prefKey) ?? false;
     if (_darkChrome != localValue) {
       _darkChrome = localValue;
       notifyListeners();
