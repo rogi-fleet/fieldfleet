@@ -10,7 +10,8 @@
 </p>
 
 <p align="center">
-  <a href="https://rogi-fleet.github.io/fieldfleet/"><img src="https://img.shields.io/badge/website-fieldfleet-F47A2A?labelColor=12283F" alt="Website" /></a>
+  <a href="https://taskfleet.app/"><img src="https://img.shields.io/badge/powered%20by-TaskFleet%20AI-F47A2A?labelColor=12283F" alt="Powered by TaskFleet AI" /></a>
+  <a href="https://rogi-fleet.github.io/fieldfleet/"><img src="https://img.shields.io/badge/website-fieldfleet-12283F?labelColor=12283F" alt="Website" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Elastic%202.0-orange?labelColor=12283F" alt="License: Elastic License 2.0" /></a>
   <img src="https://img.shields.io/badge/Flutter-web%20%7C%20iOS%20%7C%20Android%20%7C%20desktop-12283F" alt="Flutter multi-platform" />
   <img src="https://img.shields.io/badge/backend-Supabase%20%2F%20Postgres-3ECF8E?labelColor=12283F" alt="Supabase backend" />
@@ -272,3 +273,9 @@ support agreements, or any use the license doesn't cover, contact
 
 Prefer not to run it yourself? [Renovo AI](https://renovoai.app) is TaskFleet's fully managed,
 hosted field operations product.
+
+---
+
+<p align="center">
+  Powered by <a href="https://taskfleet.app/"><strong>TaskFleet AI</strong></a>
+</p>

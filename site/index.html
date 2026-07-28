@@ -371,6 +371,16 @@
   .license-points svg { width: 15px; height: 15px; color: var(--accent-ink); flex: none; }
   .fine-print { font-size: var(--step--1); color: var(--text-muted); max-width: 58ch; margin: 0 auto; }
 
+  /* ---------- Powered by ---------- */
+  .powered-by {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: var(--step--1); color: var(--text-muted);
+  }
+  .powered-by a { color: var(--text); font-weight: 700; text-decoration: none; white-space: nowrap; }
+  .powered-by a:hover { color: var(--accent-ink); text-decoration: underline; }
+  .powered-by .spark { width: 16px; height: 16px; color: var(--accent-ink); flex: none; }
+  .license-box .powered-by { margin-top: 26px; }
+
   /* ---------- Footer ---------- */
   footer { border-top: 1px solid var(--border); padding: 40px 0; background: var(--bg-raised); }
   .footer-inner { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
@@ -701,6 +711,10 @@
         <a class="btn btn-primary" href="https://github.com/rogi-fleet/fieldfleet#quick-start">Read the quick start</a>
         <a class="btn btn-secondary" href="https://github.com/rogi-fleet/fieldfleet/blob/main/LICENSE">Read the license</a>
       </div>
+      <p class="powered-by">
+        <svg class="spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg>
+        Powered by <a href="https://taskfleet.app/">TaskFleet AI</a>
+      </p>
     </div>
   </div>
 </section>
@@ -713,7 +727,10 @@
       <img src="assets/logo.png" alt="" width="26" height="26">
       FieldFleet
     </a>
-    <p>Field operations platform by <a href="https://taskfleet.app">TaskFleet</a>.</p>
+    <p class="powered-by">
+      <svg class="spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg>
+      Powered by <a href="https://taskfleet.app/">TaskFleet AI</a>
+    </p>
     <div class="footer-links">
       <a href="https://taskfleet.app">TaskFleet.app</a>
       <a href="https://github.com/rogi-fleet/fieldfleet">GitHub</a>
