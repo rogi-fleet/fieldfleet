@@ -37,12 +37,12 @@
 </p>
 
 <p align="center">
-  <a href="https://rogi-fleet.github.io/fieldfleet/#demo"><strong>▶&nbsp; Watch the 55-second narrated tour</strong></a>
+  <a href="https://rogi-fleet.github.io/fieldfleet/#demo"><strong>▶&nbsp; Watch the 67-second narrated tour</strong></a>
   &nbsp;·&nbsp;
-  <a href="site/assets/fieldfleet-demo.mp4">Download the MP4</a> (18&nbsp;MB)
+  <a href="site/assets/fieldfleet-demo.mp4">Download the MP4</a> (22&nbsp;MB)
 </p>
 
-<p align="center"><sub>Narrated walkthrough recorded in a live local workspace — dashboard, projects, budgets, CRM, and more. No customer data.</sub></p>
+<p align="center"><sub>Narrated walkthrough recorded in a live local workspace — dashboard, projects, budgets, tasks, Gantt scheduling, and CRM. No customer data.</sub></p>
 
 ---
 
