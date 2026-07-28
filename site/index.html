@@ -3,26 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FieldFleet — Source-available field operations platform for contractors</title>
-<meta name="description" content="FieldFleet is a source-available field operations platform for restoration, construction, and trade contractors: projects, CRM, scheduling, budgets, invoicing, field forms, and AI workflows on Flutter + Supabase. Self-host it free.">
-<link rel="canonical" href="https://rogi-fleet.github.io/fieldfleet/">
+<title>FieldFleet — Source-available field operations platform</title>
+<meta name="description" content="Source-available field operations platform for restoration, construction, and trade contractors: projects, CRM, budgets, invoicing, and field forms. Self-host it free.">
+<link rel="canonical" href="https://taskfleetai.github.io/fieldfleet/">
 <link rel="icon" href="favicon.png">
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0B1622" media="(prefers-color-scheme: dark)">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="FieldFleet">
-<meta property="og:url" content="https://rogi-fleet.github.io/fieldfleet/">
+<meta property="og:url" content="https://taskfleetai.github.io/fieldfleet/">
 <meta property="og:title" content="FieldFleet — Source-available field operations platform">
 <meta property="og:description" content="Run the whole job, from first inspection to final payment. Projects, CRM, budgets, invoicing, field forms, and AI workflows in one self-hostable Flutter + Supabase platform.">
-<meta property="og:image" content="https://rogi-fleet.github.io/fieldfleet/assets/fieldfleet-demo-poster.jpg">
+<meta property="og:image" content="https://taskfleetai.github.io/fieldfleet/assets/fieldfleet-demo-poster.jpg">
 <meta property="og:image:width" content="1920">
 <meta property="og:image:height" content="1080">
 <meta property="og:image:alt" content="The FieldFleet projects board showing restoration jobs with budgets, progress, and margins.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="FieldFleet — Source-available field operations platform">
 <meta name="twitter:description" content="Projects, CRM, budgets, invoicing, field forms, and AI workflows in one self-hostable Flutter + Supabase platform.">
-<meta name="twitter:image" content="https://rogi-fleet.github.io/fieldfleet/assets/fieldfleet-demo-poster.jpg">
+<meta name="twitter:image" content="https://taskfleetai.github.io/fieldfleet/assets/fieldfleet-demo-poster.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,7 +54,7 @@
     --surface-sunken: #EFF3F8;
     --text: #16293D;
     --text-muted: #506379;
-    --text-faint: #6B7C90;
+    --text-faint: #5A6B7E;   /* 4.6:1 on --bg; #6B7C90 failed AA at 12-14px */
     --border: #DFE6EF;
     --border-strong: #C6D2E0;
     --accent: #F47A2A;          /* graphics only (>=3:1) */
@@ -261,6 +261,8 @@
     font-family: 'JetBrains Mono', ui-monospace, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   .frame img, .frame video { width: 100%; height: auto; background: #050a12; }
+  .video-fallback { padding: 28px; color: #E8EFF7; background: #050a12; font-size: var(--step--1); }
+  .video-fallback a { color: #FF9552; }
 
   /* ---------- Metrics ---------- */
   .metrics { padding: 44px 0 8px; }
@@ -443,7 +445,7 @@
       <a href="#screens">Screens</a>
       <a href="#architecture">Architecture</a>
       <a href="#self-host">Self-host</a>
-      <a class="btn btn-primary" href="https://github.com/rogi-fleet/fieldfleet">
+      <a class="btn btn-primary" href="https://github.com/taskfleetai/fieldfleet">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.15c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.34.95.11-.74.4-1.25.73-1.53-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.66.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
         View source
       </a>
@@ -474,7 +476,7 @@
       documents, and AI-assisted workflows — one codebase, every platform.
     </p>
     <div class="hero-ctas">
-      <a class="btn btn-primary" href="https://github.com/rogi-fleet/fieldfleet">
+      <a class="btn btn-primary" href="https://github.com/taskfleetai/fieldfleet">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.15c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.34.95.11-.74.4-1.25.73-1.53-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.66.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
         Explore the source
       </a>
@@ -490,15 +492,19 @@
 
     <div class="hero-shot reveal" id="demo">
       <div class="frame">
-        <div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>fieldfleet — 67-second product tour</span></div>
-        <video controls playsinline preload="metadata" poster="assets/fieldfleet-demo-poster.jpg" width="1920" height="1080">
+        <div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>fieldfleet — 1-minute product tour</span></div>
+        <video controls playsinline preload="metadata" poster="assets/fieldfleet-demo-poster.jpg"
+               width="1920" height="1080" title="FieldFleet product tour">
           <source src="assets/fieldfleet-demo.mp4" type="video/mp4">
-          Your browser doesn't support embedded video.
-          <a href="assets/fieldfleet-demo.mp4">Download the demo (MP4)</a>.
+          <track kind="captions" src="assets/captions.en.vtt" srclang="en" label="English" default>
+          <p class="video-fallback">
+            Your browser doesn't support embedded video.
+            <a href="assets/fieldfleet-demo.mp4">Download the tour (MP4)</a>.
+          </p>
         </video>
       </div>
       <p class="caption">
-        The whole job lifecycle in 67 narrated seconds — dashboard, projects, budgets, tasks,
+        The whole job lifecycle in a one-minute narrated tour — dashboard, projects, budgets, tasks,
         Gantt scheduling, and CRM, recorded in a live local workspace.
         <a href="assets/fieldfleet-demo.mp4">Download the MP4</a> (22&nbsp;MB).
       </p>
@@ -709,8 +715,8 @@
         <a href="https://taskfleet.app">TaskFleet</a> about support and licensing.
       </p>
       <div class="hero-ctas" style="margin-top: 28px;">
-        <a class="btn btn-primary" href="https://github.com/rogi-fleet/fieldfleet#quick-start">Read the quick start</a>
-        <a class="btn btn-secondary" href="https://github.com/rogi-fleet/fieldfleet/blob/main/LICENSE">Read the license</a>
+        <a class="btn btn-primary" href="https://github.com/taskfleetai/fieldfleet#quick-start">Read the quick start</a>
+        <a class="btn btn-secondary" href="https://github.com/taskfleetai/fieldfleet/blob/main/LICENSE">Read the license</a>
       </div>
       <p class="powered-by">
         <svg class="spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg>
@@ -725,7 +731,7 @@
 <footer>
   <div class="container footer-inner">
     <a class="nav-brand" href="#top">
-      <img src="assets/logo.png" alt="" width="26" height="26">
+      <img src="assets/logo.png" alt="" width="26" height="26" loading="lazy" decoding="async">
       FieldFleet
     </a>
     <p class="powered-by">
@@ -734,9 +740,9 @@
     </p>
     <div class="footer-links">
       <a href="https://taskfleet.app">TaskFleet.app</a>
-      <a href="https://github.com/rogi-fleet/fieldfleet">GitHub</a>
-      <a href="https://github.com/rogi-fleet/fieldfleet/blob/main/LICENSE">License</a>
-      <a href="https://github.com/rogi-fleet/fieldfleet/blob/main/SECURITY.md">Security</a>
+      <a href="https://github.com/taskfleetai/fieldfleet">GitHub</a>
+      <a href="https://github.com/taskfleetai/fieldfleet/blob/main/LICENSE">License</a>
+      <a href="https://github.com/taskfleetai/fieldfleet/blob/main/SECURITY.md">Security</a>
     </div>
   </div>
 </footer>
@@ -749,8 +755,8 @@
   "applicationCategory": "BusinessApplication",
   "operatingSystem": "Web, iOS, Android, macOS, Linux, Windows",
   "description": "Source-available field operations platform for restoration, construction, and trade contractors, covering projects, CRM, scheduling, budgets, invoicing, field data capture, and AI-assisted workflows.",
-  "url": "https://rogi-fleet.github.io/fieldfleet/",
-  "license": "https://github.com/rogi-fleet/fieldfleet/blob/main/LICENSE",
+  "url": "https://taskfleetai.github.io/fieldfleet/",
+  "license": "https://github.com/taskfleetai/fieldfleet/blob/main/LICENSE",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
   "author": { "@type": "Organization", "name": "TaskFleet", "url": "https://taskfleet.app" }
 }

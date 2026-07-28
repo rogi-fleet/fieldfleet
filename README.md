@@ -11,11 +11,11 @@
 
 <p align="center">
   <a href="https://taskfleet.app/"><img src="https://img.shields.io/badge/powered%20by-TaskFleet%20AI-F47A2A?labelColor=12283F" alt="Powered by TaskFleet AI" /></a>
-  <a href="https://rogi-fleet.github.io/fieldfleet/"><img src="https://img.shields.io/badge/website-fieldfleet-12283F?labelColor=12283F" alt="Website" /></a>
+  <a href="https://taskfleetai.github.io/fieldfleet/"><img src="https://img.shields.io/badge/website-fieldfleet-12283F?labelColor=12283F" alt="Website" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Elastic%202.0-orange?labelColor=12283F" alt="License: Elastic License 2.0" /></a>
   <img src="https://img.shields.io/badge/Flutter-web%20%7C%20iOS%20%7C%20Android%20%7C%20desktop-12283F" alt="Flutter multi-platform" />
   <img src="https://img.shields.io/badge/backend-Supabase%20%2F%20Postgres-3ECF8E?labelColor=12283F" alt="Supabase backend" />
-  <a href="https://github.com/rogi-fleet/fieldfleet/actions/workflows/ci.yml"><img src="https://github.com/rogi-fleet/fieldfleet/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="https://github.com/taskfleetai/fieldfleet/actions/workflows/ci.yml"><img src="https://github.com/taskfleetai/fieldfleet/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
 </p>
 
 <p align="center">
@@ -31,13 +31,13 @@
 ## Product tour
 
 <p align="center">
-  <a href="https://rogi-fleet.github.io/fieldfleet/#demo">
+  <a href="https://taskfleetai.github.io/fieldfleet/#demo">
     <img src="site/assets/fieldfleet-demo-poster.jpg" width="840" alt="FieldFleet projects board with restoration jobs, task progress, approved value, profit, and margin — click to watch the narrated product tour" />
   </a>
 </p>
 
 <p align="center">
-  <a href="https://rogi-fleet.github.io/fieldfleet/#demo"><strong>▶&nbsp; Watch the 67-second narrated tour</strong></a>
+  <a href="https://taskfleetai.github.io/fieldfleet/#demo"><strong>▶&nbsp; Watch the 1-minute product tour</strong></a>
   &nbsp;·&nbsp;
   <a href="site/assets/fieldfleet-demo.mp4">Download the MP4</a> (22&nbsp;MB)
 </p>
@@ -109,7 +109,7 @@ lifecycle in one codebase, including the parts of field work that generic tools 
 
 **Field operations**
 - Time tracking with GPS-stamped entries and reusable templates
-- Dynamic field forms with e-signing (22 ready-made inspection and work-order forms in [`examples/`](examples/))
+- Dynamic field forms with e-signing (28 ready-made inspection and work-order forms in [`examples/`](examples/))
 - Inventory, assets, and maintenance logs
 - Fleet/vehicle tracking with expenses and QR codes
 - Floor plans with a native room-scanning plugin
@@ -133,14 +133,14 @@ lifecycle in one codebase, including the parts of field work that generic tools 
 
 - **Flutter / Dart** — one codebase for web, iOS, Android, macOS, Linux, and Windows
   (`lib/`, platform runners in `android/`, `ios/`, etc.)
-- **Supabase** — Auth, Postgres, Storage, Realtime, and ~25 Edge Functions
+- **Supabase** — Auth, Postgres, Storage, Realtime, and 22 Edge Functions
   (`supabase/functions/`)
-- **Postgres schema** — 280+ migrations with row-level security for multi-tenant isolation
+- **Postgres schema** — 290+ migrations with row-level security for multi-tenant isolation
   (`supabase/migrations/`)
 - **Provider + go_router** for state and navigation
 - **Integrations** — Stripe payment links, Resend, OpenRouter-compatible AI providers,
   weather — all configured through environment variables, never committed
-- **Tests** — 41 test files covering floor-plan geometry, pricing and budget rollups,
+- **Tests** — 39 test files covering floor-plan geometry, pricing and budget rollups,
   documents, Supabase services, and utilities (`test/`)
 
 ## Quick start
@@ -216,12 +216,12 @@ Further guides in [`docs/`](docs/):
 ## Repository layout
 
 ```text
-lib/                  Flutter application source (~45 feature areas)
+lib/                  Flutter application source (40 feature areas)
 supabase/             Local Supabase config, migrations, edge functions
 deployment/           Example self-hosting stack with placeholder secrets
 plugins/room_scan/    Native room-scan plugin
 pro_room_scanner/     Standalone AR room-scanner app
-examples/             22 ready-made field/inspection form templates
+examples/             28 ready-made field/inspection form templates
 test/                 Dart and Flutter tests
 site/                 Public website published to GitHub Pages
 docs/                 Setup and operations guides
