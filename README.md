@@ -39,7 +39,7 @@
 <p align="center">
   <a href="https://taskfleetai.github.io/fieldfleet/#demo"><strong>▶&nbsp; Watch the 1-minute product tour</strong></a>
   &nbsp;·&nbsp;
-  <a href="site/assets/fieldfleet-demo.mp4">Download the MP4</a> (22&nbsp;MB)
+  <a href="site/assets/fieldfleet-demo.mp4">Download the MP4</a> (14&nbsp;MB)
 </p>
 
 <p align="center"><sub>Narrated walkthrough recorded in a live local workspace — dashboard, projects, budgets, tasks, Gantt scheduling, and CRM. No customer data.</sub></p>
